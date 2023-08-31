@@ -1,28 +1,30 @@
+
+
+
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <p>Test 3</p>
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    Rapid Core - Aim Trainer
+
+    <br>
+    v0.0.0
 </template>
+
+
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
 
 export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    name: 'App',
+    components: {
+
+    }
 });
 </script>
 
+
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
+
+
 </style>
