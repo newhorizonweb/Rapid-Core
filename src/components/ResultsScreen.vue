@@ -2,13 +2,21 @@
 
 
 <template>
+
 <div class="finish-screen" :class="{'fs-visible': finishScreen}">
+    
     <div class="fs-time-btns"></div>
+    <div class="fs-audio"></div>
 
     <p>Your score: {{ gameScore }}</p>
     <p>Score Per Second: {{ scorePerSecond.toFixed(2) }}</p>
+    <br>
+    <p>Total Clicks: {{ totalClicks }}</p>
+    <p>Missed Clicks: {{ missedClicks }}</p>
+    <br>
     <p>Accuracy: {{ (accuracy * 100).toFixed(2) }}%</p>
     <p>Clicks Per Second: {{ CPS.toFixed(2) }}</p>
+
 
     <p>{{ currResName }}</p>
     <p>{{ currResSize }}</p>
@@ -17,7 +25,9 @@
     <p>{{ currResFunFact }}</p>
 
     <slot name="start-btn"></slot>
+
 </div>
+
 </template>
 
 
@@ -193,6 +203,10 @@ export default defineComponent({
         
         CPS(){
             return this.totalClicks / this.timeDuration;
+        },
+
+        missedClicks(){
+            return this.totalClicks - this.gameScore;
         }
 
     }

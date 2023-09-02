@@ -8,16 +8,19 @@
 
 <button class="time-btn time-btn-current"
     @click="setTimeDur"
+    :disabled="!firstGame"
     runTime="10">
     10s
 </button>
 <button class="time-btn"
     @click="setTimeDur"
+    :disabled="!firstGame"
     runTime="30">
     30s
 </button>
 <button class="time-btn" 
     @click="setTimeDur"
+    :disabled="!firstGame"
     runTime="60">
     60s
 </button>
@@ -49,6 +52,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
     name: 'UserOptions',
+    emits: ['timerIsSet'],
 
     data(){
         return{
@@ -65,7 +69,6 @@ export default defineComponent({
         setTimeDur($event: Event) {
             // Set the duration time
             this.timeDuration = Number(($event.target as HTMLElement).getAttribute("runTime"));
-
 
             const buttons = document.querySelectorAll('.time-btn');
             buttons.forEach(function(button){
@@ -97,6 +100,5 @@ export default defineComponent({
     }
 
 }
-
 
 </style>

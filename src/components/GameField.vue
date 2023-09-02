@@ -2,6 +2,28 @@
 
 
 <template>
+
+<div class="audio-settings" :class="{'muted-audio': isMuted}">
+    <input type="range" 
+        min="0" max="1" step="0.05" 
+        v-model="masterVolume"
+        @input="adjustVolume"
+    >
+    <button @click="isMuted = !isMuted">X</button>
+    <p>Volume: {{ (masterVolume * 100).toFixed(0) }}%</p>
+</div>
+
+<teleport to=".fs-audio" v-if="!firstGame">
+    <div class="audio-settings" :class="{'muted-audio': isMuted}">
+        <input type="range" 
+            min="0" max="1" step="0.05" 
+            v-model="masterVolume"
+            @input="adjustVolume"
+        >
+        <button @click="isMuted = !isMuted">X</button>
+        <p>Volume: {{ (masterVolume * 100).toFixed(0) }}%</p>
+    </div>
+</teleport>
     
 <div class="game">
 
@@ -15,7 +37,7 @@
             class="game-core"
             :class="{'disable-core': !gamePlaying}"
             ref="gameCore"
-            @click="coreClicked()"
+            @click="coreClicked"
             v-show="showCore">
         </div>
 
@@ -28,7 +50,6 @@
     <audio ref="preTimeAudioElem" :src="preTimeAudioSrc"></audio>
     <audio ref="finishAudioElem" :src="finishAudioSrc"></audio>
 
-    <!-- v-if="finishScreen" -->
     <ResultsScreen 
         ref="resultInfo"
         :finishScreen="finishScreen"
@@ -55,6 +76,7 @@ import ResultsScreen from "./ResultsScreen.vue"
 
 export default defineComponent({
     name: 'GameField',
+    emits: ['firstGame'],
 
     components: {
         ResultsScreen
@@ -69,6 +91,9 @@ export default defineComponent({
             finishAudioSrc: require('@/assets/audio/finish.mp3'),
             clickAudioPool: [] as HTMLAudioElement[],
             clickAudioMax: 10,
+
+            masterVolume: (localStorage.getItem("masterVolume") !== null) ? Number(localStorage.getItem("masterVolume")) : 1,
+            isMuted: (localStorage.getItem("isMuted") === 'true') ? true : (localStorage.getItem("isMuted") === 'false' ? false : false),
 
             // Timer
             timerCurrVal: 0,
@@ -91,34 +116,53 @@ export default defineComponent({
         "timeDuration"
     ],
 
-    methods:{
+    mounted(){
 
             /* Audio */
 
-        created(){
-            for (let i = 0; i < this.clickAudioMax; i++){
-                const audio = new Audio(this.clickAudioSrc);
-                this.clickAudioPool.push(audio);
-            }
-        },
+        for (let i = 0; i < this.clickAudioMax; i++){
+            const audio = new Audio(this.clickAudioSrc);
+            this.clickAudioPool.push(audio);
+        }
+
+        // Adjust the volume on load
+        this.adjustVolume();
+
+    },
+
+    methods:{
+
+            /* Audio */
 
         playClickSound(){
             // Find an audio instance that's not playing
             const audio = this.clickAudioPool.find(a => a.paused || a.ended);
 
             if (audio){
-                audio.currentTime = 0; // rewind to start
+                audio.volume = this.isMuted ? 0 : this.masterVolume;
+                audio.currentTime = 0;
                 audio.play();
             }
         },
 
+        adjustVolume(){
+            const audioElems = document.querySelectorAll("audio");
+            audioElems.forEach((audioElem) => {
+                audioElem.volume = this.isMuted ? 0 : this.masterVolume;
+            });
+
+            // Save the masterVolume and isMuted to the localStorage
+            localStorage.setItem("masterVolume", this.masterVolume.toString());
+            localStorage.setItem("isMuted", this.isMuted.toString());
+        },
+
             /* Timer (Preparation & Game Duration) */
 
-        delay(ms: number): Promise<void> {
+        delay(ms: number): Promise<void>{
             return new Promise(resolve => setTimeout(resolve, ms));
         },
 
-        async startCountdown() {
+        async startCountdown(){
             // Mark that that it's not a first game
             this.firstGame = false;
             this.$emit("firstGame", this.firstGame);
@@ -187,8 +231,6 @@ export default defineComponent({
         startGame(){
             this.gamePlaying = true;
             this.showCore = true;
-
-            this.created();
             this.timerFunction();
         },
 
@@ -226,13 +268,33 @@ export default defineComponent({
             }
         }
 
+    },
+
+    watch:{
+
+        isMuted:{
+            immediate: true,
+            handler(){
+                this.adjustVolume();
+            }
+        }
+
     }
+
 });
 </script>
 
 
 
 <style lang="scss">
+
+.audio-settings{
+
+    &.muted-audio button{
+        border-color:red;
+    }
+    
+}
 
 .game{
 
