@@ -3,11 +3,17 @@
 
 <template>
     <div class="page">
-        <UserOptions @timerIsSet="timerIsSet"></UserOptions>
-        <GameField :timeDuration="timeDuration"></GameField>
+        <UserOptions 
+            @timerIsSet="timerIsSetFun"
+            :firstGame="firstGame">
+        </UserOptions>
+        <GameField 
+            @firstGame="isFirstGame"
+            :timeDuration="timeDuration">
+        </GameField>
     </div>
     <br>
-    v0.1.0
+    v0.2.0
 </template>
 
 
@@ -27,15 +33,19 @@ export default defineComponent({
 
     data(){
         return{
-            timeDuration: 10
+            timeDuration: 10,
+            firstGame: true
         }
     },
 
     methods:{
 
-        timerIsSet(newTimeDur: number){
-            this.timeDuration = newTimeDur
-            console.log(this.timeDuration)
+        timerIsSetFun(newTimeDur: number){
+            this.timeDuration = newTimeDur;
+        },
+
+        isFirstGame(wasPlayed: boolean){
+            this.firstGame = wasPlayed;
         }
 
     }
