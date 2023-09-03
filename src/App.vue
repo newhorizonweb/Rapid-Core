@@ -5,15 +5,17 @@
     <div class="page">
         <UserOptions 
             @timerIsSet="timerIsSetFun"
-            :firstGame="firstGame">
+            :firstGame="firstGame"
+            :resultsMounted="resultsMounted">
         </UserOptions>
         <GameField 
             @firstGame="isFirstGame"
+            @resultsMounted="resultsMountedFun"
             :timeDuration="timeDuration">
         </GameField>
     </div>
     <br>
-    v0.3.0
+    v0.4.0
 </template>
 
 
@@ -24,7 +26,7 @@ import UserOptions from "./components/UserOptions.vue"
 import GameField from "./components/GameField.vue"
 
 export default defineComponent({
-    name: 'App',
+    name: "App",
 
     components: {
         UserOptions,
@@ -34,7 +36,8 @@ export default defineComponent({
     data(){
         return{
             timeDuration: 10,
-            firstGame: true
+            firstGame: true,
+            resultsMounted: false
         }
     },
 
@@ -46,7 +49,12 @@ export default defineComponent({
 
         isFirstGame(wasPlayed: boolean){
             this.firstGame = wasPlayed;
+        },
+
+        resultsMountedFun(){
+            (this.resultsMounted as boolean) = true
         }
+
 
     }
 

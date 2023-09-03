@@ -25,7 +25,7 @@
     60s
 </button>
 
-<teleport to=".fs-time-btns" v-if="!firstGame">
+<teleport to=".fs-time-btns" v-if="resultsMounted">
     <button class="time-btn time-btn-current"
         @click="setTimeDur"
         runTime="10">
@@ -51,18 +51,22 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-    name: 'UserOptions',
-    emits: ['timerIsSet'],
+    name: "UserOptions",
+
+    emits: [
+        "timerIsSet"
+    ],
+
+    props:[
+        "firstGame",
+        "resultsMounted"
+    ],
 
     data(){
         return{
             timeDuration: 10
         }
     },
-
-    props:[
-        "firstGame"
-    ],
 
     methods:{
 

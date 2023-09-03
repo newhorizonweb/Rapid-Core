@@ -52,6 +52,7 @@
 
     <ResultsScreen 
         ref="resultInfo"
+        @resultsMounted="$emit('resultsMounted')"
         :finishScreen="finishScreen"
 
         :gameScore="gameScore" 
@@ -75,8 +76,12 @@ import { defineComponent } from 'vue'
 import ResultsScreen from "./ResultsScreen.vue"
 
 export default defineComponent({
-    name: 'GameField',
-    emits: ['firstGame'],
+    name: "GameField",
+
+    emits: [
+        "firstGame",
+        "resultsMounted"
+    ],
 
     components: {
         ResultsScreen
@@ -334,7 +339,6 @@ export default defineComponent({
         transform:translate(-50%, -50%);
         font-size:30px;
     }
-
 
 }
 

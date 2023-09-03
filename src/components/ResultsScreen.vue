@@ -7,24 +7,54 @@
     
     <div class="fs-time-btns"></div>
     <div class="fs-audio"></div>
+    <br>
+
+    <div v-if="newPB">
+        <p>PERSONAL RECORD</p>
+    </div>
 
     <p>Your score: {{ gameScore }}</p>
     <p>Score Per Second: {{ scorePerSecond.toFixed(2) }}</p>
     <br>
+
     <p>Total Clicks: {{ totalClicks }}</p>
     <p>Missed Clicks: {{ missedClicks }}</p>
     <br>
+
     <p>Accuracy: {{ (accuracy * 100).toFixed(2) }}%</p>
     <p>Clicks Per Second: {{ CPS.toFixed(2) }}</p>
-
+    <br>
 
     <p>{{ currResName }}</p>
     <p>{{ currResSize }}</p>
     <p>{{ currResLifespan }}</p>
     <p>{{ currResExamples }}</p>
     <p>{{ currResFunFact }}</p>
+    <br>
 
     <slot name="start-btn"></slot>
+    <br>
+
+    <div class="personal-best" v-if="personalBestScores.length > 0">
+        <div v-for="(pbScore, index) in personalBestScores" :key="index">
+            <p>{{ pbScore.pb ? pbScore.pb : "---" }}</p>
+            <p>{{ pbScore.pbSec ? pbScore.pbSec : "---"  }}</p>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+
+    <ScoreboardComp
+        ref="saveResults"
+        @pbScores="pbScores"
+
+        :timeDuration="timeDuration"
+        :gameScore="gameScore"
+        :scorePerSecond="scorePerSecond"
+        :accuracy="accuracy"
+        :CPS="CPS"
+    ></ScoreboardComp>
 
 </div>
 
@@ -34,9 +64,25 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import ScoreboardComp from "./Scoreboard.vue"
+
+interface PersonalBestScore{
+    pb: number;
+    pbSec: number;
+    uniqueIndex: number;
+    firstGame: boolean;
+}
 
 export default defineComponent({
-    name: 'ResultsScreen',
+    name: "ResultsScreen",
+
+    emits: [
+        "resultsMounted"
+    ],
+
+    components: {
+        ScoreboardComp
+    },
 
     data(){
         return{
@@ -109,13 +155,19 @@ export default defineComponent({
                 },
 
             ],
+
             currResItem: 0,
             randNum: 0,
             currResName: "",
             currResLifespan: "",
             currResSize: "",
             currResExamples: "",
-            currResFunFact: ""
+            currResFunFact: "",
+
+            // Personal Best Scores
+            personalBestScores: [] as PersonalBestScore[],
+            scoreIndex: 0,
+            newPB: false
         }
     },
 
@@ -125,6 +177,10 @@ export default defineComponent({
         "gameScore",
         "totalClicks"
     ],
+
+    mounted(){
+        this.$emit("resultsMounted");
+    },
 
     methods:{
 
@@ -182,6 +238,41 @@ export default defineComponent({
             this.randNum = Math.floor(Math.random() * 3);
             this.currResFunFact = currRes.funFacts[this.randNum];
 
+            // Save results function in the Scoreboard component
+            (this.$refs.saveResults as InstanceType<typeof ScoreboardComp>).saveResults();
+
+        },
+
+        pbScores(pbScoresArray: PersonalBestScore[]){
+            
+            this.personalBestScores = pbScoresArray;
+
+            switch (this.timeDuration){
+                case 10:
+                    this.scoreIndex = 0;
+                    break;
+                case 30:
+                    this.scoreIndex = 1;
+                    break;
+                case 60:
+                    this.scoreIndex = 2;
+                    break;
+            }
+
+            const currScores = this.personalBestScores[this.scoreIndex];
+
+            // Check if it's a personal record, so if:
+            // The current score is the highest in the scoreboard (current game duration)
+            // It's unique, so the score must be better than the previous one
+            // It's not a first game
+            if (currScores.pb == this.gameScore &&
+                currScores.uniqueIndex <= 1 &&
+                currScores.firstGame === false){
+                this.newPB = true;
+            } else {
+                this.newPB = false;
+            }
+
         }
 
     },
@@ -198,7 +289,6 @@ export default defineComponent({
             } else {
                 return 0;
             }
-            
         },
         
         CPS(){
@@ -220,12 +310,11 @@ export default defineComponent({
 
 .finish-screen{
     width:400px;
-    height:300px;
+    min-height:300px;
 
     position:absolute;
-    top:50%;
+    top:0;
     left:105%;
-    transform:translate(0, -50%);
 
     background-color:#DDD;
     transition:0.5s;
@@ -238,11 +327,11 @@ export default defineComponent({
     @keyframes fsFade{
         0%{
             left:105%;
-            transform:translate(0, -50%);
+            transform:translate(0, 0);
         }
         100%{
             left:50%;
-            transform:translate(-50%, -50%);
+            transform:translate(-50%, 0);
         }
     }
 
