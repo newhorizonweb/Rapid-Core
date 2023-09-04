@@ -7,6 +7,7 @@
     
     <div class="fs-time-btns"></div>
     <div class="fs-audio"></div>
+ 
     <br>
 
     <div v-if="newPB">
@@ -53,8 +54,8 @@
         :gameScore="gameScore"
         :scorePerSecond="scorePerSecond"
         :accuracy="accuracy"
-        :CPS="CPS"
-    ></ScoreboardComp>
+        :CPS="CPS" 
+    />
 
 </div>
 
@@ -313,7 +314,7 @@ export default defineComponent({
     min-height:300px;
 
     position:absolute;
-    top:0;
+    top:50%;
     left:105%;
 
     background-color:#DDD;

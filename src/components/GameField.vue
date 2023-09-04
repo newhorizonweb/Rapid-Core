@@ -3,28 +3,6 @@
 
 <template>
 
-<div class="audio-settings" :class="{'muted-audio': isMuted}">
-    <input type="range" 
-        min="0" max="1" step="0.05" 
-        v-model="masterVolume"
-        @input="adjustVolume"
-    >
-    <button @click="isMuted = !isMuted">X</button>
-    <p>Volume: {{ (masterVolume * 100).toFixed(0) }}%</p>
-</div>
-
-<teleport to=".fs-audio" v-if="!firstGame">
-    <div class="audio-settings" :class="{'muted-audio': isMuted}">
-        <input type="range" 
-            min="0" max="1" step="0.05" 
-            v-model="masterVolume"
-            @input="adjustVolume"
-        >
-        <button @click="isMuted = !isMuted">X</button>
-        <p>Volume: {{ (masterVolume * 100).toFixed(0) }}%</p>
-    </div>
-</teleport>
-    
 <div class="game">
 
     <div class="game-field" ref="gameField" @click="totalClicksFun">
@@ -46,10 +24,6 @@
     <p>Score: {{ gameScore }}</p>
     <p>Time left: {{ timerCurrVal.toFixed(2) }}</p>
 
-    <audio ref="startAudioElem" :src="startAudioSrc"></audio>
-    <audio ref="preTimeAudioElem" :src="preTimeAudioSrc"></audio>
-    <audio ref="finishAudioElem" :src="finishAudioSrc"></audio>
-
     <ResultsScreen 
         ref="resultInfo"
         @resultsMounted="$emit('resultsMounted')"
@@ -65,6 +39,11 @@
         
     </ResultsScreen>
 
+    <AudioGame
+        ref="AudioGame"
+        @audioGameElements="audioGameElements" 
+    />
+
 </div>
 
 </template>
@@ -74,6 +53,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import ResultsScreen from "./ResultsScreen.vue"
+import AudioGame from "./AudioGame.vue"
+
+type AudioElemsType = {
+    [key: string]: HTMLAudioElement;
+};
 
 export default defineComponent({
     name: "GameField",
@@ -84,21 +68,16 @@ export default defineComponent({
     ],
 
     components: {
-        ResultsScreen
+        ResultsScreen,
+        AudioGame
     },
 
     data(){
         return{
             // Audio
-            startAudioSrc: require('@/assets/audio/start.mp3'),
-            preTimeAudioSrc: require('@/assets/audio/pre-time.mp3'),
-            clickAudioSrc: require('@/assets/audio/click.flac'),
-            finishAudioSrc: require('@/assets/audio/finish.mp3'),
-            clickAudioPool: [] as HTMLAudioElement[],
-            clickAudioMax: 10,
-
-            masterVolume: (localStorage.getItem("masterVolume") !== null) ? Number(localStorage.getItem("masterVolume")) : 1,
-            isMuted: (localStorage.getItem("isMuted") === 'true') ? true : (localStorage.getItem("isMuted") === 'false' ? false : false),
+            startAudioElem: null as HTMLAudioElement | null,
+            preTimeAudioElem: null as HTMLAudioElement | null,
+            finishAudioElem: null as HTMLAudioElement | null,
 
             // Timer
             timerCurrVal: 0,
@@ -121,44 +100,14 @@ export default defineComponent({
         "timeDuration"
     ],
 
-    mounted(){
-
-            /* Audio */
-
-        for (let i = 0; i < this.clickAudioMax; i++){
-            const audio = new Audio(this.clickAudioSrc);
-            this.clickAudioPool.push(audio);
-        }
-
-        // Adjust the volume on load
-        this.adjustVolume();
-
-    },
-
     methods:{
 
             /* Audio */
 
-        playClickSound(){
-            // Find an audio instance that's not playing
-            const audio = this.clickAudioPool.find(a => a.paused || a.ended);
-
-            if (audio){
-                audio.volume = this.isMuted ? 0 : this.masterVolume;
-                audio.currentTime = 0;
-                audio.play();
-            }
-        },
-
-        adjustVolume(){
-            const audioElems = document.querySelectorAll("audio");
-            audioElems.forEach((audioElem) => {
-                audioElem.volume = this.isMuted ? 0 : this.masterVolume;
-            });
-
-            // Save the masterVolume and isMuted to the localStorage
-            localStorage.setItem("masterVolume", this.masterVolume.toString());
-            localStorage.setItem("isMuted", this.isMuted.toString());
+        audioGameElements(audio: AudioElemsType){
+            this.startAudioElem = audio.start;
+            this.preTimeAudioElem = audio.preTime;
+            this.finishAudioElem = audio.finish;
         },
 
             /* Timer (Preparation & Game Duration) */
@@ -184,19 +133,19 @@ export default defineComponent({
 
             // Preparation timer countdown
             this.gamePreTime = "3";
-            (this.$refs.preTimeAudioElem as HTMLVideoElement).play();
+            (this.preTimeAudioElem as HTMLVideoElement).play();
             await this.delay(1000);
 
             this.gamePreTime = "2";
-            (this.$refs.preTimeAudioElem as HTMLVideoElement).play();
+            (this.preTimeAudioElem as HTMLVideoElement).play();
             await this.delay(1000);
 
             this.gamePreTime = "1";
-            (this.$refs.preTimeAudioElem as HTMLVideoElement).play();
+            (this.preTimeAudioElem as HTMLVideoElement).play();
             await this.delay(1000);
 
             this.gamePreTime = "START";
-            (this.$refs.startAudioElem as HTMLVideoElement).play();
+            (this.startAudioElem as HTMLVideoElement).play();
             await this.delay(1000);
 
             this.gamePreTime = "";
@@ -227,7 +176,7 @@ export default defineComponent({
         finishGame(){
             this.gamePlaying = false;
             this.finishScreen = true;
-            (this.$refs.finishAudioElem as HTMLVideoElement).play();
+            (this.finishAudioElem as HTMLVideoElement).play();
 
             // Call an even in the ResultsScreen (comments)
             (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).resultInfo();
@@ -261,7 +210,7 @@ export default defineComponent({
             this.corePosition();
 
             // Play the click sound
-            this.playClickSound();
+            (this.$refs.AudioGame as InstanceType<typeof AudioGame>).playClickSound();
 
             // Change user score
             this.gameScore++
@@ -274,17 +223,6 @@ export default defineComponent({
         }
 
     },
-
-    watch:{
-
-        isMuted:{
-            immediate: true,
-            handler(){
-                this.adjustVolume();
-            }
-        }
-
-    }
 
 });
 </script>

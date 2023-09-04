@@ -6,16 +6,21 @@
         <UserOptions 
             @timerIsSet="timerIsSetFun"
             :firstGame="firstGame"
-            :resultsMounted="resultsMounted">
-        </UserOptions>
+            :resultsMounted="resultsMounted" 
+        />
+
+        <AudioSettings
+            :firstGame="firstGame"
+        />
+
         <GameField 
             @firstGame="isFirstGame"
             @resultsMounted="resultsMountedFun"
-            :timeDuration="timeDuration">
-        </GameField>
+            :timeDuration="timeDuration" 
+        />
     </div>
     <br>
-    v0.4.0
+    v0.4.1
 </template>
 
 
@@ -23,6 +28,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import UserOptions from "./components/UserOptions.vue"
+import AudioSettings from "./components/AudioSettings.vue"
 import GameField from "./components/GameField.vue"
 
 export default defineComponent({
@@ -30,6 +36,7 @@ export default defineComponent({
 
     components: {
         UserOptions,
+        AudioSettings,
         GameField
     },
 
