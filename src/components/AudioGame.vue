@@ -3,9 +3,9 @@
 
 <template>
 
-<audio ref="startAudioElem" :src="startAudioSrc"></audio>
-<audio ref="preTimeAudioElem" :src="preTimeAudioSrc"></audio>
-<audio ref="finishAudioElem" :src="finishAudioSrc"></audio>
+<audio class="gameplay-audio" ref="startAudioElem" :src="startAudioSrc"></audio>
+<audio class="gameplay-audio" ref="preTimeAudioElem" :src="preTimeAudioSrc"></audio>
+<audio class="gameplay-audio" ref="finishAudioElem" :src="finishAudioSrc"></audio>
 
 </template>
 

@@ -7,6 +7,7 @@
     
     <div class="fs-time-btns"></div>
     <div class="fs-audio"></div>
+    <div class="fs-music"></div>
  
     <br>
 

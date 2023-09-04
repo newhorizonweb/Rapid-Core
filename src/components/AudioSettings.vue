@@ -66,9 +66,9 @@ export default defineComponent({
 
         adjustVolume(){
             // Set the volume and muted state
-            const audioElems = document.querySelectorAll("audio");
+            const audioElems = document.querySelectorAll(".gameplay-audio");
             audioElems.forEach((audioElem) => {
-                audioElem.volume = this.isMuted ? 0 : this.masterVolume;
+                (audioElem as HTMLAudioElement).volume = this.isMuted ? 0 : this.masterVolume;
             });
 
             // Save the masterVolume and isMuted to the localStorage

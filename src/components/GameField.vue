@@ -64,7 +64,8 @@ export default defineComponent({
 
     emits: [
         "firstGame",
-        "resultsMounted"
+        "resultsMounted",
+        "startGame"
     ],
 
     components: {
@@ -186,6 +187,7 @@ export default defineComponent({
             this.gamePlaying = true;
             this.showCore = true;
             this.timerFunction();
+            this.$emit("startGame");
         },
 
         corePosition(){

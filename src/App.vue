@@ -13,14 +13,20 @@
             :firstGame="firstGame"
         />
 
+        <AudioMusic
+            ref="AudioMusic"
+            :firstGame="firstGame"
+        />
+
         <GameField 
             @firstGame="isFirstGame"
             @resultsMounted="resultsMountedFun"
+            @startGame="startGame"
             :timeDuration="timeDuration" 
         />
     </div>
     <br>
-    v0.4.1
+    v0.5.0
 </template>
 
 
@@ -29,6 +35,7 @@
 import { defineComponent } from 'vue'
 import UserOptions from "./components/UserOptions.vue"
 import AudioSettings from "./components/AudioSettings.vue"
+import AudioMusic from "./components/AudioMusic.vue"
 import GameField from "./components/GameField.vue"
 
 export default defineComponent({
@@ -37,6 +44,7 @@ export default defineComponent({
     components: {
         UserOptions,
         AudioSettings,
+        AudioMusic,
         GameField
     },
 
@@ -60,8 +68,11 @@ export default defineComponent({
 
         resultsMountedFun(){
             (this.resultsMounted as boolean) = true
-        }
+        },
 
+        startGame(){
+            (this.$refs.AudioMusic as InstanceType<typeof AudioMusic>).playMusicAudio();
+        }
 
     }
 
