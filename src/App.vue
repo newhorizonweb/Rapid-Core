@@ -26,7 +26,7 @@
         />
     </div>
     <br>
-    v0.5.0
+    v0.5.1
 </template>
 
 
@@ -71,7 +71,7 @@ export default defineComponent({
         },
 
         startGame(){
-            (this.$refs.AudioMusic as InstanceType<typeof AudioMusic>).playMusicAudio();
+            (this.$refs.AudioMusic as InstanceType<typeof AudioMusic>).playMusicInit();
         }
 
     }
@@ -93,6 +93,10 @@ export default defineComponent({
     display:flex;
     flex-direction:column;
     align-items:center;
+}
+
+.muted-audio .mute-btn{
+    border-color:red;
 }
 
 </style>

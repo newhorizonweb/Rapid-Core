@@ -7,9 +7,14 @@
     <input type="range" 
         min="0" max="1" step="0.05" 
         v-model="masterVolume"
-        @input="adjustVolume"
-    >
-    <button @click="isMuted = !isMuted; adjustVolume">X</button>
+        @input="adjustVolume">
+
+    <button 
+        class="mute-btn"
+        @click="isMuted = !isMuted">
+        X
+    </button>
+
     <p>Volume: {{ (masterVolume * 100).toFixed(0) }}%</p>
 </div>
 
@@ -20,9 +25,10 @@
         <input type="range" 
             min="0" max="1" step="0.05" 
             v-model="masterVolume"
-            @input="adjustVolume"
-        >
+            @input="adjustVolume">
+
         <button @click="isMuted = !isMuted">X</button>
+        
         <p>Volume: {{ (masterVolume * 100).toFixed(0) }}%</p>
     </div>
 </teleport>
@@ -44,11 +50,6 @@ export default defineComponent({
 
     data(){
         return{
-            // Audio Elements
-            startAudioElem: null as HTMLAudioElement | null,
-            preTimeAudioElem: null as HTMLAudioElement | null,
-            finishAudioElem: null as HTMLAudioElement | null,
-
             // Audio Settings
             masterVolume: (localStorage.getItem("masterVolume") !== null) ? Number(localStorage.getItem("masterVolume")) : 1,
             isMuted: (localStorage.getItem("isMuted") === 'true') ? true : (localStorage.getItem("isMuted") === 'false' ? false : false),
@@ -56,10 +57,7 @@ export default defineComponent({
     },
 
     mounted(){
-
-        // Adjust the volume on load
         this.adjustVolume();
-
     },
 
     methods:{

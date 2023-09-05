@@ -233,14 +233,6 @@ export default defineComponent({
 
 <style lang="scss">
 
-.audio-settings{
-
-    &.muted-audio button{
-        border-color:red;
-    }
-    
-}
-
 .game{
 
     .game-field{
