@@ -5,7 +5,10 @@
 
 <div class="game">
 
-    <div class="game-field" ref="gameField" @click="totalClicksFun">
+    <div class="game-field" 
+        ref="gameField" 
+        @click="totalClicksFun"
+        @click.self="playMissSound">
         
         <button v-if="firstGame" @click="startCountdown">START</button>
 
@@ -22,7 +25,12 @@
     </div>
 
     <p>Score: {{ gameScore }}</p>
-    <p>Time left: {{ timerCurrVal.toFixed(2) }}</p>
+    <p class="timer">
+        Time left: 
+        <span :class="{'timer-animation': timerAnimation}">
+            {{ ( timerCurrVal / 1000 ).toFixed(2) }}
+        </span>
+    </p>
 
     <button 
         v-show="gamePlaying"
@@ -90,6 +98,7 @@ export default defineComponent({
             // Timer
             timerCurrVal: 0,
             timerInterval: undefined as number | undefined,
+            timerAnimation: false,
 
             // Game Properties
             gamePreTime: "",
@@ -165,11 +174,25 @@ export default defineComponent({
 
         timerFunction(){
             clearInterval(this.timerInterval);
-            this.timerCurrVal = this.timeDuration;
+
+            // Convert to ms to avoid floating-points errors
+            this.timerCurrVal = this.timeDuration * 1000;
 
             // Update every 10ms
             this.timerInterval = setInterval(() => {
-                this.timerCurrVal -= 0.01;
+                this.timerCurrVal -= 10;
+
+                if (this.timerCurrVal / 1000 <= 3 && 
+                    this.timerCurrVal / 1000 > 0 && 
+                    Number.isInteger(this.timerCurrVal / 1000)){
+
+                    this.timerAnimation = true;
+
+                    // Remove the animation class after 1s
+                    setTimeout(() => {
+                        this.timerAnimation = false;
+                    }, 900);
+                }
 
                 if (this.timerCurrVal <= 0) {
                     this.finishGame();
@@ -237,6 +260,12 @@ export default defineComponent({
             if (this.gamePlaying){
                 this.totalClicks++
             }
+        },
+
+        playMissSound(){
+            if (this.gamePlaying){
+                (this.$refs.AudioGame as InstanceType<typeof AudioGame>).playMissSound();
+            }
         }
 
     },
@@ -285,6 +314,33 @@ export default defineComponent({
         left:50%;
         transform:translate(-50%, -50%);
         font-size:30px;
+    }
+
+    .timer{
+        font-size:18px;
+    }
+
+    .timer-animation{
+        animation:timerAnim 1s ease-in-out;
+    }
+
+    @keyframes timerAnim{
+        0%{
+            color:black;
+            font-size:18px;
+        }
+        15%{
+            color:red;
+        }
+        20%{
+            font-size:22px;
+        }
+        60%{
+            color:black;
+        }
+        65%{
+            font-size:18px;
+        }
     }
 
 }

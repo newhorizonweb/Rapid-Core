@@ -26,9 +26,13 @@ export default defineComponent({
             // Audio Elements
             startAudioSrc: require('@/assets/audio/start.mp3'),
             preTimeAudioSrc: require('@/assets/audio/pre-time.mp3'),
-            clickAudioSrc: require('@/assets/audio/click.flac'),
             finishAudioSrc: require('@/assets/audio/finish.mp3'),
+            clickAudioSrc: require('@/assets/audio/click.flac'),
+            missAudioSrc: require('@/assets/audio/miss.mp3'),
+
+            // Click
             clickAudioPool: [] as HTMLAudioElement[],
+            missAudioPool: [] as HTMLAudioElement[],
             clickAudioMax: 10,
 
             // Audio Settings
@@ -43,6 +47,9 @@ export default defineComponent({
         for (let i = 0; i < this.clickAudioMax; i++){
             const audio = new Audio(this.clickAudioSrc);
             this.clickAudioPool.push(audio);
+
+            const missAudio = new Audio(this.missAudioSrc);
+            this.missAudioPool.push(missAudio);
         }
 
         // Send the audio elements to the GameField
@@ -56,9 +63,9 @@ export default defineComponent({
 
     methods:{
 
-        playClickSound(){
+        playGameSound(sourceArray: HTMLAudioElement[]){
             // Find an audio instance that's not playing
-            const audio = this.clickAudioPool.find(a => a.paused || a.ended);
+            const audio = sourceArray.find(a => a.paused || a.ended);
 
             // Get the volume level and "muted" state
             this.masterVolume = (localStorage.getItem("masterVolume") !== null) ? Number(localStorage.getItem("masterVolume")) : 1;
@@ -70,6 +77,14 @@ export default defineComponent({
                 audio.currentTime = 0;
                 audio.play();
             }
+        },
+
+        playClickSound(){
+            this.playGameSound(this.clickAudioPool);
+        },
+
+        playMissSound(){
+            this.playGameSound(this.missAudioPool);
         }
 
     }
