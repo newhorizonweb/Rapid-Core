@@ -24,6 +24,12 @@
     <p>Score: {{ gameScore }}</p>
     <p>Time left: {{ timerCurrVal.toFixed(2) }}</p>
 
+    <button 
+        v-show="gamePlaying"
+        @click="finishGame">
+        -Finish-
+    </button>
+
     <ResultsScreen 
         ref="resultInfo"
         @resultsMounted="$emit('resultsMounted')"
@@ -54,6 +60,7 @@
 import { defineComponent } from 'vue'
 import ResultsScreen from "./ResultsScreen.vue"
 import AudioGame from "./AudioGame.vue"
+
 
 type AudioElemsType = {
     [key: string]: HTMLAudioElement;
@@ -165,23 +172,15 @@ export default defineComponent({
                 this.timerCurrVal -= 0.01;
 
                 if (this.timerCurrVal <= 0) {
-                    clearInterval(this.timerInterval);
-                    this.timerCurrVal = 0;
                     this.finishGame();
+
+                    // Save results in the Scoreboard component
+                    (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).saveResults();
                 }
             }, 10); 
         },
 
-            /* Game Logic */
-
-        finishGame(){
-            this.gamePlaying = false;
-            this.finishScreen = true;
-            (this.finishAudioElem as HTMLVideoElement).play();
-
-            // Call an even in the ResultsScreen (comments)
-            (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).resultInfo();
-        },
+            /* Start / Finish */
 
         startGame(){
             this.gamePlaying = true;
@@ -189,6 +188,22 @@ export default defineComponent({
             this.timerFunction();
             this.$emit("startGame");
         },
+
+        finishGame(){
+            // Stop the timer (if the game was finished manually)
+            clearInterval(this.timerInterval);
+            this.timerCurrVal = 0;
+
+            // Finish the game
+            this.gamePlaying = false;
+            this.finishScreen = true;
+            (this.finishAudioElem as HTMLVideoElement).play();
+
+            // Call an event in the ResultsScreen (levels, fun facts, etc)
+            (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).resultInfo();
+        },
+
+            /* Game Logic */
 
         corePosition(){
             const gameCoreElem = this.$refs.gameCore as HTMLElement;

@@ -4,7 +4,7 @@
 <template>
 
 <button v-if="showSbBtn" @click="showScoreboard = !showScoreboard">
-    [Scoreboard]
+    [ Scoreboard ]
 </button>
 
 <div class="scoreboards" v-show="showScoreboard && showSbBtn">
@@ -112,6 +112,8 @@ export default defineComponent({
 
     methods:{
 
+            /* Tool Functions */
+
         checkTimeDuration(){
             let sbName = "";
 
@@ -130,38 +132,11 @@ export default defineComponent({
             return sbName;
         },
 
-        saveResults(){
-
-            const sbName: string = this.checkTimeDuration();
-
-            // Get the correct scoreboard
-            const scoreboard = localStorage.getItem(sbName) ? JSON.parse(localStorage.getItem(sbName) as string) : [];
-
-            // Create an object with the score
-            const newScore = {
-                score: this.gameScore,
-                sps: this.scorePerSecond.toFixed(2),
-                accuracy: (this.accuracy * 100).toFixed(2),
-                cps: this.CPS.toFixed(2)
-            }
-
-            // Push the new score object to the array
-            scoreboard.push(newScore);
-
-            // Save the updated scoreboard
-            localStorage.setItem(sbName, JSON.stringify(scoreboard));
-
-            // Send a ping to update scoreboards
-            this.ping++
-
-            // Set the personal best score
-            this.personalBest();
-
-        },
-
         getScoreboard(sbName: string){
             return localStorage.getItem(sbName) ? JSON.parse(localStorage.getItem(sbName) as string) : [];
         },
+
+            /* Calculate Scores */
 
         avgScore(scoreboard: scoreboardTypes[]) {
             const totalGames = scoreboard.length;
@@ -189,7 +164,6 @@ export default defineComponent({
             this.scoreboards.forEach((scoreboard, index) => {
                 if (scoreboard.data.length > 0){
 
-                    // Show the scoreboard button
                     this.showSbBtn = true;
 
                     // Check for the max score
@@ -208,7 +182,6 @@ export default defineComponent({
                     this.personalBestScores[index].pbSec = maxScoreSec;
                     this.personalBestScores[index].uniqueIndex = uniqueIndex;
                     this.personalBestScores[index].firstGame = firstGame;
-
                 }
             });
 
@@ -216,8 +189,38 @@ export default defineComponent({
 
         },
 
-        clearScoreboard(){
+            /* Save Results */
 
+        saveResults(){
+            const sbName: string = this.checkTimeDuration();
+
+            // Get the correct scoreboard
+            const scoreboard = localStorage.getItem(sbName) ? JSON.parse(localStorage.getItem(sbName) as string) : [];
+
+            // Create an object with the score
+            const newScore = {
+                score: this.gameScore,
+                sps: this.scorePerSecond.toFixed(2),
+                accuracy: (this.accuracy * 100).toFixed(2),
+                cps: this.CPS.toFixed(2)
+            }
+
+            // Push the new score object to the array
+            scoreboard.push(newScore);
+
+            // Save the updated scoreboard
+            localStorage.setItem(sbName, JSON.stringify(scoreboard));
+
+            // Send a ping to update scoreboards
+            this.ping++
+
+            // Set the personal best score
+            this.personalBest();
+        },
+        
+            /* Clear Scoreboard */
+
+        clearScoreboard(){
             // Hide scoreboard and its button
             this.showSbBtn = false;
             this.showScoreboard = false;
@@ -238,6 +241,8 @@ export default defineComponent({
             // Send the cleared pb scores to the Results Screen
             this.$emit("pbScores", this.personalBestScores);
 
+            // Send a ping to update scoreboards
+            this.ping++
         }
 
     },

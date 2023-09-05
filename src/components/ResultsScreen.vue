@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import ScoreboardComp from "./Scoreboard.vue"
+import ScoreboardComp from "./ScoreboardComp.vue"
 
 interface PersonalBestScore{
     pb: number;
@@ -240,9 +240,12 @@ export default defineComponent({
             this.randNum = Math.floor(Math.random() * 3);
             this.currResFunFact = currRes.funFacts[this.randNum];
 
-            // Save results function in the Scoreboard component
-            (this.$refs.saveResults as InstanceType<typeof ScoreboardComp>).saveResults();
+            // Show the Personal Best scores
+            (this.$refs.saveResults as InstanceType<typeof ScoreboardComp>).personalBest();
+        },
 
+        saveResults(){
+            (this.$refs.saveResults as InstanceType<typeof ScoreboardComp>).saveResults();
         },
 
         pbScores(pbScoresArray: PersonalBestScore[]){
@@ -276,7 +279,7 @@ export default defineComponent({
             }
 
         }
-
+        
     },
 
     computed:{
@@ -332,7 +335,7 @@ export default defineComponent({
             transform:translate(0, 0);
         }
         100%{
-            left:50%;
+            left:80%;
             transform:translate(-50%, 0);
         }
     }
