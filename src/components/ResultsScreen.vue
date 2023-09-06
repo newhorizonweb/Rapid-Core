@@ -27,7 +27,7 @@
     <p>Clicks Per Second: {{ CPS.toFixed(2) }}</p>
     <br>
 
-    <p>{{ currResName }}</p>
+    <p>Lvl {{ currResLvl }} - {{ currResName }}</p>
     <p>{{ currResSize }}</p>
     <p>{{ currResLifespan }}</p>
     <p>{{ currResExamples }}</p>
@@ -90,6 +90,7 @@ export default defineComponent({
         return{
             resultItems: [
                 {
+                    lvl: 6,
                     name: "Black Hole",
                     lifespan: "",
                     size: "",
@@ -101,6 +102,7 @@ export default defineComponent({
                     ]
                 },
                 {
+                    lvl: 5,
                     name: "Pulsar",
                     lifespan: "",
                     size: "",
@@ -112,6 +114,7 @@ export default defineComponent({
                     ]
                 },
                 {
+                    lvl: 4,
                     name: "Blue Giant",
                     lifespan: "",
                     size: "",
@@ -123,6 +126,7 @@ export default defineComponent({
                     ]
                 },
                 {
+                    lvl: 3,
                     name: "Red Giant",
                     lifespan: "",
                     size: "",
@@ -134,6 +138,7 @@ export default defineComponent({
                     ]
                 },
                 {
+                    lvl: 2,
                     name: "Yellow Dwarf",
                     lifespan: "",
                     size: "",
@@ -145,6 +150,7 @@ export default defineComponent({
                     ]
                 },
                 {
+                    lvl: 1,
                     name: "Red Dwarf",
                     lifespan: "10 days",
                     size: "1 km",
@@ -160,6 +166,7 @@ export default defineComponent({
 
             currResItem: 0,
             randNum: 0,
+            currResLvl: 0,
             currResName: "",
             currResLifespan: "",
             currResSize: "",
@@ -186,7 +193,7 @@ export default defineComponent({
 
     methods:{
 
-        resultInfo(){
+        resultInfo(didUserEnd: boolean){
 
             switch (true){
                 case this.scorePerSecond >= 2.75:
@@ -215,6 +222,7 @@ export default defineComponent({
             }
 
             type ResultItem = {
+                lvl: number;
                 name: string;
                 lifespan: string;
                 size: string;
@@ -223,6 +231,9 @@ export default defineComponent({
             };
 
             const currRes:ResultItem = this.resultItems[this.currResItem];
+
+            // Level
+            this.currResLvl = currRes.lvl;
 
             // Name
             this.currResName = currRes.name;
@@ -242,6 +253,22 @@ export default defineComponent({
 
             // Show the Personal Best scores
             (this.$refs.saveResults as InstanceType<typeof ScoreboardComp>).personalBest();
+
+            // Remove game theme
+            for (let i = 0; i < this.resultItems.length; i++){
+                document.body.classList.remove("game-theme-lvl" + (i + 1));
+            }
+            document.body.classList.remove("game-theme-def");
+
+            // Add game theme
+            if (didUserEnd === false){
+                // Level theme
+                document.body.classList.add("game-theme-lvl" + this.currResLvl);
+            } else {
+                // Default theme
+                document.body.classList.add("game-theme-def");
+            }
+
         },
 
         saveResults(){

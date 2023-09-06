@@ -34,7 +34,7 @@
 
     <button 
         v-show="gamePlaying"
-        @click="finishGame">
+        @click="finishGame(true)">
         -Finish-
     </button>
 
@@ -195,7 +195,7 @@ export default defineComponent({
                 }
 
                 if (this.timerCurrVal <= 0) {
-                    this.finishGame();
+                    this.finishGame(false);
 
                     // Save results in the Scoreboard component
                     (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).saveResults();
@@ -212,7 +212,7 @@ export default defineComponent({
             this.$emit("startGame");
         },
 
-        finishGame(){
+        finishGame(didUserEnd: boolean){
             // Stop the timer (if the game was finished manually)
             clearInterval(this.timerInterval);
             this.timerCurrVal = 0;
@@ -223,7 +223,7 @@ export default defineComponent({
             (this.finishAudioElem as HTMLVideoElement).play();
 
             // Call an event in the ResultsScreen (levels, fun facts, etc)
-            (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).resultInfo();
+            (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).resultInfo(didUserEnd);
         },
 
             /* Game Logic */
