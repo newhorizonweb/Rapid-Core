@@ -58,6 +58,11 @@
         :CPS="CPS" 
     />
 
+    <CalcColors
+        ref="CalcColors"
+    />
+
+
 </div>
 
 </template>
@@ -67,6 +72,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import ScoreboardComp from "./ScoreboardComp.vue"
+import CalcColors from "./CalcColors.vue"
 
 interface PersonalBestScore{
     pb: number;
@@ -83,7 +89,8 @@ export default defineComponent({
     ],
 
     components: {
-        ScoreboardComp
+        ScoreboardComp, 
+        CalcColors
     },
 
     data(){
@@ -160,7 +167,7 @@ export default defineComponent({
                         "FunFact2",
                         "FunFact3"
                     ]
-                },
+                }
 
             ],
 
@@ -268,6 +275,9 @@ export default defineComponent({
                 // Default theme
                 document.body.classList.add("game-theme-def");
             }
+
+            // Calculate variables in the CalcColors component
+           (this.$refs.CalcColors as InstanceType<typeof CalcColors>).setVariables();
 
         },
 

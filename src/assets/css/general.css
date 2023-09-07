@@ -1,10 +1,33 @@
 
 
 
+
+
+
+
+
+@font-face {
+    src:url(../fonts/FuturisticFont.otf);
+    font-family:mainFont;
+    font-display:fallback;
+}
+
+@font-face {
+    src:url(../fonts/Oxanium-VariableFont_wght.ttf);
+    font-family:textFont;
+    font-display:fallback;
+}
+
+
+
+
+
+
+
+
 body{
     background-color:#edf0f4;
     position:relative;
-    transition:0.25s;
 }
 
 *{
@@ -13,29 +36,29 @@ body{
 }
 
 .game-theme-def{
-    background-color:rgb(235, 245, 255);
+    --mainColor:rgb(208, 215, 222);
 }
 
 .game-theme-lvl1{
-    background-color:rgb(255, 200, 190);
+    --mainColor:rgb(255, 200, 190);
 }
 
 .game-theme-lvl2{
-    background-color:rgb(230, 230, 200);
+    --mainColor:rgb(230, 230, 200);
 }
 
 .game-theme-lvl3{
-    background-color:rgb(255, 110, 110);
+    --mainColor:rgb(255, 110, 110);
 }
 
 .game-theme-lvl4{
-    background-color:rgb(40, 90, 255);
+    --mainColor:rgb(40, 90, 255);
 }
 
 .game-theme-lvl5{
-    background-color:rgb(80, 200, 255);
+    --mainColor:rgb(80, 200, 255);
 }
 
 .game-theme-lvl6{
-    background-color:rgb(70, 90, 100);
+    --mainColor:rgb(70, 90, 100);
 }

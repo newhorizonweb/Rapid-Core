@@ -3,6 +3,8 @@
 
 <template>
     <div class="page">
+        <LogoElem />
+
         <UserOptions 
             @timerIsSet="timerIsSetFun"
             :firstGame="firstGame"
@@ -26,13 +28,14 @@
         />
     </div>
     <br>
-    v0.7.1
+    v0.7.2
 </template>
 
 
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import LogoElem from "./components/pageElements/LogoElem.vue"
 import UserOptions from "./components/UserOptions.vue"
 import AudioSettings from "./components/AudioSettings.vue"
 import AudioMusic from "./components/AudioMusic.vue"
@@ -42,6 +45,7 @@ export default defineComponent({
     name: "App",
 
     components: {
+        LogoElem,
         UserOptions,
         AudioSettings,
         AudioMusic,

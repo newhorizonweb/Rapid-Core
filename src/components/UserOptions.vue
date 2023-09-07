@@ -3,7 +3,6 @@
 
 <template>
 
-<h1>Rapid Core</h1>
 <p>Choose the time duration</p>
 
 <button class="time-btn time-btn-current"
