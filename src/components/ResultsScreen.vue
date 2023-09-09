@@ -18,24 +18,34 @@
 
         <p>Your score: {{ gameScore }}</p>
         <p>Score Per Second: {{ scorePerSecond.toFixed(2) }}</p>
+
         <br>
 
         <p>Total Clicks: {{ totalClicks }}</p>
         <p>Missed Clicks: {{ missedClicks }}</p>
+
         <br>
 
         <p>Accuracy: {{ (accuracy * 100).toFixed(2) }}%</p>
         <p>Clicks Per Second: {{ CPS.toFixed(2) }}</p>
+
         <br>
 
-        <p>Lvl {{ currResLvl }} - {{ currResName }}</p>
-        <p>{{ currResSize }}</p>
-        <p>{{ currResLifespan }}</p>
-        <p>{{ currResExamples }}</p>
-        <p>{{ currResFunFact }}</p>
+        <p v-if="currResLvl && currResName">
+            Lvl: {{ currResLvl }} - {{ currResName }}
+        </p>
+        <p v-else>
+            Lvl: N/A
+        </p>
+        <p v-show="currResSize">{{ currResSize }}</p>
+        <p v-show="currResLifespan">{{ currResLifespan }}</p>
+        <p v-show="currResExamples">{{ currResExamples }}</p>
+        <p v-show="currResFunFact">{{ currResFunFact }}</p>
+
         <br>
 
         <slot name="start-btn"></slot>
+
         <br>
 
         <div class="personal-best" v-if="personalBestScores.length > 0">
@@ -44,6 +54,7 @@
                 <p>{{ pbScore.pbSec ? pbScore.pbSec : "---"  }}</p>
             </div>
         </div>
+        
         <br>
         <br>
         <br>
@@ -98,7 +109,7 @@ export default defineComponent({
         return{
             resultItems: [
                 {
-                    lvl: 6,
+                    lvl: "6",
                     name: "Black Hole",
                     lifespan: "",
                     size: "",
@@ -110,7 +121,7 @@ export default defineComponent({
                     ]
                 },
                 {
-                    lvl: 5,
+                    lvl: "5",
                     name: "Pulsar",
                     lifespan: "",
                     size: "",
@@ -122,7 +133,7 @@ export default defineComponent({
                     ]
                 },
                 {
-                    lvl: 4,
+                    lvl: "4",
                     name: "Blue Giant",
                     lifespan: "",
                     size: "",
@@ -134,7 +145,7 @@ export default defineComponent({
                     ]
                 },
                 {
-                    lvl: 3,
+                    lvl: "3",
                     name: "Red Giant",
                     lifespan: "",
                     size: "",
@@ -146,7 +157,7 @@ export default defineComponent({
                     ]
                 },
                 {
-                    lvl: 2,
+                    lvl: "2",
                     name: "Yellow Dwarf",
                     lifespan: "",
                     size: "",
@@ -158,7 +169,7 @@ export default defineComponent({
                     ]
                 },
                 {
-                    lvl: 1,
+                    lvl: "1",
                     name: "Red Dwarf",
                     lifespan: "10 days",
                     size: "1 km",
@@ -174,7 +185,7 @@ export default defineComponent({
 
             currResItem: 0,
             randNum: 0,
-            currResLvl: 0,
+            currResLvl: "N/A",
             currResName: "",
             currResLifespan: "",
             currResSize: "",
@@ -203,61 +214,72 @@ export default defineComponent({
 
         resultInfo(didUserEnd: boolean){
 
-            switch (true){
-                case this.scorePerSecond >= 2.75:
-                    this.currResItem = 0;
-                    break;
+            if (this.gameScore > 0){
 
-                case this.scorePerSecond >= 2.25:
-                    this.currResItem = 1;
-                    break;
+                switch (true){
+                    case this.scorePerSecond >= 2.75:
+                        this.currResItem = 0;
+                        break;
 
-                case this.scorePerSecond >= 1.75:
-                    this.currResItem = 2;
-                    break;
+                    case this.scorePerSecond >= 2.25:
+                        this.currResItem = 1;
+                        break;
 
-                case this.scorePerSecond >= 1.25:
-                    this.currResItem = 3;
-                    break;
+                    case this.scorePerSecond >= 1.75:
+                        this.currResItem = 2;
+                        break;
 
-                case this.scorePerSecond >= 0.75:
-                    this.currResItem = 4;
-                    break;
+                    case this.scorePerSecond >= 1.25:
+                        this.currResItem = 3;
+                        break;
 
-                case this.scorePerSecond < 0.75:
-                    this.currResItem = 5;
-                    break;
+                    case this.scorePerSecond >= 0.75:
+                        this.currResItem = 4;
+                        break;
+
+                    case this.scorePerSecond < 0.75:
+                        this.currResItem = 5;
+                        break;
+                }
+
+                type ResultItem = {
+                    lvl: string;
+                    name: string;
+                    lifespan: string;
+                    size: string;
+                    examples: string;
+                    funFacts: string[];
+                };
+
+                const currRes:ResultItem = this.resultItems[this.currResItem];
+
+                // Level
+                this.currResLvl = currRes.lvl;
+
+                // Name
+                this.currResName = currRes.name;
+
+                // Lifespan
+                this.currResLifespan = currRes.lifespan;
+
+                // Size
+                this.currResSize = currRes.size;
+
+                // Examples
+                this.currResExamples = currRes.examples;
+
+                // Random Fun Fact
+                this.randNum = Math.floor(Math.random() * 3);
+                this.currResFunFact = currRes.funFacts[this.randNum];
+
+            } else {
+                this.currResLvl = "";
+                this.currResName = "";
+                this.currResLifespan = "";
+                this.currResSize = "";
+                this.currResExamples = "";
+                this.currResFunFact = "";
             }
-
-            type ResultItem = {
-                lvl: number;
-                name: string;
-                lifespan: string;
-                size: string;
-                examples: string;
-                funFacts: string[];
-            };
-
-            const currRes:ResultItem = this.resultItems[this.currResItem];
-
-            // Level
-            this.currResLvl = currRes.lvl;
-
-            // Name
-            this.currResName = currRes.name;
-
-            // Lifespan
-            this.currResLifespan = currRes.lifespan;
-
-            // Size
-            this.currResSize = currRes.size;
-
-            // Examples
-            this.currResExamples = currRes.examples;
-
-            // Random Fun Fact
-            this.randNum = Math.floor(Math.random() * 3);
-            this.currResFunFact = currRes.funFacts[this.randNum];
 
             // Show the Personal Best scores
             (this.$refs.saveResults as InstanceType<typeof ScoreboardComp>).personalBest();
@@ -269,7 +291,8 @@ export default defineComponent({
             document.body.classList.remove("game-theme-def");
 
             // Add game theme
-            if (didUserEnd === false){
+            if (didUserEnd === false && 
+                this.gameScore > 0){
                 // Level theme
                 document.body.classList.add("game-theme-lvl" + this.currResLvl);
             } else {
@@ -278,7 +301,7 @@ export default defineComponent({
             }
 
             // Calculate variables in the CalcColors component
-           (this.$refs.CalcColors as InstanceType<typeof CalcColors>).setVariables();
+            (this.$refs.CalcColors as InstanceType<typeof CalcColors>).setVariables();
 
         },
 

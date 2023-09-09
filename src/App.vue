@@ -37,7 +37,7 @@
 
 <footer class="wrapper">
 
-    <p>v0.8.0</p>
+    <p>v0.8.1</p>
     
 </footer>
 

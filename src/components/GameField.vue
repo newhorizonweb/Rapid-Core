@@ -199,8 +199,10 @@ export default defineComponent({
                 if (this.timerCurrVal <= 0) {
                     this.finishGame(false);
 
-                    // Save results in the Scoreboard component
-                    (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).saveResults();
+                    if (this.gameScore > 0){
+                        // Save results in the Scoreboard component
+                        (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).saveResults();
+                    }
                 }
             }, 10); 
         },
