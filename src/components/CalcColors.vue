@@ -21,23 +21,44 @@ export default defineComponent({
         }
     },
 
-    created(){
+    mounted(){
        this.setVariables();
     },
 
     methods:{
 
+        hexToRgb(hex: string){
+
+            // Remove the "#"
+            hex = hex.charAt(0) === "#" ? hex.slice(1) : hex;
+
+            let bigint = parseInt(hex, 16);
+            let r = (bigint >> 16) & 255;
+            let g = (bigint >> 8) & 255;
+            let b = bigint & 255;
+
+            return [r, g, b];
+        },
+
         getCssVariable(varName: string){
             const compStyle = getComputedStyle(document.body);
-            return compStyle.getPropertyValue(varName).trim();
+            let colorVal = compStyle.getPropertyValue(varName).trim();
+
+            // If it's a HEX value
+            if (colorVal.startsWith("#")){
+                let [r, g, b] = this.hexToRgb(colorVal);
+                colorVal = `rgb(${r}, ${g}, ${b})`;
+            }
+
+            return colorVal;
         },
 
         calcVar(varName: string, operation: string, newVal: number, transpar: number){
+
             this.mainColor = this.getCssVariable(varName);
             const newColor: RegExpMatchArray | null = this.mainColor.match(/\d+/g);
 
             if (newColor){
-
                 const newTranspar = transpar * 0.01;
 
                 let r = parseInt(newColor[0]),

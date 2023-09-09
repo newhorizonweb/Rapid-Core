@@ -54,7 +54,7 @@
     --trans1:0.1s  ease-in-out;
     --trans2:0.15s ease-in-out;
     --trans3:0.25s ease-in-out;
-    --trans4:0.8s  ease-in-out;     /* Theme Change */
+    --trans4:0.35s ease-in-out;     /* Theme Change */
 
 }
 
@@ -67,7 +67,6 @@ body{
         /* Gradients */
 
     --mainBgGrad1:linear-gradient(to bottom right, var(--mainBg1a), var(--mainBg1b));
-
     --mainBgGrad2:linear-gradient(to bottom right, var(--mainBg2a), var(--mainBg2b));
 
 }

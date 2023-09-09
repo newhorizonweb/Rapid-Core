@@ -37,7 +37,7 @@
 
 <footer class="wrapper">
 
-    <p>v0.8.1</p>
+    <p>v0.8.2</p>
     
 </footer>
 
@@ -123,8 +123,8 @@ export default defineComponent({
 
 <style lang="scss">
 
-.add-transition{
-    transition:var(--trans3);
+body:not(.add-transition) *{
+    transition:0s !important;
 }
 
 header{
@@ -143,7 +143,7 @@ header{
         z-index:100;
 
         & *{
-            transition:fill var(--trans3);
+            transition:fill var(--trans4);
         }
 
     }

@@ -25,7 +25,7 @@ body:after{
 
     opacity:0.05;
     background-color:var(--mainColor);
-    transition:var(--trans3);
+    transition:var(--trans4);
 }
 
 #app{
@@ -67,7 +67,7 @@ footer.wrapper{
     backdrop-filter:blur(10px);
     background-color:var(--mainColor1t10);
     
-    transition:var(--trans3);
+    transition:var(--trans4);
     z-index:-1;
 }
 
