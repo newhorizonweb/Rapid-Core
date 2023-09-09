@@ -26,19 +26,11 @@ export default defineComponent({
 
         /* Shade Colors */
 
-    svg{
-        width:300px;
-
-        & *{
-            transition:fill 0.25s;
-        }
-    }
-
     .cls-38{
-        fill:var(--mainShadow2);
+        fill:var(--mainShade2);
     }
     .cls-39{
-        fill:var(--mainShadow1);
+        fill:var(--mainShade1);
     }
     .cls-44{
         fill:var(--mainColor);

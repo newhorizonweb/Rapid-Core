@@ -1,64 +1,277 @@
+/* 
+    Rapid Core - created by Uverit
+    Do not copy or distribute
+*/
+
+    /* Media breakpoints */
+    /* Width: 1440, 1200, 1024, 900, 768, 540, 440, 320 */
 
 
 
+    /* Variables */
+
+:root{
+
+        /* Colors */
+
+    --color1:#07abdb;
+    --color1a:#098dca;
+
+    --color2:#444;
+    --color2a:#666;
+
+    --mainBg1a:rgb(2, 5, 8);
+    --mainBg1b:rgb(32, 37, 42);
+
+    --mainBg2a:rgb(22, 25, 28, 0.5);
+    --mainBg2b:rgb(52, 57, 62, 0.5);
+
+        /* Text Colors */
+
+    --txt1:#FAFAFA;
+    --txt2:#222;
+    --txt-faded:#EEE;
+    --txt-faded2:#CFCFCF;
+    --txt-faded3:#B1B1B1;
+
+        /* Sizes */
+
+    --size1:4px;
+    --size2:8px;
+    --size3:12px;
+    --size4:16px;
+    --size5:20px;
+    --size6:24px;
+    --size7:32px;
+    --size8:48px;
+
+        /* Box Shadows */
+
+    --box-shadow1:0 0 1px 2px;
+
+        /* Transitions */
+
+    --trans1:0.1s  ease-in-out;
+    --trans2:0.15s ease-in-out;
+    --trans3:0.25s ease-in-out;
+    --trans4:0.45s ease-in-out;
+
+}
 
 
 
+    /* Themes */
+
+body{
+
+        /* Gradients */
+
+    --mainBgGrad1:linear-gradient(to bottom right, var(--mainBg1a), var(--mainBg1b));
+
+    --mainBgGrad2:linear-gradient(to bottom right, var(--mainBg2a), var(--mainBg2b));
+
+}
+
+.game-theme-def{
+    --mainColor:rgb(65, 255, 255);
+    --accColor:rgb(65, 255, 144);
+}
+
+.game-theme-lvl1{
+    --mainColor:rgb(255, 200, 190);
+    --accColor:rgb(255, 225, 190);
+}
+
+.game-theme-lvl2{
+    --mainColor:rgb(230, 230, 200);
+    --accColor:rgb(227, 215, 146);
+}
+
+.game-theme-lvl3{
+    --mainColor:rgb(238, 79, 132);
+    --accColor:rgb(255, 110, 110);
+}
+
+.game-theme-lvl4{
+    --mainColor:rgb(40, 90, 255);
+    --accColor:rgb(75, 45, 197);
+}
+
+.game-theme-lvl5{
+    --mainColor:rgb(80, 200, 255);
+    --accnColor:rgb(151, 205, 205);
+}
+
+.game-theme-lvl6{
+    --mainColor:rgb(70, 90, 100);
+    --accColor:rgb(55, 44, 72);
+}
 
 
-@font-face {
+
+    /* Fonts */
+
+@font-face{
     src:url(../fonts/FuturisticFont.otf);
     font-family:mainFont;
     font-display:fallback;
 }
 
-@font-face {
+@font-face{
     src:url(../fonts/Oxanium-VariableFont_wght.ttf);
     font-family:textFont;
     font-display:fallback;
 }
 
-
-
-
-
-
-
-
-body{
-    background-color:#edf0f4;
-    position:relative;
+.main-font{
+    font-family:mainFont, Calibri, sans-serif;
 }
+
+p, a, label, button{
+    font-size:18px;
+    font-weight:400;
+    line-height:1.3em;
+    text-decoration:none;
+    color:var(--txt-faded);
+    transition:var(--trans3);
+}
+
+label{
+    font-size:16px;
+    color:var(--txt-faded2);
+}
+
+@media screen and (width <= 440px){
+    
+    p, a, label, button{
+        font-size:16px;
+        line-height:1.2em;
+    }
+
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family:mainFont, Calibri, sans-serif;
+    color:var(--txt1);
+    font-weight:800;
+    transition:var(--trans3);
+}
+
+h1{
+    font-size:38px;
+}
+h2{
+    font-size:36px;
+}
+h3{
+    font-size:28px;
+}
+h4{
+    font-size:20px;
+}
+h5{
+    font-size:18px;
+}
+h6{
+    font-size:16px;
+}
+
+@media screen and (width <= 440px){
+    
+    h1{
+        font-size:32px;
+    }
+    h2{
+        font-size:32px;
+    }
+    h3{
+        font-size:24px;
+    }
+    h4{
+        font-size:18px;
+    }
+    h5{
+        font-size:16px;
+    }
+    h6{
+        font-size:14px;
+    }
+
+}
+
+
+    /* Scrollbar */
+
+::-webkit-scrollbar{
+    width:6px;
+}
+
+::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--color1);
+    border-radius:100px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:var(--color1a);
+}
+
+::-webkit-resizer{
+    background:var(--color1);
+}
+
+::-webkit-scrollbar-corner{
+    background:transparent;
+}
+
+
+
+    /* Firefox Adjustments */
+
+@-moz-document url-prefix(){ 
+
+    :root{
+        --box-shadow2:0 0 2px 1px;
+    }
+    
+    *{
+        scrollbar-color:var(--color1) transparent !important;
+        scrollbar-width:thin !important;
+    }
+
+}
+
+
+
+    /* Style Reset */
 
 *{
     margin:0;
     padding:0;
+    box-sizing:border-box;
+    font-family:textFont, Roboto, Arial, sans-serif;
+    -webkit-tap-highlight-color:transparent;
 }
 
-.game-theme-def{
-    --mainColor:rgb(208, 215, 222);
+*:focus{
+    outline:0 !important;
 }
 
-.game-theme-lvl1{
-    --mainColor:rgb(255, 200, 190);
+*:selection{
+    background:var(--color1) !important;
 }
 
-.game-theme-lvl2{
-    --mainColor:rgb(230, 230, 200);
+html{
+    position:relative;
+    overflow-x:hidden;
 }
 
-.game-theme-lvl3{
-    --mainColor:rgb(255, 110, 110);
-}
-
-.game-theme-lvl4{
-    --mainColor:rgb(40, 90, 255);
-}
-
-.game-theme-lvl5{
-    --mainColor:rgb(80, 200, 255);
-}
-
-.game-theme-lvl6{
-    --mainColor:rgb(70, 90, 100);
+body{
+    width:100%;
+    max-width:100vw;
+    position:relative;
+    overflow:hidden;
 }

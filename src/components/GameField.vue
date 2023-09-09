@@ -24,10 +24,12 @@
 
     </div>
 
-    <p>Score: {{ gameScore }}</p>
+    <p class="main-font">Score: {{ gameScore }}</p>
     <p class="timer">
         Time left: 
-        <span :class="{'timer-animation': timerAnimation}">
+        <span 
+            class="main-font"
+            :class="{'timer-animation': timerAnimation}">
             {{ ( timerCurrVal / 1000 ).toFixed(2) }}
         </span>
     </p>
@@ -326,7 +328,7 @@ export default defineComponent({
 
     @keyframes timerAnim{
         0%{
-            color:black;
+            color:var(--txt-faded);
             font-size:18px;
         }
         15%{
@@ -336,7 +338,7 @@ export default defineComponent({
             font-size:22px;
         }
         60%{
-            color:black;
+            color:var(--txt-faded);
         }
         65%{
             font-size:18px;

@@ -1,0 +1,75 @@
+/* 
+    Rapid Core - created by Uverit
+    Do not copy or distribute
+*/
+
+    /* Media breakpoints */
+    /* Width: 1440, 1200, 1024, 900, 768, 540, 440, 320 */
+
+
+
+    /* Body & Wrapper */
+
+body{
+    background:var(--mainBgGrad1);
+}
+
+body:after{
+    content:"";
+    width:100%;
+    height:100%;
+
+    position:absolute;
+    top:0;
+    left:0;
+
+    opacity:0.05;
+    background-color:var(--mainColor);
+    transition:var(--trans3);
+}
+
+#app{
+    padding:var(--size8) 0;
+    display:flex;
+    flex-direction:column;
+    gap:var(--size8);
+}
+
+.wrapper{
+    width:1024px;
+    margin:0 auto;
+    padding:0 var(--size6);
+
+    position:relative;
+    display:flex;
+    flex-direction:column;
+
+    background:var(--mainBgGrad2);
+    box-shadow:var(--box-shadow1) var(--mainColor);
+    border-radius:var(--size2);
+    
+    overflow:hidden;
+    z-index:100;
+}
+
+.wrapper-bg{
+    width:100%;
+    height:100%;
+
+    position:absolute;
+    top:0;
+    left:0;
+
+    backdrop-filter:blur(10px);
+    background-color:var(--mainColor1t10);
+    
+    transition:var(--trans3);
+    z-index:-1;
+}
+
+
+
+
+button{
+    background:rgb(84, 68, 3);
+}

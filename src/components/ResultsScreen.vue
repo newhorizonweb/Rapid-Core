@@ -4,65 +4,66 @@
 <template>
 
 <div class="finish-screen" :class="{'fs-visible': finishScreen}">
+    <div class="fs-inner">
+        
+        <div class="fs-time-btns"></div>
+        <div class="fs-audio"></div>
+        <div class="fs-music"></div>
     
-    <div class="fs-time-btns"></div>
-    <div class="fs-audio"></div>
-    <div class="fs-music"></div>
- 
-    <br>
+        <br>
 
-    <div v-if="newPB">
-        <p>PERSONAL RECORD</p>
-    </div>
-
-    <p>Your score: {{ gameScore }}</p>
-    <p>Score Per Second: {{ scorePerSecond.toFixed(2) }}</p>
-    <br>
-
-    <p>Total Clicks: {{ totalClicks }}</p>
-    <p>Missed Clicks: {{ missedClicks }}</p>
-    <br>
-
-    <p>Accuracy: {{ (accuracy * 100).toFixed(2) }}%</p>
-    <p>Clicks Per Second: {{ CPS.toFixed(2) }}</p>
-    <br>
-
-    <p>Lvl {{ currResLvl }} - {{ currResName }}</p>
-    <p>{{ currResSize }}</p>
-    <p>{{ currResLifespan }}</p>
-    <p>{{ currResExamples }}</p>
-    <p>{{ currResFunFact }}</p>
-    <br>
-
-    <slot name="start-btn"></slot>
-    <br>
-
-    <div class="personal-best" v-if="personalBestScores.length > 0">
-        <div v-for="(pbScore, index) in personalBestScores" :key="index">
-            <p>{{ pbScore.pb ? pbScore.pb : "---" }}</p>
-            <p>{{ pbScore.pbSec ? pbScore.pbSec : "---"  }}</p>
+        <div v-if="newPB">
+            <p>PERSONAL RECORD</p>
         </div>
+
+        <p>Your score: {{ gameScore }}</p>
+        <p>Score Per Second: {{ scorePerSecond.toFixed(2) }}</p>
+        <br>
+
+        <p>Total Clicks: {{ totalClicks }}</p>
+        <p>Missed Clicks: {{ missedClicks }}</p>
+        <br>
+
+        <p>Accuracy: {{ (accuracy * 100).toFixed(2) }}%</p>
+        <p>Clicks Per Second: {{ CPS.toFixed(2) }}</p>
+        <br>
+
+        <p>Lvl {{ currResLvl }} - {{ currResName }}</p>
+        <p>{{ currResSize }}</p>
+        <p>{{ currResLifespan }}</p>
+        <p>{{ currResExamples }}</p>
+        <p>{{ currResFunFact }}</p>
+        <br>
+
+        <slot name="start-btn"></slot>
+        <br>
+
+        <div class="personal-best" v-if="personalBestScores.length > 0">
+            <div v-for="(pbScore, index) in personalBestScores" :key="index">
+                <p>{{ pbScore.pb ? pbScore.pb : "---" }}</p>
+                <p>{{ pbScore.pbSec ? pbScore.pbSec : "---"  }}</p>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+
+        <ScoreboardComp
+            ref="saveResults"
+            @pbScores="pbScores"
+
+            :timeDuration="timeDuration"
+            :gameScore="gameScore"
+            :scorePerSecond="scorePerSecond"
+            :accuracy="accuracy"
+            :CPS="CPS" 
+        />
+
+        <CalcColors
+            ref="CalcColors"
+        />
+
     </div>
-    <br>
-    <br>
-    <br>
-
-    <ScoreboardComp
-        ref="saveResults"
-        @pbScores="pbScores"
-
-        :timeDuration="timeDuration"
-        :gameScore="gameScore"
-        :scorePerSecond="scorePerSecond"
-        :accuracy="accuracy"
-        :CPS="CPS" 
-    />
-
-    <CalcColors
-        ref="CalcColors"
-    />
-
-
 </div>
 
 </template>
@@ -351,30 +352,20 @@ export default defineComponent({
 <style lang="scss">
 
 .finish-screen{
-    width:400px;
-    min-height:300px;
+    width:100vw;
+    height:100vh;
 
-    position:absolute;
-    top:50%;
+    position:fixed;
+    top:0;
     left:105%;
 
-    background-color:#DDD;
-    transition:0.5s;
-    z-index:100;
+    background-color:rgb(0,0,0,0.3);
+    transition:var(--trans3);
+    overflow:auto;
+    z-index:1000;
 
     &.fs-visible{
-        animation:fsFade 0.5s ease-in forwards;
-    }
-
-    @keyframes fsFade{
-        0%{
-            left:105%;
-            transform:translate(0, 0);
-        }
-        100%{
-            left:80%;
-            transform:translate(-50%, 0);
-        }
+        left:0;
     }
 
 }

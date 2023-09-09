@@ -2,9 +2,14 @@
 
 
 <template>
-    <div class="page">
-        <LogoElem />
 
+<header>
+    <LogoElem />
+</header>
+
+<main class="wrapper">
+
+    <section class="settings">
         <UserOptions 
             @timerIsSet="timerIsSetFun"
             :firstGame="firstGame"
@@ -19,16 +24,25 @@
             ref="AudioMusic"
             :firstGame="firstGame"
         />
+    </section>
 
-        <GameField 
-            @firstGame="isFirstGame"
-            @resultsMounted="resultsMountedFun"
-            @startGame="startGame"
-            :timeDuration="timeDuration" 
-        />
-    </div>
-    <br>
-    v0.7.2
+    <GameField 
+        @firstGame="isFirstGame"
+        @resultsMounted="resultsMountedFun"
+        @startGame="startGame"
+        :timeDuration="timeDuration" 
+    />
+    
+</main>
+
+<footer class="wrapper">
+
+    <p>v0.8.0</p>
+    
+</footer>
+
+<BgCores />
+
 </template>
 
 
@@ -40,6 +54,7 @@ import UserOptions from "./components/UserOptions.vue"
 import AudioSettings from "./components/AudioSettings.vue"
 import AudioMusic from "./components/AudioMusic.vue"
 import GameField from "./components/GameField.vue"
+import BgCores from "./components/BgCores.vue"
 
 export default defineComponent({
     name: "App",
@@ -49,7 +64,8 @@ export default defineComponent({
         UserOptions,
         AudioSettings,
         AudioMusic,
-        GameField
+        GameField,
+        BgCores
     },
 
     data(){
@@ -60,7 +76,27 @@ export default defineComponent({
         }
     },
 
+    mounted(){
+        // Add transition after the load, so the bg color doesn't flash
+        document.body.classList.add("add-transition");
+
+        // Append wrapper background
+        this.appendWrapperBg();
+    },
+
     methods:{
+
+        appendWrapperBg(){
+            const wrappers = document.querySelectorAll(".wrapper");
+
+            wrappers.forEach((wrapper) => {
+                const background = document.createElement("div");
+                background.classList.add("wrapper-bg");
+                wrapper.appendChild(background);
+            });
+        },
+
+            /* Components */
 
         timerIsSetFun(newTimeDur: number){
             this.timeDuration = newTimeDur;
@@ -71,7 +107,7 @@ export default defineComponent({
         },
 
         resultsMountedFun(){
-            (this.resultsMounted as boolean) = true
+            (this.resultsMounted as boolean) = true;
         },
 
         startGame(){
@@ -87,16 +123,31 @@ export default defineComponent({
 
 <style lang="scss">
 
-.body{
-    display:flex;
-    justify-content:center;
+.add-transition{
+    transition:var(--trans3);
 }
 
-.page{
+header{
+    width:1024px;
     margin:0 auto;
+    padding:var(--size6);
+
     display:flex;
-    flex-direction:column;
-    align-items:center;
+    justify-content:center;
+
+    & svg{
+        width:270px;
+        margin-top:var(--size6);
+
+        position:relative;
+        z-index:100;
+
+        & *{
+            transition:fill var(--trans3);
+        }
+
+    }
+
 }
 
 .muted-audio .mute-btn{
