@@ -3,12 +3,17 @@
 
 <template>
 
-<div class="bg-blobs" ref="bgBlobs"></div>
+<div class="bg-blobs" ref="bgBlobs">
+    <BgStars 
+        :blobContainer="this.$refs.bgBlobs"
+    />
+</div>
 
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import BgStars from "./BgStars.vue"
 
 type BlobData = {
     element: HTMLDivElement;
@@ -25,9 +30,13 @@ type BlobData = {
 export default defineComponent({
     name: "BgBlobs",
 
+    components: {
+        BgStars
+    },
+
     data(){
         return{
-            blobs: [] as BlobData[],  // Specify type here
+            blobs: [] as BlobData[],
             blobNumber: this.calculateBlobNumber(),
             blobSizeMin: 30,
             blobSizeMax: 150
@@ -37,14 +46,14 @@ export default defineComponent({
     mounted(){
         this.createBlob();
         this.animateBlobs();
-        window.addEventListener('resize', this.handleResize); // Listen for resize events
+        window.addEventListener('resize', this.handleResize);
     },
 
     beforeUnmount() {
-        window.removeEventListener('resize', this.handleResize); // Clean up the listener on component unmount
+        window.removeEventListener('resize', this.handleResize);
     },
 
-     methods:{
+    methods:{
 
         createBlob(){
             const blobContainer: HTMLElement = this.$refs.bgBlobs as HTMLElement;
@@ -132,6 +141,10 @@ export default defineComponent({
                     break;
 
                 case width <= 1024:
+                    newBlobNumber = 7;
+                    break;
+
+                case width <= 1440:
                     newBlobNumber = 8;
                     break;
 
@@ -220,7 +233,7 @@ export default defineComponent({
         &:after{
             content:"";
             width:100%;
-            height:100%;
+            height:105%;
             position:absolute;
 
             background:linear-gradient(to right,
