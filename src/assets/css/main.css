@@ -11,7 +11,8 @@
     /* Body & Wrapper */
 
 body{
-    background:var(--mainBgGrad1);
+    background:var(--colorGrad1);
+    padding:0 var(--size6);
 }
 
 body:after{
@@ -36,20 +37,25 @@ body:after{
 }
 
 .wrapper{
-    width:1024px;
+    width:min(1024px, 100%);
     margin:0 auto;
-    padding:0 var(--size6);
+    padding:var(--size6);
 
     position:relative;
     display:flex;
     flex-direction:column;
 
-    background:var(--mainBgGrad2);
-    box-shadow:var(--box-shadow1) var(--mainColor);
-    border-radius:var(--size2);
-    
-    overflow:hidden;
+    background:var(--colorGrad2),
+        url("../img/noise-texture.svg");
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+
+    box-shadow:inset 0 0 20px 0 rgb(125, 125, 125, 0.15),
+        0 0 20px 0 rgb(0, 0, 0, 0.2) !important;
+    border-radius:var(--size4) !important;
     z-index:100;
+
 }
 
 footer.wrapper{
@@ -65,7 +71,8 @@ footer.wrapper{
     left:0;
 
     backdrop-filter:blur(10px);
-    background-color:var(--mainColor1t10);
+    background:var(--mainGrad1);
+    border-radius:var(--size4);
     
     transition:var(--trans4);
     z-index:-1;
@@ -73,7 +80,69 @@ footer.wrapper{
 
 
 
+    /* Buttons & Glass Border */
 
-button{
-    background:rgb(84, 68, 3);
+button:not(.no-glass-border),
+.glass-border{
+    --border:2px;
+    
+    position:relative;
+    border:none;
+    border-radius:var(--size2);
+    box-shadow:inset 0 0 5px 0 rgb(125, 125, 125, 0.15),
+        0 0 5px 0 rgb(0, 0, 0, 0.2);
+
+    &:before{
+        content:"";
+        padding:var(--border);
+        position:absolute;
+        
+        inset:calc(-1 * var(--border));
+        mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite:xor;
+        mask-composite:exclude;
+        
+        pointer-events:none;
+    }
+}
+
+.glass-border{
+    box-shadow:inset 0 0 20px 0 rgb(125, 125, 125, 0.15),
+        0 0 20px 0 rgb(0, 0, 0, 0.2) !important;
+    border-radius:var(--size4) !important;
+
+    &:before{
+        border-radius:calc(var(--border) + var(--size4));
+        background:linear-gradient(to bottom right,
+            var(--mainBorder1a), var(--mainBorder1b));
+    }
+
+}
+
+button:not(.start-btn){
+    margin:0 10px;
+    padding:var(--size2) var(--size3);
+
+    background:linear-gradient(to bottom right,
+        var(--mainBg2a), var(--mainBg2b)),
+        url("../img/noise-texture2.svg");
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+
+    line-height:1;
+    cursor:pointer;
+
+    &:hover,
+    &:hover:before{
+        filter:brightness(150%);
+    }
+
+    &:before{
+        background:linear-gradient(to bottom right,
+            var(--mainBorder2a), var(--mainBorder2b));
+        border-radius:calc(var(--border) + var(--size2));
+    }
+
 }

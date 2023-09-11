@@ -98,6 +98,31 @@ export default defineComponent({
             // 3. Add / sub value - number 0-255
             // 4. Transparency (percent) - (0: full tran., 100: no tran.)
 
+
+
+            // Main Color Background
+            bodyStyle.setProperty('--mainBg1a', 
+                this.calcVar("--mainColor", "sub", 90, 35));
+
+            bodyStyle.setProperty('--mainBg1b', 
+                this.calcVar("--mainColor", "sub", 70, 20));
+
+
+            bodyStyle.setProperty('--mainBg2a',
+                this.calcVar("--mainColor", "sub", 70, 70));
+
+            bodyStyle.setProperty('--mainBg2b',
+                this.calcVar("--mainColor", "sub", 20, 60));
+
+
+            bodyStyle.setProperty('--mainBg3a',
+                this.calcVar("--mainColor", "sub", 160, 70));
+
+            bodyStyle.setProperty('--mainBg3b',
+                this.calcVar("--mainColor", "sub", 140, 60));
+
+
+
             // Main Color Shades
             bodyStyle.setProperty('--mainShade1', 
                 this.calcVar("--mainColor", "sub", 40, 100));
@@ -105,9 +130,22 @@ export default defineComponent({
             bodyStyle.setProperty('--mainShade2',
                 this.calcVar("--mainColor", "sub", 60, 100));
 
-            // Main Color Semi-Transparent
-            bodyStyle.setProperty('--mainColor1t10', 
-                this.calcVar("--mainColor", "add", 0, 10));
+
+
+            // Main Color Borders
+            bodyStyle.setProperty('--mainBorder1a', 
+                this.calcVar("--mainColor", "add", 15, 25));
+                
+            bodyStyle.setProperty('--mainBorder1b', 
+                this.calcVar("--mainColor", "add", 30, 30));
+
+
+            bodyStyle.setProperty('--mainBorder2a', 
+                this.calcVar("--mainColor", "add", 50, 30));
+                
+            bodyStyle.setProperty('--mainBorder2b', 
+                this.calcVar("--mainColor", "add", 75, 45));
+
         }
 
     }

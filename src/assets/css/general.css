@@ -20,11 +20,11 @@
     --color2:#444;
     --color2a:#666;
 
-    --mainBg1a:rgb(2, 5, 8);
-    --mainBg1b:rgb(32, 37, 42);
+    --colorBg1a:rgb(2, 5, 8);
+    --colorBg1b:rgb(32, 37, 42);
 
-    --mainBg2a:rgb(12, 15, 18, 0.7);
-    --mainBg2b:rgb(32, 37, 42, 0.7);
+    --colorBg2a:rgb(12, 15, 18, 0.7);
+    --colorBg2b:rgb(32, 37, 42, 0.7);
 
         /* Text Colors */
 
@@ -66,13 +66,19 @@ body{
 
         /* Gradients */
 
-    --mainBgGrad1:linear-gradient(to bottom right, var(--mainBg1a), var(--mainBg1b));
-    --mainBgGrad2:linear-gradient(to bottom right, var(--mainBg2a), var(--mainBg2b));
+    --colorGrad1:linear-gradient(to bottom right, var(--colorBg1a), var(--colorBg1b));
+    --colorGrad2:linear-gradient(to bottom right, var(--colorBg2a), var(--colorBg2b));
+
+    --mainGrad1:linear-gradient(to bottom right, var(--mainBg1a), var(--mainBg1b));
+
+    --mainGrad3:linear-gradient(to bottom right, var(--mainBg3a), var(--mainBg3b));
+
+
 
 }
 
 .game-theme-def{
-    --mainColor:rgb(65, 255, 255);
+    --mainColor:rgb(14, 112, 182);
     --accColor:rgb(65, 255, 144);
 }
 
@@ -132,7 +138,7 @@ p, a, label, button{
     line-height:1.3em;
     text-decoration:none;
     color:var(--txt-faded);
-    transition:var(--trans3);
+    transition:var(--trans2);
 }
 
 label{

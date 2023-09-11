@@ -7,7 +7,7 @@
     <LogoElem />
 </header>
 
-<main class="wrapper">
+<main class="wrapper glass-border">
 
     <section class="settings">
         <UserOptions 
@@ -35,9 +35,9 @@
     
 </main>
 
-<footer class="wrapper">
+<footer class="wrapper glass-border">
 
-    <p>v0.8.3</p>
+    <p>v0.9.0</p>
     
 </footer>
 

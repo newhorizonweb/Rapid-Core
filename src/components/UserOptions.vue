@@ -3,26 +3,28 @@
 
 <template>
 
-<p>Choose the time duration</p>
+<div class="user-options">
+    <p>Choose the time duration</p>
 
-<button class="time-btn time-btn-current"
-    @click="setTimeDur"
-    :disabled="!firstGame"
-    runTime="10">
-    10s
-</button>
-<button class="time-btn"
-    @click="setTimeDur"
-    :disabled="!firstGame"
-    runTime="30">
-    30s
-</button>
-<button class="time-btn" 
-    @click="setTimeDur"
-    :disabled="!firstGame"
-    runTime="60">
-    60s
-</button>
+    <button class="time-btn time-btn-current"
+        @click="setTimeDur"
+        :disabled="!firstGame"
+        runTime="10">
+        10s
+    </button>
+    <button class="time-btn"
+        @click="setTimeDur"
+        :disabled="!firstGame"
+        runTime="30">
+        30s
+    </button>
+    <button class="time-btn" 
+        @click="setTimeDur"
+        :disabled="!firstGame"
+        runTime="60">
+        60s
+    </button>
+</div>
 
 <teleport to=".fs-time-btns" v-if="resultsMounted">
     <button class="time-btn time-btn-current"
@@ -95,6 +97,11 @@ export default defineComponent({
 
 
 <style lang="scss">
+
+.user-options{
+    position:relative;
+    z-index:10;
+}
 
 .time-btn{
 

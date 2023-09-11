@@ -69,6 +69,11 @@ export default defineComponent({
                 const star = document.createElement("div");
                 star.classList.add("bg-star");
 
+                // Create the inner star element
+                const innerStar = document.createElement("div");
+                innerStar.classList.add("inner-bg-star");
+                star.appendChild(innerStar);
+
                 // Random Size
                 const size = Math.random() * 
                     (this.starSizeMax - this.starSizeMin) + this.starSizeMin;
@@ -183,33 +188,50 @@ export default defineComponent({
     height:100vh;
 
     & .bg-star{
-        border-radius:50%;
-        background-color:#FFF;
         position:absolute;
 
-        &:before, 
-        &:after{
-            content:"";
-
-            position:absolute;
-            top:50%;
-            left:50%;
-            transform:translate(-50%, -50%) scale(0);
-
-            background-color:#FFF;
-            border-radius:50%;
-            filter:blur(2px);
-        }
-
-        &:before{
-            height:100%;
-        }
-
-        &:after{
+        & .inner-bg-star{
             width:100%;
+            height:100%;
+            position:absolute;
+
+            border-radius:50%;
+            background-color:#FFF;
+
+            &:before, 
+            &:after{
+                content:"";
+                position:absolute;
+                top:50%;
+                left:50%;
+                transform:translate(-50%, -50%) scale(0);
+
+                background-color:#FFF;
+                border-radius:50%;
+                filter:blur(2px);
+            }
+
+            &:before{
+                height:100%;
+            }
+
+            &:after{
+                width:100%;
+            }
+        
         }
 
-        &:nth-of-type(3n + 1){
+        &:is(:nth-of-type(9n + 2), :nth-of-type(9n + 6)) .inner-bg-star{
+            background-color:var(--mainColor);
+
+            &:before,
+            &:after{
+                background-color:var(--mainColor);
+            }
+            
+        }
+        
+        &:nth-of-type(3n + 1) .inner-bg-star{
             &:before{
                 width:1500%;
             }
@@ -217,7 +239,7 @@ export default defineComponent({
                 height:1500%;
             }
         }
-        &:nth-of-type(3n + 2){
+        &:nth-of-type(3n + 2) .inner-bg-star{
             &:before{
                 width:2000%;
             }
@@ -225,7 +247,7 @@ export default defineComponent({
                 height:2000%;
             }
         }
-        &:nth-of-type(3n + 3){
+        &:nth-of-type(3n + 3) .inner-bg-star{
             &:before{
                 width:2500%;
             }
@@ -236,7 +258,9 @@ export default defineComponent({
 
             /* Only some of the stars have the rays */
 
-        &:nth-of-type(9n + 1){
+        &:nth-of-type(9n + 1) .inner-bg-star{
+            transform:rotate(45deg);
+
             &:before{
                 animation:starGrow 2.5s ease-in-out forwards,
                     starShine1 10s ease-in-out infinite 2.5s;
@@ -246,17 +270,19 @@ export default defineComponent({
                     starShine1 10s ease-in-out infinite 2.6s;
             }
         }
-        &:nth-of-type(9n + 2){
+        &:nth-of-type(9n + 2) .inner-bg-star{
             &:before{
+                background-color:var(--mainColor);
                 animation:starGrow 3s ease-in-out 4s forwards,
                     starShine2 13s ease-in-out infinite 9s;
             }
             &:after{
+                background-color:var(--mainColor);
                 animation:starGrow 3.1s ease-in-out 4s forwards,
                     starShine2 13s ease-in-out infinite 9.15s;
             }
         }
-        &:nth-of-type(9n + 3){
+        &:nth-of-type(9n + 3) .inner-bg-star{
             &:before{
                 animation:starGrow 4s ease-in-out forwards,
                     starShine1 14s ease-in-out infinite 4s;
@@ -266,7 +292,7 @@ export default defineComponent({
                     starShine1 14s ease-in-out infinite 4.1s;
             }
         }
-        &:nth-of-type(9n + 4){
+        &:nth-of-type(9n + 4) .inner-bg-star{
             &:before{
                 animation:starGrow 5s ease-in-out 6s forwards,
                     starShine1 9s ease-in-out infinite 13s;

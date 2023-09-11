@@ -5,21 +5,29 @@
 
 <div class="game">
 
-    <div class="game-field" 
-        ref="gameField" 
+    <div class="game-field glass-border"  
         @click="totalClicksFun"
         @click.self="playMissSound">
         
-        <button v-if="firstGame" @click="startCountdown">START</button>
-
+        <button class="start-btn no-glass-border"
+            v-if="firstGame" 
+            @click="startCountdown">
+            START
+        </button>
         <p class="pre-game-timer" v-if="gamePreTime">{{ gamePreTime }}</p>
 
-        <div 
-            class="game-core"
-            :class="{'disable-core': !gamePlaying}"
-            ref="gameCore"
-            @click="coreClicked"
-            v-show="showCore">
+        <div class="game-field-inner"
+            ref="gameField"
+            @click.self="playMissSound">
+
+            <div class="game-core"
+                :class="{'disable-core': !gamePlaying}"
+                ref="gameCore"
+                
+                @click="coreClicked"
+                v-show="showCore">
+            </div>
+
         </div>
 
     </div>
@@ -109,6 +117,9 @@ export default defineComponent({
             firstGame: true,
             finishScreen: false,
             
+            // Game Elements
+            coreSize: 50,   // Width & Height (px)
+
             // Game Logic
             gameScore: 0,
             totalClicks: 0
@@ -118,6 +129,11 @@ export default defineComponent({
     props:[
         "timeDuration"
     ],
+
+    mounted(){
+        const gameCoreElem = this.$refs.gameCore as HTMLElement;
+        gameCoreElem.style.width = this.coreSize + "px";
+    },
 
     methods:{
 
@@ -239,14 +255,14 @@ export default defineComponent({
             // Get the game field width and height
             const gameFieldW = gameFieldElem.offsetWidth;
             const gameFieldH = gameFieldElem.offsetHeight;
-            const gfPad = 30;
 
             // Generate a random position in the game field
-            const randX = Math.floor(gfPad + Math.random() * ((gameFieldW - gfPad) - gfPad + 1));
-            const randY = Math.floor(gfPad + Math.random() * ((gameFieldH - gfPad) - gfPad + 1));
+            const randX = Math.floor(Math.random() * 
+                (gameFieldW - this.coreSize + 1));
+            const randY = Math.floor(Math.random() * 
+                (gameFieldH - this.coreSize + 1));
 
-            gameCoreElem.style.setProperty('--gc-top', randY.toString()+"px");
-            gameCoreElem.style.setProperty('--gc-left', randX.toString()+"px");
+            gameCoreElem.style.transform = `translate3d(${randX}px, ${randY}px, 0px)`;
         },
 
         coreClicked(){
@@ -286,24 +302,48 @@ export default defineComponent({
     .game-field{
         height:350px;
         width:500px;
-        box-sizing:border-box;
-        position:relative;
+        padding:14px;
 
-        border:solid 2px grey;
-        border-radius:10px;
+        position:relative;
+        background:var(--colorGrad1);
+
+        transition:var(--trans2);
+        cursor:crosshair;
+
+        &:has(.start-btn:hover),
+        &:has(.start-btn:hover):before{
+            filter:brightness(150%);
+        }
+        
+        &:after{
+            content:"";
+            width:100%;
+            height:100%;
+
+            position:absolute;
+            top:0;
+            left:0;
+
+            opacity:0.1;
+            background-color:var(--mainColor);
+            border-radius:calc(var(--border) + var(--size4));
+            pointer-events:none;
+        }
+
+        .game-field-inner{
+            width:100%;
+            height:100%;
+        }
     }
 
     .game-core{
-        width:50px;
         aspect-ratio:1/1;
-
         position:absolute;
-        top:var(--gc-top);
-        left:var(--gc-left);
-        transform:translate(-50%, -50%);
 
         background-color:blue;
         border-radius:50%;
+
+        z-index:100;
         transition:0.075s;
 
         &.disable-core{
@@ -318,6 +358,9 @@ export default defineComponent({
         left:50%;
         transform:translate(-50%, -50%);
         font-size:30px;
+
+        pointer-events:none;
+        z-index:10;
     }
 
     .timer{
@@ -345,6 +388,30 @@ export default defineComponent({
         65%{
             font-size:18px;
         }
+    }
+
+    .start-btn{
+        width:100%;
+        height:100%;
+
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+
+        font-size:32px;
+
+        background-color:transparent;
+        border:none;
+        border-radius:calc(var(--border) + var(--size4));
+
+        cursor:pointer;
+        z-index:10;
+
+    }
+
+    .game-field:hover .start-btn{
+        color:var(--mainColor);
     }
 
 }

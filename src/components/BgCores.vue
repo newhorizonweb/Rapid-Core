@@ -71,10 +71,10 @@ export default defineComponent({
                 blob.style.height = size + "px";
 
                 // Random Position & Speed
-                const posX = Math.random() * 
-                    (blobContainer.offsetWidth - size);
-                const posY = Math.random() * 
-                    (blobContainer.offsetHeight - size);
+                const posX = Math.floor(Math.random() * 
+                    (blobContainer.offsetWidth - size + 1));
+                const posY = Math.floor(Math.random() * 
+                    (blobContainer.offsetHeight - size + 1));
 
                 const blobData = {
                     element: blob,
@@ -90,7 +90,7 @@ export default defineComponent({
 
                 // Append the blob and set its position
                 this.blobs.push(blobData);
-                blob.style.transform = `translate(${posX}px, ${posY}px)`;
+                blob.style.transform = `translate3d(${posX}px, ${posY}px, 0px)`;
                 blobContainer.appendChild(blob);
 
             }
@@ -119,7 +119,7 @@ export default defineComponent({
 
                     // Set blob's new position
                     blobData.element.style.transform = 
-                        `translate(${blobData.position.x}px, ${blobData.position.y}px)`;
+                        `translate3d(${blobData.position.x}px, ${blobData.position.y}px, 0px)`;
 
                 }
 
@@ -165,7 +165,7 @@ export default defineComponent({
                 }
 
                 // Check if the blob's y position goes out of the bottom boundary
-                if (blobData.position.y + blobData.element.offsetHeight > blobContainer.offsetHeight) {
+                if (blobData.position.y + blobData.element.offsetHeight > blobContainer.offsetHeight){
                     blobData.position.y = blobContainer.offsetHeight - blobData.element.offsetHeight;
                 }
 
