@@ -70,16 +70,13 @@ body{
     --colorGrad2:linear-gradient(to bottom right, var(--colorBg2a), var(--colorBg2b));
 
     --mainGrad1:linear-gradient(to bottom right, var(--mainBg1a), var(--mainBg1b));
-
     --mainGrad3:linear-gradient(to bottom right, var(--mainBg3a), var(--mainBg3b));
-
-
 
 }
 
 .game-theme-def{
     --mainColor:rgb(14, 112, 182);
-    --accColor:rgb(65, 255, 144);
+    --accColor:rgb(35, 169, 196);
 }
 
 .game-theme-lvl1{
@@ -212,20 +209,21 @@ h6{
 }
 
 ::-webkit-scrollbar-track{
-    background:transparent;
+    background:var(--mainScrollBg);
+    filter:brightness(220%);
 }
 
 ::-webkit-scrollbar-thumb{
-    background:var(--color1);
+    background:var(--mainColor);
     border-radius:100px;
 }
 
 ::-webkit-scrollbar-thumb:hover{
-    background:var(--color1a);
+    background:var(--mainScrollHover);
 }
 
 ::-webkit-resizer{
-    background:var(--color1);
+    background:var(--mainColor);
 }
 
 ::-webkit-scrollbar-corner{

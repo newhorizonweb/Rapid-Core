@@ -2,81 +2,135 @@
 
 
 <template>
-<div class="music-settings" :class="{'muted-audio': isMusicMuted}">
-    <br>
-    <br>
-    <br>
-    <br>  
-    <p>Music</p>
+<div class="audio-player music-settings" :class="{'muted-audio': isMusicMuted}">
+
     <audio 
         ref="musicAudioElem"
         @ended="nextTrack"
         :src="musicAudioSrc">
     </audio>
-    <br>
-    <p v-if="musicInitiated">Now playing: {{ musicTitle }}</p>
-    <p>Volume: {{ (musicVolume * 100).toFixed(0) }}%</p>
-    <br>
 
-    <input type="range"
-        min="0" max="1" step="0.05" 
-        v-model="musicVolume"
-        @input="adjustMusicVolume">
+    <div class="music-display glass-border">
+        <div class="md-inner"
+        ref="musicDisplay">
 
-    <br>
-    <button 
-        @click="stopMusic">
-        {{ pausedBtn }}
-    </button>
-    <button 
-        class="mute-btn"
-        @click="isMusicMuted = !isMusicMuted">
-        X
-    </button>
+            <p class="music-title"
+                ref="musicTitle">
+                {{ musicTitle }}
+            </p>
+            <p class="music-title marquee-title">
+                {{ musicTitle }}
+            </p>
+            <p class="music-title marquee-title">
+                {{ musicTitle }}
+            </p>
 
-    <br>
-    <button @click="prevTrack">prev</button>
-    <button @click="nextTrack">next</button>
+        </div>
+    </div>
+    
+    <div class="volume-section"></div>
+
+    <div class="audio-panel">
+
+        <div class="audio-buttons">
+            <button class="audio-icon audio-arrow prev-track"
+                @click="prevTrack">
+                <AudioArrow />
+            </button>
+
+            <button class="audio-icon"
+                @click="stopMusic">
+                <PlayIcon v-if="pausedBtn" />
+                <PauseIcon v-if="!pausedBtn" />
+            </button>
+
+            <button class="audio-icon audio-arrow next-track"
+                @click="nextTrack">
+                <AudioArrow />
+            </button>
+        </div>
+
+        <input type="range" class="volume-slider"
+            min="0" max="1" step="0.05" 
+            v-model="musicVolume"
+            @input="adjustMusicVolume">
+    </div>
+
+    <div class="volume-section">
+        <button class="audio-icon mute-btn mute-music"
+            @click="isMusicMuted = !isMusicMuted">
+            <MuteIcon />
+        </button>
+        <p>{{ (musicVolume * 100).toFixed(0) }}%</p>
+    </div>
+
 </div>
 
 
 
 <teleport to=".fs-music" v-if="!firstGame">
-    <div class="music-settings" :class="{'muted-audio': isMusicMuted}">
-        <br>
-        <br>
-        <br>
-        <br>  
-        <p>Music</p>
+    <div class="audio-player music-settings" :class="{'muted-audio': isMusicMuted}">
+
         <audio 
             ref="musicAudioElem"
             @ended="nextTrack"
             :src="musicAudioSrc">
         </audio>
-        <br>
-        <p v-if="musicInitiated">Now playing: {{ musicTitle }}</p>
-        <p>Volume: {{ (musicVolume * 100).toFixed(0) }}%</p>
-        <br>
 
-        <input type="range"
-            min="0" max="1" step="0.05" 
-            v-model="musicVolume"
-            @input="adjustMusicVolume">
+        <div class="music-display glass-border">
+            <div class="md-inner"
+            ref="musicDisplay">
 
-        <br>
-        <button 
-            @click="stopMusic">
-            {{ pausedBtn }}
-        </button>
-        <button 
-            class="mute-btn"
-            @click="isMusicMuted = !isMusicMuted">
-            X
-        </button>
+                <p class="music-title"
+                    ref="musicTitle">
+                    {{ musicTitle }}
+                </p>
+                <p class="music-title marquee-title">
+                    {{ musicTitle }}
+                </p>
+                <p class="music-title marquee-title">
+                    {{ musicTitle }}
+                </p>
 
-        <br>
-        <button @click="prevTrack">prev</button>
-        <button @click="nextTrack">next</button>
+            </div>
+        </div>
+        
+        <div class="volume-section"></div>
+
+        <div class="audio-panel">
+
+            <div class="audio-buttons">
+                <button class="audio-icon audio-arrow prev-track"
+                    @click="prevTrack">
+                    <AudioArrow />
+                </button>
+
+                <button class="audio-icon"
+                    @click="stopMusic">
+                    <PlayIcon v-if="pausedBtn" />
+                    <PauseIcon v-if="!pausedBtn" />
+                </button>
+
+                <button class="audio-icon audio-arrow next-track"
+                    @click="nextTrack">
+                    <AudioArrow />
+                </button>
+            </div>
+
+            <input type="range" class="volume-slider"
+                min="0" max="1" step="0.05" 
+                v-model="musicVolume"
+                @input="adjustMusicVolume">
+        </div>
+
+        <div class="volume-section">
+            <button class="audio-icon mute-btn mute-music"
+                @click="isMusicMuted = !isMusicMuted">
+                <MuteIcon />
+            </button>
+            <p>{{ (musicVolume * 100).toFixed(0) }}%</p>
+        </div>
+
     </div>
 </teleport>
 
@@ -86,10 +140,21 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import AudioArrow from "./pageElements/AudioArrow.vue";
+import PlayIcon from "./pageElements/PlayIcon.vue";
+import PauseIcon from "./pageElements/PauseIcon.vue";
+import MuteIcon from "./pageElements/MuteIcon.vue";
 
 export default defineComponent({
     name: "AudioMusic",
+
+    components:{
+        AudioArrow,
+        PlayIcon,
+        PauseIcon,
+        MuteIcon
+    },
 
     props:[
         "firstGame"
@@ -124,7 +189,7 @@ export default defineComponent({
                 song: require('@/assets/music/subway-15016.mp3')}
             ],
             currTrack: (localStorage.getItem("currTrack") !== null) ? Number(localStorage.getItem("currTrack")) : 0,
-            musicTitle: "",
+            musicTitle: "No Track",
             musicAudioSrc: "",
 
             // Audio state
@@ -133,9 +198,7 @@ export default defineComponent({
 
             // Pause
             musicPaused: false,
-            pausedBtn: "",
-            pausedIcon: "||",
-            unpausedIcon: "|>",
+            pausedBtn: true, // true = play icon (unpaused), false = pause icon
 
             // Volume, Muted
             musicVolume: (localStorage.getItem("musicVolume") !== null) ? Number(localStorage.getItem("musicVolume")) : 0.5,
@@ -146,9 +209,11 @@ export default defineComponent({
     mounted(){
         this.musicAudioElem = this.$refs.musicAudioElem as HTMLAudioElement;
         this.musicAudioSrc = this.playlist[this.currTrack].song;
-
-        this.pausedBtn = this.unpausedIcon;
         this.adjustMusicVolume();
+
+        // Marquee
+        this.marqueeTxt();
+        window.addEventListener("resize", this.marqueeTxt);
     },
 
     methods:{
@@ -157,24 +222,34 @@ export default defineComponent({
 
         playMusicInit(){
             if (!this.musicInitiated){
-                this.pausedBtn = this.pausedIcon;
+                this.pausedBtn = false;
             }
             this.musicInitiated = true;
             this.musicTitle = this.playlist[this.currTrack].title;
 
             if(!this.musicPaused && this.musicAudioElem){
                 this.musicAudioElem.play();
+
+                // Marquee
+                this.$nextTick(() => {
+                    this.marqueeTxt();
+                });
             }
         },
 
         playMusicAudio(){
             this.musicInitiated = true;
             this.musicPaused = false;
-            this.pausedBtn = this.pausedIcon;
+            this.pausedBtn = false;
             this.musicTitle = this.playlist[this.currTrack].title;
 
-            if(!this.musicPaused &&this.musicAudioElem){
+            if(!this.musicPaused && this.musicAudioElem){
                 this.musicAudioElem.play();
+
+                // Marquee
+                this.$nextTick(() => {
+                    this.marqueeTxt();
+                });
             }
         },
 
@@ -193,6 +268,11 @@ export default defineComponent({
             // Make sure the song is loaded, if so - play
             this.musicAudioElem!.addEventListener("canplay", () => {
                 this.playMusicAudio();
+
+                // Marquee
+                this.$nextTick(() => {
+                    this.marqueeTxt();
+                });
             });
         },
 
@@ -205,6 +285,11 @@ export default defineComponent({
 
             // Change track
             this.changeTrack(this.currTrack);
+
+            // Marquee
+            this.$nextTick(() => {
+                this.marqueeTxt();
+            });
         },
 
         nextTrack(){
@@ -216,6 +301,11 @@ export default defineComponent({
 
             // Change track
             this.changeTrack(this.currTrack);
+
+            // Marquee
+            this.$nextTick(() => {
+                this.marqueeTxt();
+            });
         },
 
             /* Pause */
@@ -227,7 +317,7 @@ export default defineComponent({
             
             if (this.musicPaused){
                 this.musicAudioElem!.pause();
-                this.pausedBtn = this.unpausedIcon;
+                this.pausedBtn = true;
             } else {
                 this.playMusicAudio();
             }
@@ -240,9 +330,56 @@ export default defineComponent({
                 this.musicAudioElem.volume = this.isMusicMuted ? 0 : this.musicVolume;
             }
             
-            // Save the masterVolume and isMuted to the localStorage
+            // Save the musicVolume and isMuted to the localStorage
             localStorage.setItem("musicVolume", this.musicVolume.toString());
             localStorage.setItem("isMusicMuted", this.isMusicMuted.toString());
+
+            // Set the musicVolume to a CSS variable
+            document.documentElement.style.setProperty('--musicVol', 
+                (Math.round(this.musicVolume * 100)).toString()+"%");
+
+            // Change the mute icon state
+            this.muteIconState();
+        },
+
+        muteIconState(){
+            const muteBtns = document.querySelectorAll(".mute-music");
+
+            muteBtns.forEach((muteBtn) => {
+                if (this.isMusicMuted){
+                    muteBtn.classList.add("muted-icon-active")
+                } else {
+                    muteBtn.classList.remove("muted-icon-active")
+                }
+                
+                if (muteBtn){
+                    muteBtn!.classList.remove("mute-lvl1");
+                    muteBtn!.classList.remove("mute-lvl2");
+
+                    switch (true){
+                        case this.musicVolume <= 0.3:
+                            muteBtn!.classList.add("mute-lvl2");
+                            break;
+                        case this.musicVolume <= 0.6:
+                            muteBtn!.classList.add("mute-lvl1");
+                            break;
+                    }
+                }
+            });
+        },
+
+            /* Marquee */
+
+        marqueeTxt(){
+            // Call this function in the $nextTick, so the musicTitle has correct width
+            const musicDisplay = this.$refs.musicDisplay as HTMLElement;
+            const musicTitle = this.$refs.musicTitle as HTMLElement;
+
+            if (musicTitle.offsetWidth > musicDisplay.offsetWidth){
+                musicDisplay.classList.add("marquee-active");
+            } else {
+                musicDisplay.classList.remove("marquee-active");
+            }
         }
 
     },
@@ -254,7 +391,16 @@ export default defineComponent({
             handler(){
                 this.adjustMusicVolume();
             }
-        }
+        },
+
+        firstGame:{
+            immediate: true,
+            handler(){
+                this.$nextTick(() => {
+                    this.muteIconState();
+                });
+            }
+        },
 
     }
 
@@ -265,6 +411,83 @@ export default defineComponent({
 
 <style lang="scss">
 
+    /* Music Display */
 
+.music-display{
+    width:100%;
+    height:60px;
+    padding:var(--size2);
+    position:relative;
+
+    background:var(--colorGrad1);
+    border-radius:var(--size2) !important;
+
+    &:before{
+        border-radius:calc(var(--border) + var(--size2));
+        background:linear-gradient(to bottom right,
+            var(--mainBorder1a), var(--mainBorder1b));
+    }
+
+    &:after{
+        content:"";
+        width:100%;
+        height:100%;
+
+        position:absolute;
+        top:0;
+        left:0;
+
+        opacity:0.1;
+        background-color:var(--mainColor);
+        border-radius:calc(var(--border) + var(--size4));
+        pointer-events:none;
+    }
+
+}
+
+.md-inner{
+    width:100%;
+    max-width:100%;
+    height:100%;
+    position:relative;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:50px;
+
+    white-space:nowrap;
+    overflow:hidden;
+    z-index:10;
+
+    & .music-title{
+        flex-shrink:0;
+        min-width:100%;
+        margin-bottom:-4px;
+        transform:translateX(0);
+
+        text-align:center;
+        font-size:22px;
+    }
+
+    & .marquee-title{
+        display:none;
+    }
+
+    &.marquee-active .music-title{
+        display:flex;
+        animation:marqueeAnim 6s linear infinite;
+    }
+
+}
+
+@keyframes marqueeAnim{
+    0%{
+        transform:translateX(30%);
+    }
+    100%{
+        transform:translateX(calc(-70% - 50px));
+    }
+}
 
 </style>

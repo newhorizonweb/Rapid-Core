@@ -59,7 +59,7 @@ export default defineComponent({
             const newColor: RegExpMatchArray | null = this.mainColor.match(/\d+/g);
 
             if (newColor){
-                const newTranspar = transpar * 0.01;
+                const newTranspar = Math.round(transpar) / 100;
 
                 let r = parseInt(newColor[0]),
                     g = parseInt(newColor[1]),
@@ -123,6 +123,15 @@ export default defineComponent({
 
 
 
+            // Accent Color Background
+            bodyStyle.setProperty('--accBg2a',
+                this.calcVar("--accColor", "sub", 70, 70));
+
+            bodyStyle.setProperty('--accBg2b',
+                this.calcVar("--accColor", "sub", 20, 60));
+
+
+
             // Main Color Shades
             bodyStyle.setProperty('--mainShade1', 
                 this.calcVar("--mainColor", "sub", 40, 100));
@@ -139,12 +148,35 @@ export default defineComponent({
             bodyStyle.setProperty('--mainBorder1b', 
                 this.calcVar("--mainColor", "add", 30, 30));
 
-
             bodyStyle.setProperty('--mainBorder2a', 
                 this.calcVar("--mainColor", "add", 50, 30));
                 
             bodyStyle.setProperty('--mainBorder2b', 
                 this.calcVar("--mainColor", "add", 75, 45));
+                
+
+
+            // Accent Color Borders
+            bodyStyle.setProperty('--accBorder2a', 
+                this.calcVar("--accColor", "add", 50, 30));
+                
+            bodyStyle.setProperty('--accBorder2b', 
+                this.calcVar("--accColor", "add", 75, 45));
+
+
+
+            // Main Color Scrollbar
+            bodyStyle.setProperty('--mainScrollBg',
+                this.calcVar("--mainColor", "sub", 185, 85));
+
+            bodyStyle.setProperty('--mainScrollHover',
+                this.calcVar("--mainColor", "add", 25, 100));
+
+
+
+            // Main Color Crosshair
+            bodyStyle.setProperty('--mainCrosshair',
+                this.calcVar("--mainColor", "add", 30, 100));
 
         }
 

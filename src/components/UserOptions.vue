@@ -4,26 +4,28 @@
 <template>
 
 <div class="user-options">
-    <p>Choose the time duration</p>
+    <p>Game Duration</p>
 
-    <button class="time-btn time-btn-current"
-        @click="setTimeDur"
-        :disabled="!firstGame"
-        runTime="10">
-        10s
-    </button>
-    <button class="time-btn"
-        @click="setTimeDur"
-        :disabled="!firstGame"
-        runTime="30">
-        30s
-    </button>
-    <button class="time-btn" 
-        @click="setTimeDur"
-        :disabled="!firstGame"
-        runTime="60">
-        60s
-    </button>
+    <div class="time-buttons">
+        <button class="time-btn time-btn-current"
+            @click="setTimeDur"
+            :disabled="!firstGame"
+            runTime="10">
+            10s
+        </button>
+        <button class="time-btn"
+            @click="setTimeDur"
+            :disabled="!firstGame"
+            runTime="30">
+            30s
+        </button>
+        <button class="time-btn" 
+            @click="setTimeDur"
+            :disabled="!firstGame"
+            runTime="60">
+            60s
+        </button>
+    </div>
 </div>
 
 <teleport to=".fs-time-btns" v-if="resultsMounted">
@@ -99,14 +101,39 @@ export default defineComponent({
 <style lang="scss">
 
 .user-options{
+    flex:1;
+    width:100%;
+    align-self:flex-start;
     position:relative;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     z-index:10;
-}
 
-.time-btn{
+    & .time-btn-current{
+        background:linear-gradient(to bottom right,
+            var(--accBg2a), var(--accBg2b)),
+            url("../assets/img/noise-texture2.svg");
 
-    &.time-btn-current{
-        border-color:blue;
+        &:before{
+            background:linear-gradient(to bottom right,
+                var(--accBorder2a), var(--accBorder2b));
+        }
+    }
+
+    & .time-btn:disabled{
+        filter:brightness(80%) !important;
+        cursor:default;
+
+        &:before{
+            filter:brightness(80%) !important;
+        }
+    }
+
+    & .time-buttons{
+        display:flex;
+        gap:var(--size4);
     }
 
 }

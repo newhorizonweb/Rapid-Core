@@ -6,6 +6,26 @@
 <div class="finish-screen" :class="{'fs-visible': finishScreen}">
     <div class="fs-inner">
         
+        <div class="finished-info">
+            <div v-if="userFinished || windowResized">
+                <p>Game Termination</p>
+            </div>
+            <div v-if="gameScore === 0 && !userFinished && !windowResized">
+                <p>No Score</p>
+            </div>
+
+            <div v-if="windowResized">
+                <p>Game ended due to window resize.</p>
+            </div>
+            <div v-if="userFinished || windowResized || gameScore === 0">
+                <p>Your results will not be saved.</p>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
         <div class="fs-time-btns"></div>
         <div class="fs-audio"></div>
         <div class="fs-music"></div>
@@ -15,7 +35,6 @@
         <div v-if="newPB">
             <p>PERSONAL RECORD</p>
         </div>
-
         <p>Your score: {{ gameScore }}</p>
         <p>Score Per Second: {{ scorePerSecond.toFixed(2) }}</p>
 
@@ -203,7 +222,9 @@ export default defineComponent({
         "finishScreen",
         "timeDuration",
         "gameScore",
-        "totalClicks"
+        "totalClicks",
+        "userFinished",
+        "windowResized"
     ],
 
     mounted(){

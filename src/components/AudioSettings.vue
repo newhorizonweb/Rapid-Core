@@ -3,46 +3,60 @@
 
 <template>
 
-<div class="audio-settings" :class="{'muted-audio': isMuted}">
-    <input type="range" 
+<div class="audio-player audio-settings" :class="{'muted-audio': isMuted}">
+    <p class="audio-label">Master Volume</p>
+
+    <input type="range" class="volume-slider"
         min="0" max="1" step="0.05" 
         v-model="masterVolume"
         @input="adjustVolume">
 
-    <button 
-        class="mute-btn"
-        @click="isMuted = !isMuted">
-        X
-    </button>
-
-    <p>Volume: {{ (masterVolume * 100).toFixed(0) }}%</p>
+    <div class="volume-section">
+        <button 
+            class="audio-icon mute-btn mute-master"
+            :class="{'muted-icon-active': isMuted}"
+            @click="isMuted = !isMuted">
+            <MuteIcon />
+        </button>
+        <p>{{ (masterVolume * 100).toFixed(0) }}%</p>
+    </div>
 </div>
 
 <!-- Teleporting it is the easiest way -->
 <!-- Otherwise, it would be difficult to synch the inputs -->
 <teleport to=".fs-audio" v-if="!firstGame">
-    <div class="audio-settings" :class="{'muted-audio': isMuted}">
-        <input type="range" 
+    <div class="audio-player audio-settings" :class="{'muted-audio': isMuted}">
+        <div class="volume-section">
+            <button 
+                class="audio-icon mute-btn mute-master"
+                :class="{'muted-icon-active': isMuted}"
+                @click="isMuted = !isMuted">
+                <MuteIcon />
+            </button>
+            <p>{{ (masterVolume * 100).toFixed(0) }}%</p>
+        </div>
+
+        <input type="range" class="volume-slider"
             min="0" max="1" step="0.05" 
             v-model="masterVolume"
             @input="adjustVolume">
-
-        <button @click="isMuted = !isMuted">X</button>
-        
-        <p>Volume: {{ (masterVolume * 100).toFixed(0) }}%</p>
     </div>
 </teleport>
-
 
 </template>
 
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import MuteIcon from "./pageElements/MuteIcon.vue";
 
 export default defineComponent({
     name: "AudioSettings",
+
+    components:{
+        MuteIcon
+    },
 
     props:[
         "firstGame"
@@ -72,7 +86,40 @@ export default defineComponent({
             // Save the masterVolume and isMuted to the localStorage
             localStorage.setItem("masterVolume", this.masterVolume.toString());
             localStorage.setItem("isMuted", this.isMuted.toString());
-        }
+
+            // Set the masterVolume to a CSS variable
+            document.documentElement.style.setProperty('--masterVol', 
+                (Math.round(this.masterVolume * 100)).toString()+"%");
+
+            // Change the mute icon state
+            this.muteIconState();
+        },
+
+        muteIconState(){
+            const muteBtns = document.querySelectorAll(".mute-master");
+
+            muteBtns.forEach((muteBtn) => {
+                if (this.isMuted){
+                    muteBtn.classList.add("muted-icon-active")
+                } else {
+                    muteBtn.classList.remove("muted-icon-active")
+                }
+                
+                if (muteBtn){
+                    muteBtn!.classList.remove("mute-lvl1");
+                    muteBtn!.classList.remove("mute-lvl2");
+
+                    switch (true){
+                        case this.masterVolume <= 0.3:
+                            muteBtn!.classList.add("mute-lvl2");
+                            break;
+                        case this.masterVolume <= 0.6:
+                            muteBtn!.classList.add("mute-lvl1");
+                            break;
+                    }
+                }
+            });
+        },
 
     },
 
@@ -83,7 +130,16 @@ export default defineComponent({
             handler(){
                 this.adjustVolume();
             }
-        }
+        },
+        
+        firstGame:{
+            immediate: true,
+            handler(){
+                this.$nextTick(() => {
+                    this.muteIconState();
+                });
+            }
+        },
 
     }
 

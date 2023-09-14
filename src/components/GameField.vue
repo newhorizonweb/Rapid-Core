@@ -6,10 +6,11 @@
 <div class="game">
 
     <div class="game-field glass-border"  
+        ref="gameFieldElem"
         @click="totalClicksFun"
         @click.self="playMissSound">
         
-        <button class="start-btn no-glass-border"
+        <button class="start-btn"
             v-if="firstGame" 
             @click="startCountdown">
             START
@@ -21,11 +22,9 @@
             @click.self="playMissSound">
 
             <div class="game-core"
-                :class="{'disable-core': !gamePlaying}"
+                :class="{'disable-core': !gamePlaying, 'show-core': showCore}"
                 ref="gameCore"
-                
-                @click="coreClicked"
-                v-show="showCore">
+                @click="coreClicked">
             </div>
 
         </div>
@@ -44,7 +43,7 @@
 
     <button 
         v-show="gamePlaying"
-        @click="finishGame(true)">
+        @click="finishGame(true); userFinished=true">
         -Finish-
     </button>
 
@@ -55,7 +54,9 @@
 
         :gameScore="gameScore" 
         :timeDuration="timeDuration"
-        :totalClicks="totalClicks">
+        :totalClicks="totalClicks"
+        :userFinished="userFinished"
+        :windowResized="windowResized">
 
         <template v-slot:start-btn>
             <button @click="startCountdown">PLAY AGAIN</button>
@@ -70,6 +71,7 @@
 
 </div>
 
+
 </template>
 
 
@@ -78,6 +80,7 @@
 import { defineComponent } from 'vue'
 import ResultsScreen from "./ResultsScreen.vue"
 import AudioGame from "./AudioGame.vue"
+
 
 
 type AudioElemsType = {
@@ -116,9 +119,14 @@ export default defineComponent({
             showCore: false,
             firstGame: true,
             finishScreen: false,
+
+            // Game Interruption
+            userFinished: false,
+            windowResized: false,
             
-            // Game Elements
-            coreSize: 50,   // Width & Height (px)
+            // Game Elements & Settings
+            cursorColor: "",
+            coreSize: 0,
 
             // Game Logic
             gameScore: 0,
@@ -131,8 +139,14 @@ export default defineComponent({
     ],
 
     mounted(){
-        const gameCoreElem = this.$refs.gameCore as HTMLElement;
-        gameCoreElem.style.width = this.coreSize + "px";
+        // Core Size
+        this.coreSize = (this.$refs.gameCore as HTMLElement).offsetWidth;
+
+        // Finish on Window Resize
+        this.resizeFinish();
+
+        // Set the Cursor Color
+        this.setCursorColor();
     },
 
     methods:{
@@ -166,6 +180,9 @@ export default defineComponent({
             // Hide the core
             this.showCore = false;
 
+            // Set core position
+            this.corePosition();
+
             // Preparation timer countdown
             this.gamePreTime = "3";
             (this.preTimeAudioElem as HTMLVideoElement).play();
@@ -187,7 +204,6 @@ export default defineComponent({
 
             // Start the game and set the core position
             this.startGame();
-            this.corePosition();
         },
 
         timerFunction(){
@@ -226,9 +242,15 @@ export default defineComponent({
             /* Start / Finish */
 
         startGame(){
+            // Game interruption reset
+            this.windowResized = false;
+            this.userFinished = false;
+
+            // Start the game
             this.gamePlaying = true;
             this.showCore = true;
             this.timerFunction();
+            this.setCursorElem();
             this.$emit("startGame");
         },
 
@@ -244,6 +266,17 @@ export default defineComponent({
 
             // Call an event in the ResultsScreen (levels, fun facts, etc)
             (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).resultInfo(didUserEnd);
+
+            this.setCursorColor();
+        },
+
+        resizeFinish(){
+            window.addEventListener("resize", () => {
+                if (this.gamePlaying){
+                    this.windowResized = true;
+                    this.finishGame(true);
+                }
+            });
         },
 
             /* Game Logic */
@@ -256,6 +289,9 @@ export default defineComponent({
             const gameFieldW = gameFieldElem.offsetWidth;
             const gameFieldH = gameFieldElem.offsetHeight;
 
+            // Core Size
+            this.coreSize = gameCoreElem.offsetWidth;
+
             // Generate a random position in the game field
             const randX = Math.floor(Math.random() * 
                 (gameFieldW - this.coreSize + 1));
@@ -263,9 +299,13 @@ export default defineComponent({
                 (gameFieldH - this.coreSize + 1));
 
             gameCoreElem.style.transform = `translate3d(${randX}px, ${randY}px, 0px)`;
+            gameCoreElem.classList.add("core-animation");
         },
 
         coreClicked(){
+            // Remove the animation class
+            (this.$refs.gameCore as HTMLElement).classList.remove("core-animation");
+
             // Change core position
             this.corePosition();
 
@@ -286,9 +326,40 @@ export default defineComponent({
             if (this.gamePlaying){
                 (this.$refs.AudioGame as InstanceType<typeof AudioGame>).playMissSound();
             }
+        },
+
+            /* Cursor Color */
+
+        setCursorColor(){
+            // Get the CSS variable
+            this.cursorColor = getComputedStyle(document.body).getPropertyValue("--mainCrosshair").trim();
+
+            // Set the cursor to default
+            // Or it won't update on ResultsScreen until the user moves the cursor
+            const gameField = this.$refs.gameFieldElem as HTMLElement;
+            gameField.style.cursor = "default";
+        },
+
+        setCursorElem(){
+            // SVG custom cursor
+            const svg = `<svg width="32px" height="32px" id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><style>.cls-1{fill:${this.cursorColor};}.cls-2{fill:#FFFFFF;}</style></defs><path class='cls-1' d='M11.8,26.9h-.7a12.1,12.1,0,0,1-5.9-5.9,1.5,1.5,0,0,1,.8-2,1.5,1.5,0,0,1,2,.7A8.6,8.6,0,0,0,12.4,24a1.5,1.5,0,0,1,.7,2A1.4,1.4,0,0,1,11.8,26.9Z'/><path class='cls-2' d='M31,17H21.9a1,1,0,0,1,0-2H31a1,1,0,0,1,0,2Z'/><path class='cls-2' d='M10.1,17H1a1,1,0,0,1,0-2h9.1a1,1,0,1,1,0,2Z'/><path class='cls-2' d='M16,11.1a.9.9,0,0,1-1-1V1a1,1,0,0,1,2,0v9.1A.9.9,0,0,1,16,11.1Z'/><path class='cls-2' d='M16,32a1,1,0,0,1-1-1V21.9a1,1,0,0,1,2,0V31A1,1,0,0,1,16,32Z'/><path class='cls-1' d='M6.6,13.3,6,13.1a1.5,1.5,0,0,1-.8-2,12.1,12.1,0,0,1,5.9-5.9,1.5,1.5,0,0,1,2,.8,1.5,1.5,0,0,1-.7,2A8.6,8.6,0,0,0,8,12.4,1.7,1.7,0,0,1,6.6,13.3Z'/><path class='cls-1' d='M25.4,13.3a1.7,1.7,0,0,1-1.4-.9A8.6,8.6,0,0,0,19.6,8a1.5,1.5,0,0,1-.7-2,1.5,1.5,0,0,1,2-.8,12.1,12.1,0,0,1,5.9,5.9,1.5,1.5,0,0,1-.8,2Z'/><path class='cls-1' d='M20.2,26.9a1.4,1.4,0,0,1-1.3-.9,1.5,1.5,0,0,1,.7-2A8.6,8.6,0,0,0,24,19.6a1.5,1.5,0,0,1,2-.7,1.5,1.5,0,0,1,.8,2,12.1,12.1,0,0,1-5.9,5.9Z'/><circle class='cls-2' cx='16' cy='16' r='2'/></svg>`;
+
+            const encoded = btoa(svg);
+
+            // Set it to be visible in the Game Field
+            const gameField = this.$refs.gameFieldElem as HTMLElement;
+            gameField.style.cursor = `url("data:image/svg+xml;base64,${encoded}") 16 16, auto`;
         }
 
     },
+
+    watch:{
+
+        cursorColor(){
+            this.setCursorElem();
+        }
+
+    }
 
 });
 </script>
@@ -300,15 +371,14 @@ export default defineComponent({
 .game{
 
     .game-field{
-        height:350px;
-        width:500px;
+        container-type:inline-size;
+        width:100%;
+        aspect-ratio:3/2;
         padding:14px;
 
         position:relative;
         background:var(--colorGrad1);
-
         transition:var(--trans2);
-        cursor:crosshair;
 
         &:has(.start-btn:hover),
         &:has(.start-btn:hover):before{
@@ -337,19 +407,51 @@ export default defineComponent({
     }
 
     .game-core{
+        will-change:transform;
+
+        width:6cqw;
         aspect-ratio:1/1;
         position:absolute;
 
-        background-color:blue;
-        border-radius:50%;
-
+        opacity:0;
+        pointer-events:none;
         z-index:100;
-        transition:0.075s;
 
         &.disable-core{
             pointer-events:none;
         }
 
+        &.show-core{
+            opacity:1;
+            pointer-events:all;
+        }
+
+        &:after{
+            content:"";
+            width:100%;
+            height:100%;
+
+            position:absolute;
+            top:0;
+            left:0;
+
+            background-color:red;
+            border-radius:50%;
+        }
+
+        &.core-animation:after{
+            animation:coreAnimation 0.075s ease-in-out;
+        }
+
+    }
+
+    @keyframes coreAnimation{
+        0%{
+            scale:0;
+        }
+        100%{
+            scale:1;
+        }
     }
 
     .pre-game-timer{
@@ -407,7 +509,6 @@ export default defineComponent({
 
         cursor:pointer;
         z-index:10;
-
     }
 
     .game-field:hover .start-btn{

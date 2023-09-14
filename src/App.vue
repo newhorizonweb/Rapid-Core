@@ -10,15 +10,17 @@
 <main class="wrapper glass-border">
 
     <section class="settings">
-        <UserOptions 
-            @timerIsSet="timerIsSetFun"
-            :firstGame="firstGame"
-            :resultsMounted="resultsMounted" 
-        />
+        <div class="game-settings">
+            <UserOptions 
+                @timerIsSet="timerIsSetFun"
+                :firstGame="firstGame"
+                :resultsMounted="resultsMounted" 
+            />
 
-        <AudioSettings
-            :firstGame="firstGame"
-        />
+            <AudioSettings
+                :firstGame="firstGame"
+            />
+        </div>
 
         <AudioMusic
             ref="AudioMusic"
@@ -37,7 +39,7 @@
 
 <footer class="wrapper glass-border">
 
-    <p>v0.9.0</p>
+    <p>v0.10.0</p>
     
 </footer>
 
@@ -150,8 +152,23 @@ header{
 
 }
 
-.muted-audio .mute-btn{
-    border-color:red;
+.settings{
+    margin-bottom:var(--size6);
+    display:flex;
+    align-items:stretch;
+    gap:var(--size6);
+
+    & > div{
+        width:calc((100% - var(--size6)) / 2);
+    }
+
+    & .game-settings{
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+        gap:var(--size6);
+    }
+
 }
 
 </style>
