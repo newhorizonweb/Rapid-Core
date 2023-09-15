@@ -54,7 +54,7 @@
     --trans1:0.1s  ease-in-out;
     --trans2:0.15s ease-in-out;
     --trans3:0.25s ease-in-out;
-    --trans4:0.35s ease-in-out;     /* Theme Change */
+    --trans4:0.35s ease-in-out;
 
 }
 
@@ -132,10 +132,14 @@ body{
 p, a, label, button{
     font-size:18px;
     font-weight:400;
-    line-height:1.3em;
+    line-height:1.2;
     text-decoration:none;
     color:var(--txt-faded);
     transition:var(--trans2);
+}
+
+p, a, label{
+    margin-bottom:-2px;
 }
 
 label{
@@ -152,6 +156,15 @@ label{
 
 }
 
+@media screen and (width <= 320px){
+    
+    p, a, label, button{
+        font-size:15px;
+        line-height:1.2em;
+    }
+
+}
+
 h1, h2, h3, h4, h5, h6{
     font-family:mainFont, Calibri, sans-serif;
     color:var(--txt1);
@@ -163,19 +176,19 @@ h1{
     font-size:38px;
 }
 h2{
-    font-size:36px;
+    font-size:32px;
 }
 h3{
     font-size:28px;
 }
 h4{
-    font-size:20px;
+    font-size:24px;
 }
 h5{
-    font-size:18px;
+    font-size:20px;
 }
 h6{
-    font-size:16px;
+    font-size:18px;
 }
 
 @media screen and (width <= 440px){
@@ -184,10 +197,33 @@ h6{
         font-size:32px;
     }
     h2{
-        font-size:32px;
+        font-size:28px;
     }
     h3{
         font-size:24px;
+    }
+    h4{
+        font-size:20px;
+    }
+    h5{
+        font-size:18px;
+    }
+    h6{
+        font-size:16px;
+    }
+
+}
+
+@media screen and (width <= 320px){
+    
+    h1{
+        font-size:28px;
+    }
+    h2{
+        font-size:24px;
+    }
+    h3{
+        font-size:20px;
     }
     h4{
         font-size:18px;

@@ -4,42 +4,42 @@
 <template>
 
 <div class="user-options">
-    <p>Game Duration</p>
+    <p class="uo-label">Game Duration</p>
 
     <div class="time-buttons">
-        <button class="time-btn time-btn-current"
+        <button class="time-btn glass-btn time-btn-current"
             @click="setTimeDur"
             :disabled="!firstGame"
             runTime="10">
-            10s
+            <p>10s</p>
         </button>
-        <button class="time-btn"
+        <button class="time-btn glass-btn"
             @click="setTimeDur"
             :disabled="!firstGame"
             runTime="30">
-            30s
+            <p>30s</p>
         </button>
-        <button class="time-btn" 
+        <button class="time-btn glass-btn" 
             @click="setTimeDur"
             :disabled="!firstGame"
             runTime="60">
-            60s
+            <p>60s</p>
         </button>
     </div>
 </div>
 
 <teleport to=".fs-time-btns" v-if="resultsMounted">
-    <button class="time-btn time-btn-current"
+    <button class="time-btn glass-btn time-btn-current"
         @click="setTimeDur"
         runTime="10">
         10s
     </button>
-    <button class="time-btn"
+    <button class="time-btn glass-btn"
         @click="setTimeDur"
         runTime="30">
         30s
     </button>
-    <button class="time-btn" 
+    <button class="time-btn glass-btn" 
         @click="setTimeDur"
         runTime="60">
         60s
@@ -73,7 +73,7 @@ export default defineComponent({
 
     methods:{
 
-        setTimeDur($event: Event) {
+        setTimeDur($event: Event){
             // Set the duration time
             this.timeDuration = Number(($event.target as HTMLElement).getAttribute("runTime"));
 
@@ -111,16 +111,49 @@ export default defineComponent({
     align-items:center;
     z-index:10;
 
-    & .time-btn-current{
-        background:linear-gradient(to bottom right,
-            var(--accBg2a), var(--accBg2b)),
-            url("../assets/img/noise-texture2.svg");
+    & .time-btn{
 
-        &:before{
-            background:linear-gradient(to bottom right,
-                var(--accBorder2a), var(--accBorder2b));
+        &.time-btn-current{
+
+            &:before{
+                background:linear-gradient(to bottom right,
+                    var(--accBorder2a), var(--accBorder2b));
+            }
+
+            &:after{
+                opacity:1;
+            }
+
         }
+
+        &:after{
+            content:"";
+            width:100%;
+            height:100%;
+
+            position:absolute;
+            top:0;
+            left:0;
+
+            background:linear-gradient(to bottom right,
+                var(--accBg2a), var(--accBg2b)),
+                url("../assets/img/noise-texture2.svg");
+            border-radius:var(--size2);
+
+            opacity:0;
+            transition:var(--trans2);
+        }
+
+        & p{
+            position:relative;
+            line-height:1;
+            z-index:100;
+            pointer-events:none;
+        }
+
     }
+
+
 
     & .time-btn:disabled{
         filter:brightness(80%) !important;
@@ -129,6 +162,7 @@ export default defineComponent({
         &:before{
             filter:brightness(80%) !important;
         }
+        
     }
 
     & .time-buttons{

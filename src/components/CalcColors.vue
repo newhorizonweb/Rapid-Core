@@ -141,6 +141,12 @@ export default defineComponent({
 
 
 
+            // Main Color Tint
+            bodyStyle.setProperty('--mainTint1', 
+                this.calcVar("--mainColor", "add", 40, 100));
+
+
+
             // Main Color Borders
             bodyStyle.setProperty('--mainBorder1a', 
                 this.calcVar("--mainColor", "add", 15, 25));
@@ -171,13 +177,6 @@ export default defineComponent({
 
             bodyStyle.setProperty('--mainScrollHover',
                 this.calcVar("--mainColor", "add", 25, 100));
-
-
-
-            // Main Color Crosshair
-            bodyStyle.setProperty('--mainCrosshair',
-                this.calcVar("--mainColor", "add", 30, 100));
-
         }
 
     }

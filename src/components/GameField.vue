@@ -5,47 +5,58 @@
 
 <div class="game">
 
-    <div class="game-field glass-border"  
-        ref="gameFieldElem"
-        @click="totalClicksFun"
-        @click.self="playMissSound">
-        
-        <button class="start-btn"
-            v-if="firstGame" 
-            @click="startCountdown">
-            START
-        </button>
-        <p class="pre-game-timer" v-if="gamePreTime">{{ gamePreTime }}</p>
-
-        <div class="game-field-inner"
-            ref="gameField"
+    <div class="game-field-outer">
+        <div class="game-field glass-border"  
+            ref="gameFieldElem"
+            @click="totalClicksFun"
             @click.self="playMissSound">
+            
+            <button class="start-btn"
+                v-if="firstGame" 
+                @click="startCountdown">
+                START
+            </button>
+            <p class="pre-game-timer" v-if="gamePreTime">{{ gamePreTime }}</p>
 
-            <div class="game-core"
-                :class="{'disable-core': !gamePlaying, 'show-core': showCore}"
-                ref="gameCore"
-                @click="coreClicked">
+            <div class="game-field-inner"
+                ref="gameField"
+                @click.self="playMissSound">
+
+                <div class="game-core"
+                    :class="{'disable-core': !gamePlaying, 'show-core': showCore}"
+                    ref="gameCore"
+                    @click="coreClicked">
+                </div>
+
             </div>
 
         </div>
-
     </div>
 
-    <p class="main-font">Score: {{ gameScore }}</p>
-    <p class="timer">
-        Time left: 
-        <span 
-            class="main-font"
-            :class="{'timer-animation': timerAnimation}">
-            {{ ( timerCurrVal / 1000 ).toFixed(2) }}
-        </span>
-    </p>
+    <div class="match-info">
 
-    <button 
-        v-show="gamePlaying"
-        @click="finishGame(true); userFinished=true">
-        -Finish-
-    </button>
+        <div class="timer"
+            :class="{'timer-animation': timerAnimation}">
+
+            <TimeIcon />
+            <p class="main-font">
+                {{ (timerCurrVal / 1000).toFixed(2) }}
+            </p>
+        </div>
+
+        <button class="finish-btn glass-btn"
+            v-show="gamePlaying"
+            @click="finishGame(true); userFinished=true">
+            Finish
+        </button>
+
+        <div class="score-info"
+            :class="{'misclick': missAnim}">
+            <p class="main-font">{{ gameScore }}</p>
+            <ScoreIcon />
+        </div>
+
+    </div>
 
     <ResultsScreen 
         ref="resultInfo"
@@ -80,6 +91,8 @@
 import { defineComponent } from 'vue'
 import ResultsScreen from "./ResultsScreen.vue"
 import AudioGame from "./AudioGame.vue"
+import TimeIcon from "./pageElements/TimeIcon.vue"
+import ScoreIcon from "./pageElements/ScoreIcon.vue"
 
 
 
@@ -98,7 +111,9 @@ export default defineComponent({
 
     components: {
         ResultsScreen,
-        AudioGame
+        AudioGame,
+        TimeIcon,
+        ScoreIcon
     },
 
     data(){
@@ -125,6 +140,8 @@ export default defineComponent({
             windowResized: false,
             
             // Game Elements & Settings
+            missAnim: false,
+            missAnimTimeout: null as number | null,
             cursorColor: "",
             coreSize: 0,
 
@@ -324,15 +341,32 @@ export default defineComponent({
 
         playMissSound(){
             if (this.gamePlaying){
+                // Play the miss sound
                 (this.$refs.AudioGame as InstanceType<typeof AudioGame>).playMissSound();
+
+                // Trigger the miss icon animation
+                this.triggerMissAnim();
             }
+        },
+
+        triggerMissAnim(){
+            this.missAnim = true;
+
+            if (this.missAnimTimeout) {
+                clearTimeout(this.missAnimTimeout);
+            }
+
+            this.missAnimTimeout = setTimeout(() => {
+                this.missAnim = false;
+                this.missAnimTimeout = null;
+            }, 250);
         },
 
             /* Cursor Color */
 
         setCursorColor(){
             // Get the CSS variable
-            this.cursorColor = getComputedStyle(document.body).getPropertyValue("--mainCrosshair").trim();
+            this.cursorColor = getComputedStyle(document.body).getPropertyValue("--mainTint1").trim();
 
             // Set the cursor to default
             // Or it won't update on ResultsScreen until the user moves the cursor
@@ -369,10 +403,23 @@ export default defineComponent({
 <style lang="scss">
 
 .game{
+    display:flex;
+    flex-direction:column;
 
-    .game-field{
-        container-type:inline-size;
+        /* Game Field */
+
+    & .game-field-outer{
         width:100%;
+        max-height:calc(100vh - (var(--size6) * 2));
+        aspect-ratio:3/2;
+
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+
+    & .game-field{
+        height:100%;
         aspect-ratio:3/2;
         padding:14px;
 
@@ -401,22 +448,61 @@ export default defineComponent({
         }
 
         .game-field-inner{
+            container-type:inline-size;
             width:100%;
             height:100%;
         }
     }
 
+    .pre-game-timer{
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        font-size:30px;
+
+        pointer-events:none;
+        z-index:10;
+    }
+
+    .start-btn{
+        width:100%;
+        height:100%;
+
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+
+        font-size:32px;
+        background-color:transparent;
+        border:none;
+        border-radius:calc(var(--border) + var(--size4));
+
+        cursor:pointer;
+        z-index:10;
+    }
+
+    .game-field:hover .start-btn{
+        color:var(--mainColor);
+    }
+
+        /* Game Core */
+
     .game-core{
         will-change:transform;
 
-        width:6cqw;
+        width:7cqw;
         aspect-ratio:1/1;
         position:absolute;
 
         opacity:0;
-        pointer-events:none;
-        z-index:100;
+        border-radius:50%;
 
+        pointer-events:none;
+        overflow:hidden;
+        z-index:100;
+        
         &.disable-core{
             pointer-events:none;
         }
@@ -435,14 +521,27 @@ export default defineComponent({
             top:0;
             left:0;
 
-            background-color:red;
+            background:linear-gradient(to right,
+                var(--mainColor), var(--accColor));
             border-radius:50%;
+            filter:blur(5px);
+            animation:coreRotate 5s linear infinite;
         }
 
         &.core-animation:after{
-            animation:coreAnimation 0.075s ease-in-out;
+            animation:coreRotate 5s linear infinite,
+                coreAnimation 0.075s ease-in-out;
         }
 
+    }
+
+    @keyframes coreRotate{
+        0%{
+            transform:rotate(0deg);
+        }
+        100%{
+            transform:rotate(360deg);
+        }
     }
 
     @keyframes coreAnimation{
@@ -454,23 +553,70 @@ export default defineComponent({
         }
     }
 
-    .pre-game-timer{
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translate(-50%, -50%);
-        font-size:30px;
+        /* Match Info */
 
-        pointer-events:none;
-        z-index:10;
+    .match-info{
+        width:100%;
+        height:var(--size8);
+        margin-top:var(--size4);
+
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:space-between;
+        align-items:center;
+
+        & .timer,
+        & .score-info{
+            width:90px;
+            height:var(--size7);
+
+            display:flex;
+            align-items:center;
+            gap:var(--size2);
+
+            & div, & svg{
+                height:100%;
+                aspect-ratio:1/1;
+            }
+
+            & p{
+                margin-bottom:-2px;
+            }
+
+        }
+
+        & .score-info{
+            justify-content:flex-end;
+        }
+
+        & .timer{
+            font-size:18px;
+        }
+
+        & .timer-animation svg :is(.cls-2, .cls-3){
+            animation:timerAnimIcon 1s ease-in-out;
+        }
+        
+        & .timer-animation p{
+            animation:timerAnim 1s ease-in-out;
+        }
+
+        & .finish-btn{
+            padding:var(--size3) var(--size6);
+        }
+
     }
 
-    .timer{
-        font-size:18px;
-    }
-
-    .timer-animation{
-        animation:timerAnim 1s ease-in-out;
+    @keyframes timerAnimIcon{
+        0%{
+            stroke:#FFF;
+        }
+        15%{
+            stroke:#F00;
+        }
+        60%{
+            stroke:#FFF;
+        }
     }
 
     @keyframes timerAnim{
@@ -479,7 +625,7 @@ export default defineComponent({
             font-size:18px;
         }
         15%{
-            color:red;
+            color:#F00;
         }
         20%{
             font-size:22px;
@@ -492,29 +638,60 @@ export default defineComponent({
         }
     }
 
-    .start-btn{
-        width:100%;
-        height:100%;
+}
 
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translate(-50%, -50%);
+    /* Media */
 
-        font-size:32px;
+@media screen and (width <= 540px){
 
-        background-color:transparent;
-        border:none;
-        border-radius:calc(var(--border) + var(--size4));
+    .game{
 
-        cursor:pointer;
-        z-index:10;
+        & .game-field-outer,
+        & .game-field{
+            aspect-ratio:2/3;
+        }
+        
     }
+    
+}
 
-    .game-field:hover .start-btn{
-        color:var(--mainColor);
+@media screen and (width <= 440px){
+
+    .game{
+
+        .match-info{
+            height:auto;
+            gap:var(--size4);
+
+
+            & .timer,
+            & .score-info{
+                order:0;
+                width:auto;
+            }
+
+            & .finish-btn{
+                order:1;
+                width:100%;
+            }
+
+        }
+
     }
+    
+}
 
+@media screen and (height <= 440px) and (orientation:landscape){
+
+    .game{
+
+        & .game-field-outer,
+        & .game-field{
+            aspect-ratio:2/1;
+        }
+        
+    }
+    
 }
 
 </style>

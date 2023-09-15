@@ -9,6 +9,8 @@
 
 <main class="wrapper glass-border">
 
+    <h1 class="main-heading">Settings</h1>
+
     <section class="settings">
         <div class="game-settings">
             <UserOptions 
@@ -39,7 +41,14 @@
 
 <footer class="wrapper glass-border">
 
-    <p>v0.10.0</p>
+    <div class="footer-credits">
+        <p>Created by</p>
+        <UveritLogo />
+    </div>
+    <div class="version">
+        <p>v0.11.0</p>
+        <p>© 2023 uverit</p>
+    </div>
     
 </footer>
 
@@ -52,17 +61,20 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import LogoElem from "./components/pageElements/LogoElem.vue"
+import UveritLogo from "./components/pageElements/UveritLogo.vue"
 import UserOptions from "./components/UserOptions.vue"
 import AudioSettings from "./components/AudioSettings.vue"
 import AudioMusic from "./components/AudioMusic.vue"
 import GameField from "./components/GameField.vue"
 import BgCores from "./components/BgCores.vue"
 
+
 export default defineComponent({
     name: "App",
 
     components: {
         LogoElem,
+        UveritLogo,
         UserOptions,
         AudioSettings,
         AudioMusic,
@@ -125,50 +137,98 @@ export default defineComponent({
 
 <style lang="scss">
 
+    /* General */
+
 body:not(.add-transition) *{
     transition:0s !important;
 }
 
+    /* Header & Main */
+
 header{
-    width:1024px;
+    width:min(1024px, 100%);
     margin:0 auto;
     padding:var(--size6);
 
     display:flex;
     justify-content:center;
 
-    & svg{
-        width:270px;
-        margin-top:var(--size6);
-
+    & .rapid-core-logo{
+        width:min(270px, 100%);
         position:relative;
         z-index:100;
 
-        & *{
-            transition:fill var(--trans4);
-        }
+        & svg{
+            width:100%;
 
+            & *{
+                transition:fill var(--trans4);
+            }
+
+        }
     }
 
 }
 
-.settings{
-    margin-bottom:var(--size6);
-    display:flex;
-    align-items:stretch;
-    gap:var(--size6);
+.main-heading{
+    width:100%;
+    padding-top:var(--size4);
+    padding-bottom:var(--size6);
+    text-align:center;
+}
 
-    & > div{
-        width:calc((100% - var(--size6)) / 2);
+    /* Footer */
+
+footer.wrapper{
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:flex-end;
+
+    & p{
+        font-size:14px;
     }
 
-    & .game-settings{
+    & .footer-credits{
         display:flex;
         flex-direction:column;
-        justify-content:space-between;
-        gap:var(--size6);
+        gap:var(--size1);
+
+        & p{
+            font-family:mainFont;
+        }
+
+        & .uverit-logo{
+            height:var(--size6);
+
+            & svg{
+                height:100%;
+            }
+
+        }
+
     }
 
+    & .version{
+        display:flex;
+        flex-direction:column;
+        align-items:flex-end;
+    }
+
+}
+
+@media screen and (width <= 320px){
+
+    footer.wrapper{
+        flex-direction:column;
+        align-items:center;
+        gap:var(--size6);
+
+        & .version{
+            align-items:center
+        }
+
+    }
+    
 }
 
 </style>

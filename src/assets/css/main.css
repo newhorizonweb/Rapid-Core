@@ -82,7 +82,7 @@ footer.wrapper{
 
     /* Glass Border */
 
-.time-btn,
+.glass-btn,
 .audio-player,
 .glass-border{
     --border:2px;
@@ -92,6 +92,7 @@ footer.wrapper{
     border-radius:var(--size2);
     box-shadow:inset 0 0 5px 0 rgb(125, 125, 125, 0.15),
         0 0 5px 0 rgb(0, 0, 0, 0.2);
+    transition:var(--trans2);
 
     &:before{
         content:"";
@@ -125,7 +126,7 @@ footer.wrapper{
 
     /* Buttons & Audio Player */
 
-.time-btn,
+.glass-btn,
 .audio-player{
     padding:var(--size3);
 
@@ -137,7 +138,6 @@ footer.wrapper{
     background-size:cover;
 
     line-height:1;
-    transition:var(--trans2);
     cursor:pointer;
 
     &:not(.audio-player):hover,
@@ -155,6 +155,29 @@ footer.wrapper{
 
 
 
+    /* Settings */
+
+.settings{
+    margin-bottom:var(--size8);
+    display:flex;
+    align-items:stretch;
+    gap:var(--size6);
+
+    & > div{
+        width:calc((100% - var(--size6)) / 2);
+    }
+
+    & .game-settings{
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+        gap:var(--size6);
+    }
+
+}
+
+
+
     /* Audio Player */
 
 .audio-player{
@@ -165,9 +188,8 @@ footer.wrapper{
 
     justify-content:space-between;
     align-items:center;
-
     row-gap:var(--size4);
-    column-gap:var(--size3);
+    column-gap:var(--size6);
 
     cursor:auto;
 }
@@ -353,4 +375,112 @@ footer.wrapper{
         background-color:#FFF;
     }
 
+}
+
+        /* Audio Player & Settings - media */
+
+@media screen and (768px < width <= 1024px){
+
+    .uo-label{
+        font-size:16px;
+    }
+    
+    .audio-panel{
+        flex:1;
+        width:auto;
+    }
+
+    .vs-placeholder{
+        display:none;
+    }
+
+}
+
+@media screen and (width <= 768px){
+
+    .settings{
+        flex-direction:column;
+    
+        & > div{
+            width:100%;
+        }
+    
+    }
+    
+}
+
+@media screen and (width <= 540px){
+
+    .audio-panel{
+        flex:1;
+        width:auto;
+    }
+
+    .vs-placeholder{
+        display:none;
+    }
+    
+}
+
+@media screen and (width <= 440px){
+
+    .user-options{
+        flex-direction:column;
+        gap:var(--size4);
+    }
+
+    .audio-player{
+        flex-direction:column;
+    }
+
+    .audio-settings{
+        height:auto;
+        max-height:none;
+        row-gap:var(--size4);
+
+        & .volume-slider{
+            flex:none;
+            width:100%;
+            height:var(--size1);
+        }
+
+    }
+
+    .audio-panel{
+        width:100%;
+    }
+
+    .music-display{
+        height:52px;
+    }
+
+    .md-inner{
+
+        & .music-title{
+            font-size:18px;
+        }
+
+    }
+    
+    .audio-label{
+        text-align:center;
+    }
+
+}
+
+@media screen and (width <= 320px){
+
+    .user-options{
+
+        & .time-buttons{
+            width:100%;
+            justify-content:space-between;
+        }
+
+        & .time-btn{
+            padding:var(--size2);
+        }
+
+    }
+    
 }

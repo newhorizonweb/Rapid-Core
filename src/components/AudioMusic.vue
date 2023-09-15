@@ -28,7 +28,7 @@
         </div>
     </div>
     
-    <div class="volume-section"></div>
+    <div class="volume-section vs-placeholder"></div>
 
     <div class="audio-panel">
 
