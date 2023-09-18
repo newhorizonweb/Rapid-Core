@@ -107,6 +107,9 @@ export default defineComponent({
             bodyStyle.setProperty('--mainBg1b', 
                 this.calcVar("--mainColor", "sub", 70, 20));
 
+            bodyStyle.setProperty('--mainBg1c', 
+                this.calcVar("--mainColor", "sub", 70, 100));
+
 
             bodyStyle.setProperty('--mainBg2a',
                 this.calcVar("--mainColor", "sub", 70, 70));
@@ -149,16 +152,17 @@ export default defineComponent({
 
             // Main Color Borders
             bodyStyle.setProperty('--mainBorder1a', 
-                this.calcVar("--mainColor", "add", 15, 25));
+                this.calcVar("--mainColor", "add", 15, 15));
                 
             bodyStyle.setProperty('--mainBorder1b', 
-                this.calcVar("--mainColor", "add", 30, 30));
+                this.calcVar("--mainColor", "add", 30, 20));
+
 
             bodyStyle.setProperty('--mainBorder2a', 
-                this.calcVar("--mainColor", "add", 50, 30));
+                this.calcVar("--mainColor", "add", 50, 20));
                 
             bodyStyle.setProperty('--mainBorder2b', 
-                this.calcVar("--mainColor", "add", 75, 45));
+                this.calcVar("--mainColor", "add", 75, 35));
                 
 
 

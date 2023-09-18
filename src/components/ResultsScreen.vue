@@ -5,96 +5,147 @@
 
 <div class="finish-screen" :class="{'fs-visible': finishScreen}">
     <div class="fs-inner">
-        
-        <div class="finished-info">
-            <div v-if="userFinished || windowResized">
-                <p>Game Termination</p>
-            </div>
-            <div v-if="gameScore === 0 && !userFinished && !windowResized">
-                <p>No Score</p>
+        <div class="fs-content">
+            
+            <div class="finish-info">
+                <h2 class="finish-section-heading fi-heading"
+                    v-if="userFinished && !gamePlaying || windowResized">
+                    Game Termination
+                </h2>
+                <h2 class="finish-section-heading fi-heading"
+                    v-if="gameScore === 0 && !userFinished && !windowResized">
+                    No Score
+                </h2>
+
+                <p class="fi-txt"
+                    v-if="windowResized && !gamePlaying">
+                    Game ended due to window resize.
+                </p>
+
+                <p class="fi-txt"
+                    v-if="userFinished || windowResized || gameScore === 0">
+                    Your results will not be saved.
+                </p>
             </div>
 
-            <div v-if="windowResized">
-                <p>Game ended due to window resize.</p>
+            <div class="fs-lvl-info">
+                <h2 class="personal-record-heading"
+                    v-if="newPB">
+                    PERSONAL RECORD
+                </h2>
+
+                <h3 class="finish-section-heading fs-lvl-heading"
+                    v-if="currResLvl && currResName">
+                    {{ currResName }}
+                </h3>
+                <h3 class="finish-section-heading fs-lvl-heading"
+                v-else>
+                    N/A
+                </h3>
+
+                <div class="lvl-cores">
+                    <div class="lvl-core"></div>
+                    <div class="lvl-core"></div>
+                    <div class="lvl-core"></div>
+                    <div class="lvl-core"></div>
+                    <div class="lvl-core"></div>
+                    <div class="lvl-core"></div>
+                </div>
             </div>
-            <div v-if="userFinished || windowResized || gameScore === 0">
-                <p>Your results will not be saved.</p>
+
+            <div class="fs-btn-div">
+                <slot name="start-btn"></slot>
             </div>
+            
+            <div class="finish-results">
+
+                <h3 class="finish-section-heading">Results</h3>
+
+                <div class="fr-section glass-border">
+                    <p>Your Score: {{ gameScore }}</p>
+                    <p>Score/Sec: {{ scorePerSecond.toFixed(2) }}</p>
+                </div>
+
+                <div class="fr-section glass-border">
+                    <p>Total Clicks: {{ totalClicks }}</p>
+                    <p>Missed Clicks: {{ missedClicks }}</p>
+                </div>
+
+                <div class="fr-section glass-border">
+                    <p>CPS: {{ CPS.toFixed(2) }}</p>
+                    <p>Accuracy: {{ (accuracy * 100).toFixed(2) }}%</p>
+                </div>
+
+            </div>
+
+            <div class="personal-best" v-if="personalBestScores.length > 0">
+                
+                <h3 class="finish-section-heading">Personal Best</h3>
+
+                <div class="pb-div glass-border"
+                    v-for="(pbScore, index) in personalBestScores" 
+                    :key="index">
+
+                    <h4>{{ timeDurationArray[index] }}<span class="pb-time-span">s</span></h4>
+
+                    <p>Score: {{ pbScore.pb ? pbScore.pb : "---" }}</p>
+                    <p>Score/Sec: {{ pbScore.pbSec ? pbScore.pbSec : "---"  }}</p>
+
+                </div>
+
+            </div>
+
+            <div class="core-intel">
+                <h3 class="finish-section-heading">Core Intel</h3>
+
+                <div class="ci-section ci-data glass-border">
+                    <h4 class="ci-heading">Data</h4>
+
+                    <div class="ci-elem">
+                        <p class="ci-label">Object</p>
+                        <p class="ci-txt">{{ currResName }}</p>
+                    </div>
+
+                    <div class="ci-elem">
+                        <p class="ci-label">Size</p>
+                        <p class="ci-txt">{{ currResSize }}</p>
+                    </div>
+
+                    <div class="ci-elem">
+                        <p class="ci-label">Lifespan</p>
+                        <p class="ci-txt">{{ currResLifespan }}</p>
+                    </div>
+
+                    <div class="ci-elem">
+                        <p class="ci-label">Examples</p>
+                        <p class="ci-txt">{{ currResExamples }}</p>
+                    </div>
+                </div>
+                
+                <div class="ci-section ci-fun-fact glass-border">
+                    <h4 class="ci-heading">Did you know?</h4>
+                    <p class="ci-txt">{{ currResFunFact }}</p>
+                </div>
+            </div>
+
         </div>
-
-        <br>
-        <br>
-        <br>
-
-        <div class="fs-time-btns"></div>
-        <div class="fs-audio"></div>
-        <div class="fs-music"></div>
-    
-        <br>
-
-        <div v-if="newPB">
-            <p>PERSONAL RECORD</p>
-        </div>
-        <p>Your score: {{ gameScore }}</p>
-        <p>Score Per Second: {{ scorePerSecond.toFixed(2) }}</p>
-
-        <br>
-
-        <p>Total Clicks: {{ totalClicks }}</p>
-        <p>Missed Clicks: {{ missedClicks }}</p>
-
-        <br>
-
-        <p>Accuracy: {{ (accuracy * 100).toFixed(2) }}%</p>
-        <p>Clicks Per Second: {{ CPS.toFixed(2) }}</p>
-
-        <br>
-
-        <p v-if="currResLvl && currResName">
-            Lvl: {{ currResLvl }} - {{ currResName }}
-        </p>
-        <p v-else>
-            Lvl: N/A
-        </p>
-        <p v-show="currResSize">{{ currResSize }}</p>
-        <p v-show="currResLifespan">{{ currResLifespan }}</p>
-        <p v-show="currResExamples">{{ currResExamples }}</p>
-        <p v-show="currResFunFact">{{ currResFunFact }}</p>
-
-        <br>
-
-        <slot name="start-btn"></slot>
-
-        <br>
-
-        <div class="personal-best" v-if="personalBestScores.length > 0">
-            <div v-for="(pbScore, index) in personalBestScores" :key="index">
-                <p>{{ pbScore.pb ? pbScore.pb : "---" }}</p>
-                <p>{{ pbScore.pbSec ? pbScore.pbSec : "---"  }}</p>
-            </div>
-        </div>
-        
-        <br>
-        <br>
-        <br>
-
-        <ScoreboardComp
-            ref="saveResults"
-            @pbScores="pbScores"
-
-            :timeDuration="timeDuration"
-            :gameScore="gameScore"
-            :scorePerSecond="scorePerSecond"
-            :accuracy="accuracy"
-            :CPS="CPS" 
-        />
-
-        <CalcColors
-            ref="CalcColors"
-        />
-
     </div>
+
+    <ScoreboardComp
+        ref="saveResults"
+        @pbScores="pbScores"
+
+        :timeDuration="timeDuration"
+        :gameScore="gameScore"
+        :scorePerSecond="scorePerSecond"
+        :accuracy="accuracy"
+        :CPS="CPS" 
+    />
 </div>
+
+<CalcColors
+    ref="CalcColors"
+/>
 
 </template>
 
@@ -115,14 +166,25 @@ interface PersonalBestScore{
 export default defineComponent({
     name: "ResultsScreen",
 
-    emits: [
-        "resultsMounted"
-    ],
-
     components: {
         ScoreboardComp, 
         CalcColors
     },
+
+    emits: [
+        "resultsMounted"
+    ],
+
+    props:[
+        "finishScreen",
+        "gamePlaying",
+        "duringMatch",
+        "timeDuration",
+        "gameScore",
+        "totalClicks",
+        "userFinished",
+        "windowResized"
+    ],
 
     data(){
         return{
@@ -204,6 +266,8 @@ export default defineComponent({
 
             currResItem: 0,
             randNum: 0,
+
+            // Result Info (Core Intel)
             currResLvl: "N/A",
             currResName: "",
             currResLifespan: "",
@@ -213,19 +277,15 @@ export default defineComponent({
 
             // Personal Best Scores
             personalBestScores: [] as PersonalBestScore[],
+            timeDurationArray: [
+                "10",
+                "30",
+                "60"
+            ],
             scoreIndex: 0,
             newPB: false
         }
     },
-
-    props:[
-        "finishScreen",
-        "timeDuration",
-        "gameScore",
-        "totalClicks",
-        "userFinished",
-        "windowResized"
-    ],
 
     mounted(){
         this.$emit("resultsMounted");
@@ -238,27 +298,27 @@ export default defineComponent({
             if (this.gameScore > 0){
 
                 switch (true){
-                    case this.scorePerSecond >= 2.75:
+                    case this.scorePerSecond >= 0.8:
                         this.currResItem = 0;
                         break;
 
-                    case this.scorePerSecond >= 2.25:
+                    case this.scorePerSecond >= 0.7:
                         this.currResItem = 1;
                         break;
 
-                    case this.scorePerSecond >= 1.75:
+                    case this.scorePerSecond >= 0.6:
                         this.currResItem = 2;
                         break;
 
-                    case this.scorePerSecond >= 1.25:
+                    case this.scorePerSecond >= 0.5:
                         this.currResItem = 3;
                         break;
 
-                    case this.scorePerSecond >= 0.75:
+                    case this.scorePerSecond >= 0.4:
                         this.currResItem = 4;
                         break;
 
-                    case this.scorePerSecond < 0.75:
+                    case this.scorePerSecond < 0.4:
                         this.currResItem = 5;
                         break;
                 }
@@ -300,6 +360,17 @@ export default defineComponent({
                 this.currResSize = "";
                 this.currResExamples = "";
                 this.currResFunFact = "";
+            }
+
+            // Level
+            const lvlCores = document.querySelectorAll(".lvl-core");
+
+            lvlCores.forEach((lvlCore) => {
+                lvlCore.classList.remove("lvl-core-active");
+            });
+
+            for (let i = 0; i < parseInt(this.currResLvl); i++){
+                lvlCores[i].classList.add("lvl-core-active");
             }
 
             // Show the Personal Best scores
@@ -360,7 +431,11 @@ export default defineComponent({
                 this.newPB = false;
             }
 
-        }
+        },
+
+        closeScoreboard(){
+            (this.$refs.saveResults as InstanceType<typeof ScoreboardComp>).closeScoreboard();
+        },
         
     },
 
@@ -395,21 +470,341 @@ export default defineComponent({
 
 <style lang="scss">
 
-.finish-screen{
-    width:100vw;
-    height:100vh;
+    /* Finish Screen */
 
-    position:fixed;
+.finish-screen{
+    width:100%;
+    height:100%;
+ 
+    position:absolute;
     top:0;
     left:105%;
 
-    background-color:rgb(0,0,0,0.3);
+    border-radius:var(--size4);
     transition:var(--trans3);
-    overflow:auto;
+    cursor:auto;
     z-index:1000;
 
     &.fs-visible{
         left:0;
+    }
+
+    & .fs-inner{
+        width:calc(100% - ((var(--size3) - var(--scrollBar)) * 2));
+        height:calc(100% - (var(--size6) * 2));
+
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+
+        scrollbar-gutter:stable both-edges;
+        transition:var(--trans3);
+        overflow:auto;
+
+        &::-webkit-scrollbar-track{
+            background:transparent;
+        }
+
+    }
+
+    &:has(.stats-visible) .fs-inner{
+        opacity:0;
+    }
+
+}
+
+        /* Finish Screen - Heading */
+
+.finish-section-heading:not(.fs-lvl-heading){
+    width:100%;
+    margin-top:var(--size6);
+    text-align:center;
+    text-wrap:balance;
+}
+
+
+
+    /* Finish Screen - Content */
+
+.fs-content{
+    padding:0 var(--size3);
+    display:flex;
+    flex-direction:column;
+    gap:var(--size6);
+
+        /* Info */
+
+    & .finish-info{
+
+        &:not(:has(.fi-heading)){
+            display:none;
+        }
+
+        & *{
+            text-align:center;
+        }
+
+        & .fi-heading{
+            margin-bottom:var(--size1);
+        }
+
+        & .fi-txt{
+            text-wrap:balance;
+        }
+
+    }
+
+    & .fs-lvl-info{
+        margin-top:var(--size6);
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:var(--size3);
+
+        & .personal-record-heading{
+            width:100%;
+            margin-bottom:var(--size6);
+            text-align:center;
+        }
+
+        & .lvl-cores{
+            width:min(400px, 100%);
+            display:flex;
+            gap:var(--size3);
+
+            & .lvl-core{
+                flex:1;
+                aspect-ratio:1/1;
+                position:relative;
+
+                border-radius:50%;
+                overflow:hidden;
+
+                &:after{
+                    content:"";
+                    width:100%;
+                    height:100%;
+
+                    position:absolute;
+                    top:0;
+                    left:0;
+
+                    background:linear-gradient(to right,
+                        var(--mainBg1a), var(--mainBg1b));
+                    border-radius:50%;
+                    filter:blur(5px) brightness(700%);
+                    
+                    transition:var(--trans2);
+                }
+
+                &.lvl-core-active:after{
+                    background:linear-gradient(to right,
+                        var(--mainColor), var(--accColor));
+                    filter:blur(5px);
+                }
+
+                .fs-visible &{
+                    animation:finCoreAnim 1.5s ease-out;
+
+                    &:after{
+                        animation:coreRotate 5s linear infinite;
+                    }
+
+                }
+
+                @keyframes finCoreAnim{
+                    0%{
+                        scale:0;
+                    }
+                    10%{
+                        scale:1.2;
+                    }
+                    25%{
+                        scale:0.85;
+                    }
+                    50%{
+                        scale:1.1;
+                    }
+                    100%{
+                        scale:1;
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+    & .fs-btn-div{
+        width:100%;
+        display:flex;
+        justify-content:center;
+
+        & .rs-start-btn{
+            width:min(400px, 100%);
+            padding:var(--size6);
+            align-self:center;
+        }
+
+    }
+
+        /* Results */
+
+    & .finish-results,
+    & .personal-best{
+        display:flex;
+        flex-wrap:wrap;
+        gap:var(--size6);
+
+        & .fr-section,
+        & .pb-div{
+            flex:35%;
+            padding:var(--size6);
+
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:var(--size1);
+
+            background:linear-gradient(to bottom right,
+                var(--mainBg2a), var(--mainBg2b)),
+                url("../assets/img/noise-texture2.svg");
+            background-position:center;
+            background-repeat:no-repeat;
+            background-size:cover;
+
+            &:before{
+                background:linear-gradient(to bottom right,
+                    var(--mainBorder2a), var(--mainBorder2b));
+                border-radius:var(--size4);
+            }
+
+            & p{
+                text-align:center;
+                text-wrap:balance;
+            }
+
+        }
+
+        & .pb-div{
+            flex:26%;
+
+            & .pb-time-span{
+                font-size:20px;
+            }
+
+        }
+
+        & .fr-section:nth-of-type(1){
+            flex:100%;
+        }
+
+    }
+
+        /* Core Intel */
+
+    & .core-intel{
+        display:flex;
+        flex-wrap:wrap;
+        gap:var(--size6);
+
+        & .ci-section{
+            flex:1;
+            padding:var(--size6);
+
+            display:flex;
+            flex-direction:column;
+            gap:var(--size3);
+
+            background:linear-gradient(to bottom right,
+                var(--mainBg2a), var(--mainBg2b)),
+                url("../assets/img/noise-texture2.svg");
+            background-position:center;
+            background-repeat:no-repeat;
+            background-size:cover;
+
+            &:before{
+                background:linear-gradient(to bottom right,
+                    var(--mainBorder2a), var(--mainBorder2b));
+                border-radius:var(--size4);
+            }
+
+            & .ci-heading{
+                width:100%;
+                margin-bottom:var(--size6);
+                text-align:center;
+                text-wrap:balance;
+            }
+
+            & .ci-label{
+                font-size:14px;
+                color:var(--txt-faded2);
+            }
+
+            & .ci-txt{
+                text-wrap:balance;
+            }
+
+        }
+
+    }
+
+}
+
+    /* Media */
+
+@media screen and (width <= 768px){
+    
+    .fs-content{
+
+        & .finish-results,
+        & .personal-best{
+
+            & .fr-section,
+            & .pb-div{
+                flex:100%;
+            }
+
+        }
+
+        & .core-intel{
+
+            & .ci-section{
+                flex:100%;
+            }
+
+        }
+
+    }
+
+}
+
+@media screen and (width <= 540px){
+
+    .fs-content{
+
+        & .finish-info{
+
+            & .fi-heading{
+                margin-top:calc(var(--size8) + var(--size2));
+            }
+
+        }
+
+        &:not(:has(.fi-heading)) .fs-lvl-info{
+            margin-top:calc(var(--size8) + var(--size2));
+        }
+
+    } 
+
+    h2.finish-section-heading{
+        font-size:6vw;
+    }
+
+    h3.finish-section-heading{
+        font-size:5.5vw;
     }
 
 }

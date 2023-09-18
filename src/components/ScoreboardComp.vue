@@ -3,60 +3,81 @@
 
 <template>
 
-<button v-if="showSbBtn" @click="showScoreboard = !showScoreboard">
-    [ Scoreboard ]
+<button class="stats-btn glass-btn"
+    :class="{'close-stats': showScoreboard}"
+    v-if="showSbBtn" 
+    @click="showScoreboard = !showScoreboard">
+    <StatsIcon />
 </button>
 
-<div class="scoreboards" v-show="showScoreboard && showSbBtn">
+<div class="scoreboards" 
+    :class="{'stats-visible': showScoreboard && showSbBtn}"
+    ref="scoreboardsElem">
+    <div class="scoreboards-inner">
 
-    <button @click="clearScoreboard">Clear Scoreboard</button>
+        <div class="clear-stats-div">
+            <button class="clear-stats-btn glass-btn"
+                @click="clearScoreboard">
+                Clear Stats
+            </button>
+        </div>
 
-    <h3>Scoreboard</h3>
+        <div class="stats-section"
+            v-for="scoreboard in scoreboardsFilter" 
+            :key="scoreboard.name">
 
-    <div v-for="scoreboard in scoreboardsFilter" :key="scoreboard.name">
-        <h4>{{ scoreboard.name }}</h4>
+            <h3 class="table-heading">
+                {{ scoreboard.name }}<span class="th-span">s</span>
+            </h3>
 
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Score</th>
-                    <th>Score/sec</th>
-                    <th>Accuracy</th>
-                    <th>Clicks/Sec</th>
-                </tr>
-            </thead>
+            <div class="stats-tables">
+                <table class="stats-table glass-border">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Score</th>
+                            <th>Score/Sec</th>
+                            <th>CPS</th>
+                            <th>Accuracy</th>
+                        </tr>
+                    </thead>
 
-            <tbody>
-                <tr v-for="(data, index) in scoreboard.data" :key="data.score">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ data.score }}</td>
-                    <td>{{ data.sps }}</td>
-                    <td>{{ data.accuracy }}%</td>
-                    <td>{{ data.cps }}</td>
-                </tr>
-            </tbody>
+                    <tbody>
+                        <tr v-for="(data, index) in scoreboard.data" :key="data.score">
+                            <td>{{ index + 1 }}.</td>
+                            <td>{{ data.score }}</td>
+                            <td>{{ data.sps }}</td>
+                            <td>{{ data.cps }}</td>
+                            <td>{{ data.accuracy }}%</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <tfoot>
-                <tr>
-                    <th colspan="5">Average</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th>Score</th>
-                    <th>Score/sec</th>
-                    <th>Accuracy</th>
-                    <th>Clicks/Sec</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>{{ scoreboard.averages.score.toFixed(2) }}</td>
-                    <td>{{ scoreboard.averages.sps.toFixed(2) }}</td>
-                    <td>{{ scoreboard.averages.accuracy.toFixed(2) }}%</td>
-                    <td>{{ scoreboard.averages.cps.toFixed(2) }}</td>
-                </tr>
-            </tfoot>
-        </table>
+                <table class="stats-table avg-table glass-border">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Score</th>
+                            <th>Score/Sec</th>
+                            <th>CPS</th>
+                            <th>Accuracy</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>AVG</td>
+                            <td>{{ scoreboard.averages.score.toFixed(2) }}</td>
+                            <td>{{ scoreboard.averages.sps.toFixed(2) }}</td>
+                            <td>{{ scoreboard.averages.cps.toFixed(2) }}</td>
+                            <td>{{ scoreboard.averages.accuracy.toFixed(2) }}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
     </div>
 </div>
 
@@ -66,6 +87,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import StatsIcon from "./pageElements/StatsIcon.vue"
 
 // Scoreboard types
 type scoreboardTypes = {
@@ -77,6 +99,10 @@ type scoreboardTypes = {
 
 export default defineComponent({
     name: "ScoreboardComp",
+
+    components: {
+        StatsIcon
+    },
 
     emits: [
         "pbScores"
@@ -110,6 +136,20 @@ export default defineComponent({
         "CPS"
     ],
 
+    mounted(){
+
+        // Table Heading Position
+        const sbElem: HTMLElement = this.$refs.scoreboardsElem as HTMLElement;
+
+        window.addEventListener("resize", ()=> {
+            this.headingPosition(sbElem);
+        });
+        sbElem.addEventListener("scroll", ()=> {
+            this.headingPosition(sbElem);
+        });
+
+    },
+
     methods:{
 
             /* Tool Functions */
@@ -134,6 +174,29 @@ export default defineComponent({
 
         getScoreboard(sbName: string){
             return localStorage.getItem(sbName) ? JSON.parse(localStorage.getItem(sbName) as string) : [];
+        },
+
+        closeScoreboard(){
+            this.showScoreboard = false;
+        },
+
+        headingPosition(sbElem: HTMLElement){
+
+            // Data
+            const scrollOffset = sbElem.scrollLeft;
+            const widthOffset = sbElem.offsetWidth;
+            const tableWidth = (document.querySelectorAll('.stats-table')[0] as HTMLElement).offsetWidth;
+
+            // Calculate heading's new position
+            const centerOffset = (tableWidth - widthOffset);
+            const scrollPercentage = scrollOffset / centerOffset;
+            const newPosition = (tableWidth - widthOffset) * scrollPercentage;
+
+            // Set the new position
+            document.querySelectorAll(".table-heading").forEach((heading) => {
+                (heading as HTMLElement).style.transform = `translateX(${newPosition}px)`;
+            });
+
         },
 
             /* Calculate Scores */
@@ -257,17 +320,17 @@ export default defineComponent({
 
             const allScoreboards = [
                 {id: "A",
-                name: "10 seconds", 
+                name: "10", 
                 data: this.getScoreboard('scoreboardA'), 
                 averages: this.avgScore(this.getScoreboard('scoreboardA'))},
 
                 {id: "B",
-                name: "30 seconds", 
+                name: "30", 
                 data: this.getScoreboard('scoreboardB'), 
                 averages: this.avgScore(this.getScoreboard('scoreboardB'))},
 
                 {id: "C",
-                name: "60 seconds", 
+                name: "60", 
                 data: this.getScoreboard('scoreboardC'), 
                 averages: this.avgScore(this.getScoreboard('scoreboardC'))}
             ];
@@ -290,12 +353,179 @@ export default defineComponent({
 
 <style lang="scss">
 
-.scoreboards{
-    background-color:white;
+    /* Stats Section */
+
+.stats-btn{
+    position:absolute !important;
+    top:var(--size6);
+    right:var(--size6);
+    z-index:1200;
+
+    & div{
+        width:var(--size5);
+        height:var(--size5);
+    }
+
 }
 
-th, td{
-    padding:4px 8px;
+.scoreboards{
+    width:calc(100% - ((var(--size3) - var(--scrollBar)) * 2));
+    height:calc(100% - (var(--size6) * 2));
+
+    position:absolute;
+    top:50%;
+    left:155%;
+    transform:translate(-50%, -50%);
+
+    scrollbar-gutter:stable both-edges;
+    overflow:auto;
+    transition:var(--trans3);
+    z-index:1000;
+
+    &::-webkit-scrollbar-track{
+        background:transparent;
+    }
+
+    &.stats-visible{
+        left:50%;
+    }
+
+    & .clear-stats-div{
+        padding:0 var(--size2);
+    }
+
+}
+
+    /* Stats Tables */
+
+.scoreboards-inner{
+    display:flex;
+    flex-direction:column;
+    gap:var(--size6);
+
+    & .table-heading{
+        width:100%;
+        margin-top:var(--size6);
+        margin-bottom:var(--size3);
+
+        text-align:center;
+        text-wrap:balance;
+        transition:translate 0s;
+
+        & .th-span{
+            font-size:20px;
+        }
+
+    }
+
+    & .stats-tables{
+        width:100%;
+        min-width:520px;
+        padding-right:calc(var(--size3) + (var(--scrollBar) / 2));
+        padding-left:calc(var(--size3) - (var(--scrollBar) / 2));
+    }
+
+    & .stats-table{
+        width:100%;
+        padding:var(--size6);
+
+        background:linear-gradient(to bottom right,
+            var(--mainBg2a), var(--mainBg2b)),
+            url("../assets/img/noise-texture2.svg");
+        background-position:center;
+        background-repeat:no-repeat;
+        background-size:cover;
+
+        table-layout:fixed;
+        border-collapse:separate;
+        border-spacing:0;
+
+        &:before{
+            background:linear-gradient(to bottom right,
+                var(--mainBorder2a), var(--mainBorder2b));
+            border-radius:var(--size4);
+        }
+
+        &.avg-table{
+            margin-top:var(--size3);
+        }
+
+        & tbody tr:nth-child(2n + 1){
+            background-color:rgb(0,0,0,0.3);
+
+            & td:nth-child(1){
+                border-radius:var(--size2) 0 0 var(--size2);
+            }
+            
+            & td:nth-last-child(1){
+                border-radius:0 var(--size2) var(--size2) 0;
+            }
+
+        }
+
+        & th,
+        & td{
+            width:25%;
+            padding:var(--size2);
+            text-align:center;
+            line-height:1;
+
+            &:nth-child(1){
+                min-width:75px !important;
+                width:75px !important;
+            }
+
+        }
+
+        & th{
+            color:var(--txt1);
+        }
+
+    }
+
+}
+
+    /* Media */
+
+@media screen and (width <= 768px){
+
+    .scoreboards-inner{
+    
+        & .stats-table{
+
+            & th,
+            & td{
+                padding:var(--size1);
+                font-size:16px;
+
+                &:nth-child(1){
+                    min-width:70px !important;
+                    width:70px !important;
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+@media screen and (width <= 320px){
+
+    .scoreboards{
+
+        & .clear-stats-div{
+            padding-top:calc(var(--size8) + var(--size2));
+
+            & .clear-stats-btn{
+                width:100%;
+            }
+
+        }
+
+    }
+
 }
 
 </style>

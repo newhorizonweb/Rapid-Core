@@ -22,27 +22,6 @@
     </div>
 </div>
 
-<!-- Teleporting it is the easiest way -->
-<!-- Otherwise, it would be difficult to synch the inputs -->
-<teleport to=".fs-audio" v-if="!firstGame">
-    <div class="audio-player audio-settings" :class="{'muted-audio': isMuted}">
-        <div class="volume-section">
-            <button 
-                class="audio-icon mute-btn mute-master"
-                :class="{'muted-icon-active': isMuted}"
-                @click="isMuted = !isMuted">
-                <MuteIcon />
-            </button>
-            <p>{{ (masterVolume * 100).toFixed(0) }}%</p>
-        </div>
-
-        <input type="range" class="volume-slider"
-            min="0" max="1" step="0.05" 
-            v-model="masterVolume"
-            @input="adjustVolume">
-    </div>
-</teleport>
-
 </template>
 
 

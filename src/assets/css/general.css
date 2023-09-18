@@ -45,6 +45,8 @@
     --size7:32px;
     --size8:48px;
 
+    --scrollBar:var(--size2);
+
         /* Box Shadows */
 
     --box-shadow1:0 0 1px 2px;
@@ -55,6 +57,14 @@
     --trans2:0.15s ease-in-out;
     --trans3:0.25s ease-in-out;
     --trans4:0.35s ease-in-out;
+
+}
+
+@media screen and (width <= 540px){
+
+    :root{
+        --size6:var(--size5);
+    }
 
 }
 
@@ -101,7 +111,7 @@ body{
 
 .game-theme-lvl5{
     --mainColor:rgb(80, 200, 255);
-    --accnColor:rgb(151, 205, 205);
+    --accColor:rgb(151, 205, 205);
 }
 
 .game-theme-lvl6{
@@ -129,7 +139,7 @@ body{
     font-family:mainFont, Calibri, sans-serif;
 }
 
-p, a, label, button{
+p, a, label, button, th, td{
     font-size:18px;
     font-weight:400;
     line-height:1.2;
@@ -169,7 +179,7 @@ h1, h2, h3, h4, h5, h6{
     font-family:mainFont, Calibri, sans-serif;
     color:var(--txt1);
     font-weight:800;
-    transition:var(--trans3);
+    transition:var(--trans2);
 }
 
 h1{
@@ -241,7 +251,8 @@ h6{
     /* Scrollbar */
 
 ::-webkit-scrollbar{
-    width:6px;
+    width:var(--scrollBar);
+    height:var(--scrollBar);
 }
 
 ::-webkit-scrollbar-track{

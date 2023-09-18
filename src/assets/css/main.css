@@ -99,7 +99,7 @@ footer.wrapper{
         padding:var(--border);
         position:absolute;
         
-        inset:calc(-1 * var(--border));
+        inset:0;
         mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
         -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
         -webkit-mask-composite:xor;
@@ -115,7 +115,7 @@ footer.wrapper{
     border-radius:var(--size4) !important;
 
     &:before{
-        border-radius:calc(var(--border) + var(--size4));
+        border-radius:var(--size4);
         background:linear-gradient(to bottom right,
             var(--mainBorder1a), var(--mainBorder1b));
     }
@@ -148,7 +148,7 @@ footer.wrapper{
     &:before{
         background:linear-gradient(to bottom right,
             var(--mainBorder2a), var(--mainBorder2b));
-        border-radius:calc(var(--border) + var(--size2));
+        border-radius:var(--size2);
     }
 
 }

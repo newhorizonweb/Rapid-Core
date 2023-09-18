@@ -9,42 +9,24 @@
     <div class="time-buttons">
         <button class="time-btn glass-btn time-btn-current"
             @click="setTimeDur"
-            :disabled="!firstGame"
+            :disabled="duringMatch"
             runTime="10">
             <p>10s</p>
         </button>
         <button class="time-btn glass-btn"
             @click="setTimeDur"
-            :disabled="!firstGame"
+            :disabled="duringMatch"
             runTime="30">
             <p>30s</p>
         </button>
         <button class="time-btn glass-btn" 
             @click="setTimeDur"
-            :disabled="!firstGame"
+            :disabled="duringMatch"
             runTime="60">
             <p>60s</p>
         </button>
     </div>
 </div>
-
-<teleport to=".fs-time-btns" v-if="resultsMounted">
-    <button class="time-btn glass-btn time-btn-current"
-        @click="setTimeDur"
-        runTime="10">
-        10s
-    </button>
-    <button class="time-btn glass-btn"
-        @click="setTimeDur"
-        runTime="30">
-        30s
-    </button>
-    <button class="time-btn glass-btn" 
-        @click="setTimeDur"
-        runTime="60">
-        60s
-    </button>
-</teleport>
 
 </template>
 
@@ -61,7 +43,7 @@ export default defineComponent({
     ],
 
     props:[
-        "firstGame",
+        "duringMatch",
         "resultsMounted"
     ],
 

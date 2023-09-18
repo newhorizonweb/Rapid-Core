@@ -15,7 +15,7 @@
         <div class="game-settings">
             <UserOptions 
                 @timerIsSet="timerIsSetFun"
-                :firstGame="firstGame"
+                :duringMatch="duringMatch"
                 :resultsMounted="resultsMounted" 
             />
 
@@ -32,6 +32,7 @@
 
     <GameField 
         @firstGame="isFirstGame"
+        @isDuringMatch="isDuringMatch"
         @resultsMounted="resultsMountedFun"
         @startGame="startGame"
         :timeDuration="timeDuration" 
@@ -46,7 +47,7 @@
         <UveritLogo />
     </div>
     <div class="version">
-        <p>v0.11.0</p>
+        <p>v0.12.0</p>
         <p>© 2023 uverit</p>
     </div>
     
@@ -86,6 +87,7 @@ export default defineComponent({
         return{
             timeDuration: 10,
             firstGame: true,
+            duringMatch: false,
             resultsMounted: false
         }
     },
@@ -118,6 +120,10 @@ export default defineComponent({
 
         isFirstGame(wasPlayed: boolean){
             this.firstGame = wasPlayed;
+        },
+
+        isDuringMatch(isMatch: boolean){
+            this.duringMatch = isMatch;
         },
 
         resultsMountedFun(){

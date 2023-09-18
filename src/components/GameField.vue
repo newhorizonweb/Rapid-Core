@@ -16,6 +16,7 @@
                 @click="startCountdown">
                 START
             </button>
+
             <p class="pre-game-timer" v-if="gamePreTime">{{ gamePreTime }}</p>
 
             <div class="game-field-inner"
@@ -23,12 +24,37 @@
                 @click.self="playMissSound">
 
                 <div class="game-core"
-                    :class="{'disable-core': !gamePlaying, 'show-core': showCore}"
+                    :class="{'show-core': gamePlaying}"
                     ref="gameCore"
                     @click="coreClicked">
                 </div>
 
             </div>
+
+            <ResultsScreen 
+                ref="resultInfo"
+                @resultsMounted="$emit('resultsMounted')"
+
+                :finishScreen="finishScreen"
+                :gamePlaying="gamePlaying"
+                :duringMatch="duringMatch"
+
+                :gameScore="resGameScore" 
+                :timeDuration="timeDuration"
+                :totalClicks="totalClicks"
+                
+                :userFinished="userFinished"
+                :windowResized="windowResized">
+
+                <template v-slot:start-btn>
+                    <button class="rs-start-btn glass-btn"
+                        @click="startCountdown">
+
+                        Play Again
+                    </button>
+                </template>
+                
+            </ResultsScreen>
 
         </div>
     </div>
@@ -57,23 +83,6 @@
         </div>
 
     </div>
-
-    <ResultsScreen 
-        ref="resultInfo"
-        @resultsMounted="$emit('resultsMounted')"
-        :finishScreen="finishScreen"
-
-        :gameScore="gameScore" 
-        :timeDuration="timeDuration"
-        :totalClicks="totalClicks"
-        :userFinished="userFinished"
-        :windowResized="windowResized">
-
-        <template v-slot:start-btn>
-            <button @click="startCountdown">PLAY AGAIN</button>
-        </template>
-        
-    </ResultsScreen>
 
     <AudioGame
         ref="AudioGame"
@@ -106,6 +115,7 @@ export default defineComponent({
     emits: [
         "firstGame",
         "resultsMounted",
+        "isDuringMatch",
         "startGame"
     ],
 
@@ -130,8 +140,8 @@ export default defineComponent({
 
             // Game Properties
             gamePreTime: "",
+            duringMatch: false,
             gamePlaying: false,
-            showCore: false,
             firstGame: true,
             finishScreen: false,
 
@@ -147,6 +157,7 @@ export default defineComponent({
 
             // Game Logic
             gameScore: 0,
+            resGameScore: 0,
             totalClicks: 0
         }
     },
@@ -187,18 +198,19 @@ export default defineComponent({
             this.firstGame = false;
             this.$emit("firstGame", this.firstGame);
 
+            // During the match
+            this.duringMatch = true;
+            this.$emit("isDuringMatch", this.duringMatch);
+
+            // Close the scoreboard
+            (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).closeScoreboard();
+
             // Don't show the finish screen
             this.finishScreen = false;
 
             // Reset Score & total click count
             this.gameScore = 0;
             this.totalClicks = 0;
-
-            // Hide the core
-            this.showCore = false;
-
-            // Set core position
-            this.corePosition();
 
             // Preparation timer countdown
             this.gamePreTime = "3";
@@ -213,7 +225,7 @@ export default defineComponent({
             (this.preTimeAudioElem as HTMLVideoElement).play();
             await this.delay(1000);
 
-            this.gamePreTime = "START";
+            this.gamePreTime = "GO";
             (this.startAudioElem as HTMLVideoElement).play();
             await this.delay(1000);
 
@@ -221,6 +233,9 @@ export default defineComponent({
 
             // Start the game and set the core position
             this.startGame();
+
+            // Reset the Results Game Score after the game has started
+            this.resGameScore = 0;
         },
 
         timerFunction(){
@@ -263,9 +278,11 @@ export default defineComponent({
             this.windowResized = false;
             this.userFinished = false;
 
+            // Set core position
+            this.corePosition();
+
             // Start the game
             this.gamePlaying = true;
-            this.showCore = true;
             this.timerFunction();
             this.setCursorElem();
             this.$emit("startGame");
@@ -278,6 +295,10 @@ export default defineComponent({
 
             // Finish the game
             this.gamePlaying = false;
+
+            this.duringMatch = false;
+            this.$emit("isDuringMatch", this.duringMatch);
+
             this.finishScreen = true;
             (this.finishAudioElem as HTMLVideoElement).play();
 
@@ -331,6 +352,7 @@ export default defineComponent({
 
             // Change user score
             this.gameScore++
+            this.resGameScore = this.gameScore;
         },
 
         totalClicksFun(){
@@ -391,7 +413,26 @@ export default defineComponent({
 
         cursorColor(){
             this.setCursorElem();
+        },
+
+
+
+
+
+        duringMatch(newVal) {
+        console.log('duringMatch:', newVal);
+        },
+        gamePlaying(newVal) {
+        console.log('gamePlaying:', newVal);
+        },
+        finishScreen(newVal) {
+        console.log('finishScreen:', newVal);
         }
+    
+
+
+
+
 
     }
 
@@ -412,6 +453,7 @@ export default defineComponent({
         width:100%;
         max-height:calc(100vh - (var(--size6) * 2));
         aspect-ratio:3/2;
+        position:relative;
 
         display:flex;
         justify-content:center;
@@ -422,10 +464,12 @@ export default defineComponent({
         height:100%;
         aspect-ratio:3/2;
         padding:14px;
-
         position:relative;
+
         background:var(--colorGrad1);
         transition:var(--trans2);
+        overflow-x:hidden;
+        overflow-y:auto;
 
         &:has(.start-btn:hover),
         &:has(.start-btn:hover):before{
@@ -443,15 +487,16 @@ export default defineComponent({
 
             opacity:0.1;
             background-color:var(--mainColor);
-            border-radius:calc(var(--border) + var(--size4));
+            border-radius:var(--size4);
             pointer-events:none;
         }
 
-        .game-field-inner{
+        & .game-field-inner{
             container-type:inline-size;
             width:100%;
             height:100%;
         }
+
     }
 
     .pre-game-timer{
@@ -459,8 +504,8 @@ export default defineComponent({
         top:50%;
         left:50%;
         transform:translate(-50%, -50%);
-        font-size:30px;
 
+        font-size:min(46px, 6vw);
         pointer-events:none;
         z-index:10;
     }
@@ -474,10 +519,10 @@ export default defineComponent({
         left:50%;
         transform:translate(-50%, -50%);
 
-        font-size:32px;
+        font-size:min(46px, 6vw);
         background-color:transparent;
         border:none;
-        border-radius:calc(var(--border) + var(--size4));
+        border-radius:var(--size4);
 
         cursor:pointer;
         z-index:10;
@@ -502,10 +547,6 @@ export default defineComponent({
         pointer-events:none;
         overflow:hidden;
         z-index:100;
-        
-        &.disable-core{
-            pointer-events:none;
-        }
 
         &.show-core{
             opacity:1;
@@ -642,6 +683,19 @@ export default defineComponent({
 
     /* Media */
 
+@media screen and (width <= 768px){
+
+    .game{
+
+        & .game-field-outer,
+        & .game-field{
+            aspect-ratio:1/1;
+        }
+        
+    }
+    
+}
+
 @media screen and (width <= 540px){
 
     .game{
@@ -649,6 +703,10 @@ export default defineComponent({
         & .game-field-outer,
         & .game-field{
             aspect-ratio:2/3;
+        }
+
+        & .game-core{
+            width:8.5cqw;
         }
         
     }
@@ -659,10 +717,13 @@ export default defineComponent({
 
     .game{
 
+        & .game-core{
+            width:12cqw;
+        }
+
         .match-info{
             height:auto;
             gap:var(--size4);
-
 
             & .timer,
             & .score-info{
@@ -675,6 +736,18 @@ export default defineComponent({
                 width:100%;
             }
 
+        }
+
+    }
+    
+}
+
+@media screen and (width <= 320px){
+
+    .game{
+
+        & .game-core{
+            width:15cqw;
         }
 
     }
