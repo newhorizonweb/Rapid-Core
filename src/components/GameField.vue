@@ -202,6 +202,9 @@ export default defineComponent({
             this.duringMatch = true;
             this.$emit("isDuringMatch", this.duringMatch);
 
+            // Change the cursor
+            this.setCursorElem();
+
             // Close the scoreboard
             (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).closeScoreboard();
 
@@ -284,7 +287,6 @@ export default defineComponent({
             // Start the game
             this.gamePlaying = true;
             this.timerFunction();
-            this.setCursorElem();
             this.$emit("startGame");
         },
 
@@ -413,26 +415,7 @@ export default defineComponent({
 
         cursorColor(){
             this.setCursorElem();
-        },
-
-
-
-
-
-        duringMatch(newVal) {
-        console.log('duringMatch:', newVal);
-        },
-        gamePlaying(newVal) {
-        console.log('gamePlaying:', newVal);
-        },
-        finishScreen(newVal) {
-        console.log('finishScreen:', newVal);
         }
-    
-
-
-
-
 
     }
 

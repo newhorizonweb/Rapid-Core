@@ -47,7 +47,7 @@
         <UveritLogo />
     </div>
     <div class="version">
-        <p>v0.12.0</p>
+        <p>v1.0.0</p>
         <p>© 2023 uverit</p>
     </div>
     

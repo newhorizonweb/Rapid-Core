@@ -14,12 +14,6 @@
 
         /* Colors */
 
-    --color1:#07abdb;
-    --color1a:#098dca;
-
-    --color2:#444;
-    --color2a:#666;
-
     --colorBg1a:rgb(2, 5, 8);
     --colorBg1b:rgb(32, 37, 42);
 
@@ -85,38 +79,38 @@ body{
 }
 
 .game-theme-def{
-    --mainColor:rgb(14, 112, 182);
-    --accColor:rgb(35, 169, 196);
+    --mainColor:rgb(23, 121, 171);
+    --accColor:rgb(25, 180, 175);
 }
 
 .game-theme-lvl1{
-    --mainColor:rgb(255, 200, 190);
-    --accColor:rgb(255, 225, 190);
+    --mainColor:rgb(182, 91, 75);
+    --accColor:rgb(212, 128, 44);
 }
 
 .game-theme-lvl2{
-    --mainColor:rgb(230, 230, 200);
-    --accColor:rgb(227, 215, 146);
+    --mainColor:rgb(193, 192, 145);
+    --accColor:rgb(179, 200, 89);
 }
 
 .game-theme-lvl3{
-    --mainColor:rgb(238, 79, 132);
-    --accColor:rgb(255, 110, 110);
+    --mainColor:rgb(158, 39, 39);
+    --accColor:rgb(188, 116, 21);
 }
 
 .game-theme-lvl4{
-    --mainColor:rgb(40, 90, 255);
-    --accColor:rgb(75, 45, 197);
+    --mainColor:rgb(11, 164, 227);
+    --accColor:rgb(118, 136, 228);
 }
 
 .game-theme-lvl5{
-    --mainColor:rgb(80, 200, 255);
-    --accColor:rgb(151, 205, 205);
+    --mainColor:rgb(120, 206, 237);
+    --accColor:rgb(172, 75, 232);
 }
 
 .game-theme-lvl6{
-    --mainColor:rgb(70, 90, 100);
-    --accColor:rgb(55, 44, 72);
+    --mainColor:rgb(51, 61, 81);
+    --accColor:rgb(159, 223, 255);
 }
 
 
@@ -288,7 +282,7 @@ h6{
     }
     
     *{
-        scrollbar-color:var(--color1) transparent !important;
+        scrollbar-color:var(--mainColor) transparent !important;
         scrollbar-width:thin !important;
     }
 
@@ -311,7 +305,7 @@ h6{
 }
 
 *:selection{
-    background:var(--color1) !important;
+    background:var(--mainColor) !important;
 }
 
 html{

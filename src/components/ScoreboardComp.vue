@@ -34,7 +34,7 @@
                 <table class="stats-table glass-border">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th aria-label="Empty Cell"></th>
                             <th>Score</th>
                             <th>Score/Sec</th>
                             <th>CPS</th>
@@ -56,7 +56,7 @@
                 <table class="stats-table avg-table glass-border">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th aria-label="Empty Cell"></th>
                             <th>Score</th>
                             <th>Score/Sec</th>
                             <th>CPS</th>
@@ -421,8 +421,7 @@ export default defineComponent({
     & .stats-tables{
         width:100%;
         min-width:520px;
-        padding-right:calc(var(--size3) + (var(--scrollBar) / 2));
-        padding-left:calc(var(--size3) - (var(--scrollBar) / 2));
+        padding:0 var(--size3);
     }
 
     & .stats-table{
@@ -433,8 +432,8 @@ export default defineComponent({
             var(--mainBg2a), var(--mainBg2b)),
             url("../assets/img/noise-texture2.svg");
         background-position:center;
-        background-repeat:no-repeat;
-        background-size:cover;
+        background-repeat:repeat;
+        background-size:contain;
 
         table-layout:fixed;
         border-collapse:separate;
@@ -505,6 +504,22 @@ export default defineComponent({
 
             }
 
+        }
+
+    }
+
+}
+
+@media screen and (width <= 768px){
+
+    .scoreboards{
+        width:calc(100% - ((var(--size6) - var(--scrollBar) + var(--border)) * 2));
+    }
+
+    .scoreboards-inner{
+
+        & .stats-tables{
+            padding:0;
         }
 
     }

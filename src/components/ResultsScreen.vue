@@ -95,7 +95,9 @@
 
             </div>
 
-            <div class="core-intel">
+            <div class="core-intel"
+                v-show="gameScore != 0">
+                
                 <h3 class="finish-section-heading">Core Intel</h3>
 
                 <div class="ci-section ci-data glass-border">
@@ -107,8 +109,13 @@
                     </div>
 
                     <div class="ci-elem">
-                        <p class="ci-label">Size</p>
+                        <p class="ci-label">Diameter</p>
                         <p class="ci-txt">{{ currResSize }}</p>
+                    </div>
+
+                    <div class="ci-elem">
+                        <p class="ci-label">Temperature</p>
+                        <p class="ci-txt">{{ currResTemp }}</p>
                     </div>
 
                     <div class="ci-elem">
@@ -123,9 +130,10 @@
                 </div>
                 
                 <div class="ci-section ci-fun-fact glass-border">
-                    <h4 class="ci-heading">Did you know?</h4>
+                    <h4 class="ci-heading">Fun Fact</h4>
                     <p class="ci-txt">{{ currResFunFact }}</p>
                 </div>
+
             </div>
 
         </div>
@@ -190,75 +198,93 @@ export default defineComponent({
         return{
             resultItems: [
                 {
-                    lvl: "6",
-                    name: "Black Hole",
-                    lifespan: "",
-                    size: "",
-                    examples: "",
+                    lvl:        "6",
+                    name:       "Black Hole",
+                    lifespan:   "10¹⁰ to 10¹⁰⁰ years",
+                    size:       "10³ to 10⁶ km",
+                    temp:       "~0 K",
+                    examples:   "Sagittarius A*, Cygnus X-1",
                     funFacts: [
-                        "",
-                        "",
-                        ""
+                        "Picture the entirety of Earth, with its vast oceans, towering mountains, and sprawling landscapes. Now, compress all of that into a sphere roughly the size of a ping pong ball. That's the staggering density at play when we talk about black holes.",
+
+                        "Dare to approach a black hole, and you'd undergo a peculiar transformation. As the immense gravitational forces act differently on various parts of an object, it gets stretched into a long, thin form, reminiscent of spaghetti. A quirky name for a terrifying process!",
+
+                        "Some black holes are like cosmic whirligigs, spinning almost at the speed of light. This astonishingly rapid rotation doesn't just stay localized; it drags the surrounding space-time in a phenomenon dubbed frame-dragging, altering the very fabric of the universe."
                     ]
                 },
                 {
-                    lvl: "5",
-                    name: "Pulsar",
-                    lifespan: "",
-                    size: "",
-                    examples: "",
+                    lvl:        "5",
+                    name:       "Pulsar",
+                    lifespan:   "10⁶ to 10⁷ years",
+                    size:       "10 to 30 km",
+                    temp:       "~10⁶ K",
+                    examples:   "Crab Pulsar, Vela Pulsar",
                     funFacts: [
-                        "",
-                        "",
-                        ""
+                        "Some pulsars are true speed demons! They can rotate hundreds of times per second. To put that into perspective, it's as if an object several kilometers across is spinning faster than the blades of a kitchen blender. This incredible rotation is a testament to the extraordinary physics at play.",
+
+                        "Pulsars are some of the universe's most accurate clocks. Their pulses are so regular that, in some cases, they rival the accuracy of atomic clocks on Earth. Astronomers can use this trait to test theories of gravity, study the interstellar medium, and even hunt for gravitational waves.",
+
+                        "Pulsars are the remnants of massive stars that exploded in spectacular supernovae. After such a stellar death, the core collapses, and if it doesn't become a black hole, it transforms into a densely packed neutron star. As it retains the angular momentum of the original star, it spins rapidly, giving birth to a pulsar."
                     ]
                 },
                 {
-                    lvl: "4",
-                    name: "Blue Giant",
-                    lifespan: "",
-                    size: "",
-                    examples: "",
+                    lvl:        "4",
+                    name:       "Blue Giant",
+                    lifespan:   "10⁶ to 10⁷ years",
+                    size:       "7×10⁶ to 1.4×10⁷ km",
+                    temp:       "20 000 to 50 000 K",
+                    examples:   "Rigel, Spica",
                     funFacts: [
-                        "",
-                        "",
-                        ""
+                        "Due to their immense mass and rapid consumption of fuel, many blue giants meet their end in dramatic supernova explosions. These cosmic detonations can outshine entire galaxies and lead to the birth of neutron stars or black holes. The remnants of these explosions scatter essential elements throughout space, contributing to the cosmic cycle of life and death.",
+
+                        "These giants radiate immense energy, illuminating their cosmic neighborhoods. Their dazzling luminosity can outshine hundreds of thousands of Suns, casting a luminous glow that influences the fate of nearby planets and star systems.",
+
+                        "The intense radiation and stellar winds from blue giants can trigger star formation in nearby gas clouds. While their lives might be relatively short in cosmic terms, their influence is profound, shaping the structure and evolution of their resident galaxies. In a sense, they're both creators and destroyers in the cosmic drama."
                     ]
                 },
                 {
-                    lvl: "3",
-                    name: "Red Giant",
-                    lifespan: "",
-                    size: "",
-                    examples: "",
+                    lvl:        "3",
+                    name:       "Red Giant",
+                    lifespan:   "10⁸ to 10⁹ years",
+                    size:       "10⁸ to 10⁹ km",
+                    temp:       "3 500 to 5 000 K",
+                    examples:   "Arcturus, Aldebaran",
                     funFacts: [
-                        "",
-                        "",
-                        ""
+                        "Imagine the Sun expanding so much that it swallows Mercury, Venus, and even reaches close to Earth! That's the kind of dramatic growth stars undergo as they transition into red giants. These engorged stars are living on borrowed time, having exhausted their primary hydrogen fuel.",
+
+                        "As red giants near the end of their lifespans, they often cast off their outer layers in beautiful, intricate patterns, creating what we observe as planetary nebulae. These nebulae, enriched with the heavy elements forged within the star, can be the birthplaces for subsequent generations of stars and potentially life-bearing planets.",
+
+                        "Eventually, red giants exhaust their nuclear fuel and undergo a different fate than blue giants. They may collapse into white dwarfs, which are incredibly dense remnants. This transition is a crucial step in the lifecycle of stars, highlighting the incredible diversity of cosmic destinies."
                     ]
                 },
                 {
-                    lvl: "2",
-                    name: "Yellow Dwarf",
-                    lifespan: "",
-                    size: "",
-                    examples: "",
+                    lvl:        "2",
+                    name:       "Yellow Dwarf",
+                    lifespan:   "10⁹ to 10¹⁰ years",
+                    size:       "0.8×10⁶ to 1.5×10⁶ km",
+                    temp:       "5 000 to 6 000 K",
+                    examples:   "Sun, Alpha Centauri A",
                     funFacts: [
-                        "",
-                        "",
-                        ""
+                        "Yellow dwarfs, like our Sun, produce solar winds, flares, and sunspots due to magnetic activity. These phenomena can influence the space weather around planets in their system, affecting everything from auroras on planets to the health of satellites and astronauts.",
+
+                        "Their consistent output and long life make yellow dwarfs ideal candidates for planets with life. They offer a 'Goldilocks' condition - not too hot and not too cold - for planets in their habitable zones, making them prime targets in the search for extraterrestrial life.",
+
+                        "Even though they're called 'yellow' dwarfs, these stars can range in color from yellow to white. The specific shade is an indicator of the star's surface temperature. The color 'yellow' in the name is more about its average hue than a strict descriptor."
                     ]
                 },
                 {
                     lvl: "1",
                     name: "Red Dwarf",
-                    lifespan: "10 days",
-                    size: "1 km",
-                    examples: "XxX",
+                    lifespan: "10¹⁰ to 10¹³ years",
+                    size: "0.1×10⁶ to 0.6×10⁶ km",
+                    temp: "2 500 to 4 000 K",
+                    examples: "Proxima Centauri, Barnard's Star",
                     funFacts: [
-                        "FunFact1",
-                        "FunFact2",
-                        "FunFact3"
+                        "Though they're dim and not easily visible to the naked eye from Earth, red dwarfs are the most abundant type of star in the universe, making up about 70-80% of all stars in our Milky Way galaxy.",
+
+                        "Recent exoplanet discoveries show that many red dwarfs host planetary systems. Some of these exoplanets lie within their star's habitable zone, where conditions might be right for liquid water. However, the star's flare activity and tidal forces pose unique challenges for the potential of life on these worlds.",
+
+                        "Red dwarfs are fully convective, meaning that they transport heat from their cores to their surfaces through rising and falling currents, much like boiling water in a pot. This convection process remixes their entire contents, allowing them to burn nearly all their hydrogen fuel, adding to their long life span."
                     ]
                 }
 
@@ -272,6 +298,7 @@ export default defineComponent({
             currResName: "",
             currResLifespan: "",
             currResSize: "",
+            currResTemp: "",
             currResExamples: "",
             currResFunFact: "",
 
@@ -298,27 +325,27 @@ export default defineComponent({
             if (this.gameScore > 0){
 
                 switch (true){
-                    case this.scorePerSecond >= 0.8:
+                    case this.scorePerSecond >= 2:
                         this.currResItem = 0;
                         break;
 
-                    case this.scorePerSecond >= 0.7:
+                    case this.scorePerSecond >= 1.75:
                         this.currResItem = 1;
                         break;
 
-                    case this.scorePerSecond >= 0.6:
+                    case this.scorePerSecond >= 1.5:
                         this.currResItem = 2;
                         break;
 
-                    case this.scorePerSecond >= 0.5:
+                    case this.scorePerSecond >= 1.25:
                         this.currResItem = 3;
                         break;
 
-                    case this.scorePerSecond >= 0.4:
+                    case this.scorePerSecond >= 1:
                         this.currResItem = 4;
                         break;
 
-                    case this.scorePerSecond < 0.4:
+                    case this.scorePerSecond < 1:
                         this.currResItem = 5;
                         break;
                 }
@@ -328,6 +355,7 @@ export default defineComponent({
                     name: string;
                     lifespan: string;
                     size: string;
+                    temp: string;
                     examples: string;
                     funFacts: string[];
                 };
@@ -346,6 +374,9 @@ export default defineComponent({
                 // Size
                 this.currResSize = currRes.size;
 
+                // Temperature
+                this.currResTemp = currRes.temp;
+
                 // Examples
                 this.currResExamples = currRes.examples;
 
@@ -358,6 +389,7 @@ export default defineComponent({
                 this.currResName = "";
                 this.currResLifespan = "";
                 this.currResSize = "";
+                this.currResTemp = "";
                 this.currResExamples = "";
                 this.currResFunFact = "";
             }
@@ -645,7 +677,12 @@ export default defineComponent({
         & .rs-start-btn{
             width:min(400px, 100%);
             padding:var(--size6);
-            align-self:center;
+            border-radius:var(--size4);
+
+            &:before{
+                border-radius:var(--size4);
+            }
+
         }
 
     }
@@ -736,6 +773,12 @@ export default defineComponent({
                 margin-bottom:var(--size6);
                 text-align:center;
                 text-wrap:balance;
+            }
+
+            & .ci-elem{
+                display:flex;
+                flex-direction:column;
+                gap:2px;
             }
 
             & .ci-label{

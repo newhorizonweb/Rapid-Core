@@ -27,7 +27,7 @@ export default defineComponent({
             startAudioSrc: require('@/assets/audio/start.mp3'),
             preTimeAudioSrc: require('@/assets/audio/pre-time.mp3'),
             finishAudioSrc: require('@/assets/audio/finish.mp3'),
-            clickAudioSrc: require('@/assets/audio/click.flac'),
+            clickAudioSrc: require('@/assets/audio/click.mp3'),
             missAudioSrc: require('@/assets/audio/miss.mp3'),
 
             // Click

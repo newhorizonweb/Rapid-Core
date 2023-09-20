@@ -34,18 +34,21 @@
 
         <div class="audio-buttons">
             <button class="audio-icon audio-arrow prev-track"
-                @click="prevTrack">
+                @click="prevTrack"
+                aria-label="Previous Track">
                 <AudioArrow />
             </button>
 
             <button class="audio-icon"
-                @click="stopMusic">
+                @click="stopMusic"
+                aria-label="Pause Music">
                 <PlayIcon v-if="pausedBtn" />
                 <PauseIcon v-if="!pausedBtn" />
             </button>
 
             <button class="audio-icon audio-arrow next-track"
-                @click="nextTrack">
+                @click="nextTrack"
+                aria-label="Next Track">
                 <AudioArrow />
             </button>
         </div>
@@ -53,12 +56,14 @@
         <input type="range" class="volume-slider"
             min="0" max="1" step="0.05" 
             v-model="musicVolume"
-            @input="adjustMusicVolume">
+            @input="adjustMusicVolume"
+            aria-label="Music Volume Slider">
     </div>
 
     <div class="volume-section">
         <button class="audio-icon mute-btn mute-music"
-            @click="isMusicMuted = !isMusicMuted">
+            @click="isMusicMuted = !isMusicMuted"
+            aria-label="Mute Music">
             <MuteIcon />
         </button>
         <p>{{ (musicVolume * 100).toFixed(0) }}%</p>
@@ -94,30 +99,48 @@ export default defineComponent({
     data(){
         return{
             // Tracks
-            playlist: [
-                {title: "Oracle",
-                song: require('@/assets/music/02-4mhz-oracle-110554.mp3')},
+playlist: [
+                {title: "Powerfull Electro Rock - AlexiAction",
+                song: require('@/assets/music/powerfull-electro-rock-129466.mp3')},
 
-                {title: "Action Electronic Beats",
-                song: require('@/assets/music/action-electronic-beats-148541.mp3')},
+                {title: "Fire Cyberpunk - AlexiAction",
+                song: require('@/assets/music/fire-cyberpunk-sport-music-111884.mp3')},
 
-                {title: "Quantum",
-                song: require('@/assets/music/black-scorpion-music-quantum-124117.mp3')},
+                {title: "Electro Rock - LiteSaturation",
+                song: require('@/assets/music/electro-sports-rock-120-bpm-full-12148.mp3')},
 
-                {title: "Dark Engine",
-                song: require('@/assets/music/dark-cinermatic-electro-trailer-dark-engine-141041.mp3')},
+                {title: "Rock Fitness - LiteSaturation",
+                song: require('@/assets/music/rock-fitness-sports-electro-112159.mp3')},
 
-                {title: "Drive",
-                song: require('@/assets/music/drive-5957.mp3')},
+                {title: "Rock It - Coma-Media",
+                song: require('@/assets/music/rock-it-21275.mp3')},
 
-                {title: "Insurrection",
-                song: require('@/assets/music/insurrection-10941.mp3')},
+                {title: "Upbeat Sport - Diamond_Tunes",
+                song: require('@/assets/music/upbeat-sport-20666.mp3')},
 
-                {title: "Rock the Party",
-                song: require('@/assets/music/rock-the-party-110947.mp3')},
+                {title: "Shadows - AlexiAction",
+                song: require('@/assets/music/shadows-146931.mp3')},
 
-                {title: "Subway",
-                song: require('@/assets/music/subway-15016.mp3')}
+                {title: "Booty Drop - Freccero",
+                song: require('@/assets/music/freccero-booty-drop-115630.mp3')},
+
+                {title: "Decisive Stage - SPmusic",
+                song: require('@/assets/music/decisive-stage-154403.mp3')},
+
+                {title: "Synthwave 80s - AlexiAction",
+                song: require('@/assets/music/synthwave-80s-110045.mp3')},
+
+                {title: "Midnight - AlexiAction",
+                song: require('@/assets/music/midnight-138704.mp3')},
+
+                {title: "Cyber Reality - Alex_Kizenkov",
+                song: require('@/assets/music/electro-cuberpunk-cyber-reality-141371.mp3')},
+
+                {title: "Data Breach - FASSounds",
+                song: require('@/assets/music/data-breach-112775.mp3')},
+
+                {title: "Opening - LiteSaturation",
+                song: require('@/assets/music/opening-sports-100-bpm-full-12673.mp3')}
             ],
             currTrack: (localStorage.getItem("currTrack") !== null) ? Number(localStorage.getItem("currTrack")) : 0,
             musicTitle: "No Track",

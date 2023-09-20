@@ -4,18 +4,20 @@
 <template>
 
 <div class="audio-player audio-settings" :class="{'muted-audio': isMuted}">
-    <p class="audio-label">Master Volume</p>
+    <p class="audio-label">Gameplay Audio</p>
 
     <input type="range" class="volume-slider"
         min="0" max="1" step="0.05" 
         v-model="masterVolume"
-        @input="adjustVolume">
+        @input="adjustVolume"
+        aria-label="Gameplay Volume Slider">
 
     <div class="volume-section">
         <button 
             class="audio-icon mute-btn mute-master"
             :class="{'muted-icon-active': isMuted}"
-            @click="isMuted = !isMuted">
+            @click="isMuted = !isMuted"
+            aria-label="Mute Gameplay Sounds">
             <MuteIcon />
         </button>
         <p>{{ (masterVolume * 100).toFixed(0) }}%</p>
