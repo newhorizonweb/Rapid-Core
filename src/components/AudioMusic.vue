@@ -99,7 +99,7 @@ export default defineComponent({
     data(){
         return{
             // Tracks
-playlist: [
+            playlist: [
                 {title: "Powerfull Electro Rock - AlexiAction",
                 song: require('@/assets/music/powerfull-electro-rock-129466.mp3')},
 
@@ -142,6 +142,7 @@ playlist: [
                 {title: "Opening - LiteSaturation",
                 song: require('@/assets/music/opening-sports-100-bpm-full-12673.mp3')}
             ],
+
             currTrack: (localStorage.getItem("currTrack") !== null) ? Number(localStorage.getItem("currTrack")) : 0,
             musicTitle: "No Track",
             musicAudioSrc: "",
@@ -415,6 +416,8 @@ playlist: [
     z-index:10;
 
     & .music-title{
+        will-change:transform;
+
         flex-shrink:0;
         min-width:100%;
         margin-bottom:-4px;
@@ -437,10 +440,10 @@ playlist: [
 
 @keyframes marqueeAnim{
     0%{
-        transform:translateX(30%);
+        transform:translate3d(30%, 0, 0);
     }
     100%{
-        transform:translateX(calc(-70% - 50px));
+        transform:translate3d(calc(-70% - 50px), 0, 0);
     }
 }
 

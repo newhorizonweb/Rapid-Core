@@ -391,7 +391,7 @@ export default defineComponent({
     }
 
     & .clear-stats-div{
-        padding:0 var(--size2);
+        padding:0 var(--size3);
     }
 
 }
@@ -488,7 +488,26 @@ export default defineComponent({
 
 @media screen and (width <= 768px){
 
+    .scoreboards{
+        width:calc(100% - (var(--size6) * 2) + var(--scrollBar));
+        transform:translate(calc( -50% + (var(--scrollBar) / 2) ), -50%);
+        scrollbar-gutter:stable;
+
+        & .clear-stats-div{
+            padding:0;
+        }
+
+        & .stats-section:nth-last-of-type(1){
+            margin-bottom:var(--border);
+        }
+
+    }
+
     .scoreboards-inner{
+
+        & .stats-tables{
+            padding:0 calc(var(--size6) - (var(--size3) * 2));
+        }
     
         & .stats-table{
 
@@ -504,22 +523,6 @@ export default defineComponent({
 
             }
 
-        }
-
-    }
-
-}
-
-@media screen and (width <= 768px){
-
-    .scoreboards{
-        width:calc(100% - ((var(--size6) - var(--scrollBar) + var(--border)) * 2));
-    }
-
-    .scoreboards-inner{
-
-        & .stats-tables{
-            padding:0;
         }
 
     }

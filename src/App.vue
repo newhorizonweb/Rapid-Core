@@ -47,7 +47,7 @@
         <UveritLogo />
     </div>
     <div class="version">
-        <p>v1.0.0</p>
+        <p>v{{ appVersion }}</p>
         <p>© 2023 uverit</p>
     </div>
     
@@ -61,6 +61,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { version } from '../package.json'
+
 import LogoElem from "./components/pageElements/LogoElem.vue"
 import UveritLogo from "./components/pageElements/UveritLogo.vue"
 import UserOptions from "./components/UserOptions.vue"
@@ -85,6 +87,8 @@ export default defineComponent({
 
     data(){
         return{
+            appVersion: version,
+
             timeDuration: 10,
             firstGame: true,
             duringMatch: false,
