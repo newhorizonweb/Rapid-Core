@@ -826,6 +826,14 @@ export default defineComponent({
 
 @media screen and (width <= 540px){
 
+    .finish-screen{
+
+        & .fs-inner{
+            width:100%;
+        }
+
+    }
+
     .fs-content{
 
         & .finish-info{
