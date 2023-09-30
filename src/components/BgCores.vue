@@ -83,8 +83,8 @@ export default defineComponent({
                         y: posY
                     },
                     speed:{
-                        x: (Math.random() - 1) / 3,
-                        y: (Math.random() - 1) / 3
+                        x: (Math.random() * 2 - 1) / 4,
+                        y: (Math.random() * 2 - 1) / 4
                     }
                 };
 
