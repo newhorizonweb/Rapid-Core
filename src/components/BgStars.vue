@@ -49,9 +49,9 @@ export default defineComponent({
 
     methods:{
         
-        debounce(func: (...args: any[]) => void, wait = 300): (...args: any[]) => void{
+        debounce(func: (...args: number[]) => void, wait = 300): (...args: number[]) => void{
             let timeout: ReturnType<typeof setTimeout> | null;
-            return function (this: unknown, ...args: any[]){
+            return function (this: unknown, ...args: number[]){
                 if (timeout !== null){
                     clearTimeout(timeout);
                 }
