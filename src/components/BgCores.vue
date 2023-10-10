@@ -36,10 +36,15 @@ export default defineComponent({
 
     data(){
         return{
-            blobs: [] as BlobData[],
-            blobNumber: this.calculateBlobNumber(),
+            // Blob Settings
+            speedFactor: 1.5, // from 0 (no movement) | 10+ is really fast
             blobSizeMin: 30,
-            blobSizeMax: 150
+            blobSizeMax: 150,
+
+            // Blob Code
+            blobFPS: 4,
+            blobs: [] as BlobData[],
+            blobNumber: this.calculateBlobNumber()
         }
     },
 
@@ -83,8 +88,8 @@ export default defineComponent({
                         y: posY
                     },
                     speed:{
-                        x: (Math.random() * 2 - 1) / 4,
-                        y: (Math.random() * 2 - 1) / 4
+                        x: (Math.random() * 2 - 1),
+                        y: (Math.random() * 2 - 1)
                     }
                 };
 
@@ -100,11 +105,15 @@ export default defineComponent({
             const blobContainer: HTMLElement = this.$refs.bgBlobs as HTMLElement;
 
             const updateBlobs = () => {
+
+                // Calculate the speed based on the frametime
+                const blobSpeed = (1000 / this.blobFPS) / 100 * this.speedFactor;
+
                 for (let blobData of this.blobs){
 
                     // Update position based on velocity
-                    blobData.position.x += blobData.speed.x;
-                    blobData.position.y += blobData.speed.y;
+                    blobData.position.x += blobData.speed.x * blobSpeed;
+                    blobData.position.y += blobData.speed.y * blobSpeed;
 
                     // Bounce the blob off the screen edge
                     if (blobData.position.x < 0 || 
@@ -119,12 +128,14 @@ export default defineComponent({
 
                     // Set blob's new position
                     blobData.element.style.transform = 
-                        `translate3d(${blobData.position.x}px, ${blobData.position.y}px, 0px)`;
+                        `translate3d(${blobData.position.x}px, 
+                        ${blobData.position.y}px, 
+                        0px)`;
 
                 }
 
-                // Request the next frame
-                requestAnimationFrame(updateBlobs);
+                // Next Frame
+                setTimeout(updateBlobs, 1000 / this.blobFPS);
             };
 
             // Initialize the animation
@@ -155,7 +166,7 @@ export default defineComponent({
             return newBlobNumber;
         },
 
-        adjustBlobsPosition() {
+        adjustBlobsPosition(){
             const blobContainer: HTMLElement = this.$refs.bgBlobs as HTMLElement;
             
             this.blobs.forEach(blobData => {
@@ -229,6 +240,7 @@ export default defineComponent({
     .bg-blob{
         position:absolute;
         z-index:10;
+        transition:transform 0.4s linear;
 
         &:after{
             content:"";
