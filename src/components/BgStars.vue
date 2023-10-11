@@ -171,8 +171,6 @@ export default defineComponent({
             this.starNumber = newStarNumber;
         }
 
-
-
     }
 
 });

@@ -30,7 +30,7 @@ type BlobData = {
 export default defineComponent({
     name: "BgBlobs",
 
-    components: {
+    components:{
         BgStars
     },
 
@@ -61,6 +61,7 @@ export default defineComponent({
     methods:{
 
         createBlob(){
+
             const blobContainer: HTMLElement = this.$refs.bgBlobs as HTMLElement;
 
             for (let i = 0; i < this.blobNumber; i++){
@@ -99,9 +100,11 @@ export default defineComponent({
                 blobContainer.appendChild(blob);
 
             }
+
         },
 
         animateBlobs(){
+
             const blobContainer: HTMLElement = this.$refs.bgBlobs as HTMLElement;
 
             const updateBlobs = () => {
@@ -140,9 +143,11 @@ export default defineComponent({
 
             // Initialize the animation
             updateBlobs();
+
         },
 
         calculateBlobNumber(): number{
+
             const width = window.innerWidth;
             let newBlobNumber = 10;
 
@@ -164,9 +169,11 @@ export default defineComponent({
             }
 
             return newBlobNumber;
+
         },
 
         adjustBlobsPosition(){
+            
             const blobContainer: HTMLElement = this.$refs.bgBlobs as HTMLElement;
             
             this.blobs.forEach(blobData => {
@@ -184,9 +191,11 @@ export default defineComponent({
                 blobData.element.style.transform = 
                     `translate(${blobData.position.x}px, ${blobData.position.y}px)`;
             });
+
         },
 
         handleResize(){
+
             // Change the blob position (if they go out of the view)
             this.adjustBlobsPosition();
 
@@ -218,6 +227,7 @@ export default defineComponent({
 
             // Update the blob number
             this.blobNumber = newBlobNumber;
+            
         }
 
     }

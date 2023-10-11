@@ -150,6 +150,12 @@ export default defineComponent({
             windowResized: false,
             
             // Game Elements & Settings
+            gameCoreElem: null as HTMLElement | null,
+            gameFieldElem: null as HTMLElement | null,
+            gameFieldW: 0,
+            gameFieldH: 0,
+            audioGameComp: null as InstanceType<typeof AudioGame> | null,
+
             missAnim: false,
             missAnimTimeout: null as number | null,
             cursorColor: "",
@@ -167,14 +173,25 @@ export default defineComponent({
     ],
 
     mounted(){
+
+        // Elements
+        this.gameCoreElem = this.$refs.gameCore as HTMLElement;
+        this.gameFieldElem = this.$refs.gameField as HTMLElement;
+        this.audioGameComp = this.$refs.AudioGame as InstanceType<typeof AudioGame>;
+
         // Core Size
-        this.coreSize = (this.$refs.gameCore as HTMLElement).offsetWidth;
+        this.coreSize = this.gameCoreElem.offsetWidth;
+
+        // Game Field Size
+        this.gameFieldSize();
+        window.addEventListener("resize", this.gameFieldSize);
 
         // Finish on Window Resize
         this.resizeFinish();
 
         // Set the Cursor Color
         this.setCursorColor();
+
     },
 
     methods:{
@@ -194,6 +211,7 @@ export default defineComponent({
         },
 
         async startCountdown(){
+
             // Mark that that it's not a first game
             this.firstGame = false;
             this.$emit("firstGame", this.firstGame);
@@ -239,9 +257,11 @@ export default defineComponent({
 
             // Reset the Results Game Score after the game has started
             this.resGameScore = 0;
+
         },
 
         timerFunction(){
+
             clearInterval(this.timerInterval);
 
             // Convert to ms to avoid floating-points errors
@@ -272,11 +292,13 @@ export default defineComponent({
                     }
                 }
             }, 10); 
+
         },
 
             /* Start / Finish */
 
         startGame(){
+
             // Game interruption reset
             this.windowResized = false;
             this.userFinished = false;
@@ -288,9 +310,11 @@ export default defineComponent({
             this.gamePlaying = true;
             this.timerFunction();
             this.$emit("startGame");
+
         },
 
         finishGame(didUserEnd: boolean){
+
             // Stop the timer (if the game was finished manually)
             clearInterval(this.timerInterval);
             this.timerCurrVal = 0;
@@ -308,6 +332,7 @@ export default defineComponent({
             (this.$refs.resultInfo as InstanceType<typeof ResultsScreen>).resultInfo(didUserEnd);
 
             this.setCursorColor();
+
         },
 
         resizeFinish(){
@@ -319,42 +344,47 @@ export default defineComponent({
             });
         },
 
+            /* Game Field */
+
+        gameFieldSize(){
+            this.gameFieldW = this.gameFieldElem!.offsetWidth;
+            this.gameFieldH = this.gameFieldElem!.offsetHeight;
+        },
+
             /* Game Logic */
 
         corePosition(){
-            const gameCoreElem = this.$refs.gameCore as HTMLElement;
-            const gameFieldElem = this.$refs.gameField as HTMLElement;
-
-            // Get the game field width and height
-            const gameFieldW = gameFieldElem.offsetWidth;
-            const gameFieldH = gameFieldElem.offsetHeight;
-
-            // Core Size
-            this.coreSize = gameCoreElem.offsetWidth;
-
+            
             // Generate a random position in the game field
             const randX = Math.floor(Math.random() * 
-                (gameFieldW - this.coreSize + 1));
+                (this.gameFieldW - this.coreSize + 1));
             const randY = Math.floor(Math.random() * 
-                (gameFieldH - this.coreSize + 1));
+                (this.gameFieldH - this.coreSize + 1));
+            
+            // Set the position and add the animation class
+            this.gameCoreElem!.style.transform = `translate3d(${randX}px, ${randY}px, 0px)`;
+            this.gameCoreElem!.classList.add("core-animation");
 
-            gameCoreElem.style.transform = `translate3d(${randX}px, ${randY}px, 0px)`;
-            gameCoreElem.classList.add("core-animation");
         },
 
         coreClicked(){
+
             // Remove the animation class
-            (this.$refs.gameCore as HTMLElement).classList.remove("core-animation");
+            this.gameCoreElem!.classList.remove("core-animation");
+
+            // Game Field Size
+            this.gameFieldSize();
 
             // Change core position
             this.corePosition();
 
             // Play the click sound
-            (this.$refs.AudioGame as InstanceType<typeof AudioGame>).playClickSound();
+            this.audioGameComp!.playClickSound();
 
             // Change user score
             this.gameScore++
             this.resGameScore = this.gameScore;
+
         },
 
         totalClicksFun(){
@@ -366,7 +396,7 @@ export default defineComponent({
         playMissSound(){
             if (this.gamePlaying){
                 // Play the miss sound
-                (this.$refs.AudioGame as InstanceType<typeof AudioGame>).playMissSound();
+                this.audioGameComp!.playMissSound();
 
                 // Trigger the miss icon animation
                 this.triggerMissAnim();
@@ -374,6 +404,7 @@ export default defineComponent({
         },
 
         triggerMissAnim(){
+
             this.missAnim = true;
 
             if (this.missAnimTimeout) {
@@ -384,11 +415,13 @@ export default defineComponent({
                 this.missAnim = false;
                 this.missAnimTimeout = null;
             }, 250);
+
         },
 
             /* Cursor Color */
 
         setCursorColor(){
+
             // Get the CSS variable
             this.cursorColor = getComputedStyle(document.body).getPropertyValue("--mainTint1").trim();
 
@@ -396,9 +429,11 @@ export default defineComponent({
             // Or it won't update on ResultsScreen until the user moves the cursor
             const gameField = this.$refs.gameFieldElem as HTMLElement;
             gameField.style.cursor = "default";
+
         },
 
         setCursorElem(){
+
             // SVG custom cursor
             const svg = `<svg width="32px" height="32px" id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><style>.cls-1{fill:${this.cursorColor};}.cls-2{fill:#FFFFFF;}</style></defs><path class='cls-1' d='M11.8,26.9h-.7a12.1,12.1,0,0,1-5.9-5.9,1.5,1.5,0,0,1,.8-2,1.5,1.5,0,0,1,2,.7A8.6,8.6,0,0,0,12.4,24a1.5,1.5,0,0,1,.7,2A1.4,1.4,0,0,1,11.8,26.9Z'/><path class='cls-2' d='M31,17H21.9a1,1,0,0,1,0-2H31a1,1,0,0,1,0,2Z'/><path class='cls-2' d='M10.1,17H1a1,1,0,0,1,0-2h9.1a1,1,0,1,1,0,2Z'/><path class='cls-2' d='M16,11.1a.9.9,0,0,1-1-1V1a1,1,0,0,1,2,0v9.1A.9.9,0,0,1,16,11.1Z'/><path class='cls-2' d='M16,32a1,1,0,0,1-1-1V21.9a1,1,0,0,1,2,0V31A1,1,0,0,1,16,32Z'/><path class='cls-1' d='M6.6,13.3,6,13.1a1.5,1.5,0,0,1-.8-2,12.1,12.1,0,0,1,5.9-5.9,1.5,1.5,0,0,1,2,.8,1.5,1.5,0,0,1-.7,2A8.6,8.6,0,0,0,8,12.4,1.7,1.7,0,0,1,6.6,13.3Z'/><path class='cls-1' d='M25.4,13.3a1.7,1.7,0,0,1-1.4-.9A8.6,8.6,0,0,0,19.6,8a1.5,1.5,0,0,1-.7-2,1.5,1.5,0,0,1,2-.8,12.1,12.1,0,0,1,5.9,5.9,1.5,1.5,0,0,1-.8,2Z'/><path class='cls-1' d='M20.2,26.9a1.4,1.4,0,0,1-1.3-.9,1.5,1.5,0,0,1,.7-2A8.6,8.6,0,0,0,24,19.6a1.5,1.5,0,0,1,2-.7,1.5,1.5,0,0,1,.8,2,12.1,12.1,0,0,1-5.9,5.9Z'/><circle class='cls-2' cx='16' cy='16' r='2'/></svg>`;
 
@@ -407,6 +442,7 @@ export default defineComponent({
             // Set it to be visible in the Game Field
             const gameField = this.$refs.gameFieldElem as HTMLElement;
             gameField.style.cursor = `url("data:image/svg+xml;base64,${encoded}") 16 16, auto`;
+            
         }
 
     },
@@ -554,7 +590,7 @@ export default defineComponent({
 
         &.core-animation:after{
             animation:coreRotate 5s linear infinite,
-                coreAnimation 0.075s ease-in-out;
+                coreAnimation 0.1s ease-in-out;
         }
 
     }

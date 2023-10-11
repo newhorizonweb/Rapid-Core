@@ -177,7 +177,7 @@ export default defineComponent({
 
             // Main Color Scrollbar
             bodyStyle.setProperty('--mainScrollBg',
-                this.calcVar("--mainColor", "sub", 185, 85));
+                this.calcVar("--mainColor", "sub", 185, 2));
 
             bodyStyle.setProperty('--mainScrollHover',
                 this.calcVar("--mainColor", "add", 25, 100));

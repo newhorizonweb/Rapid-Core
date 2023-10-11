@@ -10,6 +10,10 @@
 
     /* Body & Wrapper */
 
+html{
+    background-color:#222;
+}
+
 body{
     background:var(--colorGrad1);
     padding:0 var(--size6);
@@ -76,6 +80,20 @@ footer.wrapper{
     
     transition:var(--trans4);
     z-index:-1;
+}
+
+
+@media screen and (width <= 768px){
+
+    .wrapper{
+        background:var(--colorGrad2),
+            url("../img/noise-texture2.svg");
+    }
+    
+    .wrapper-bg{
+        backdrop-filter:none;
+    }
+    
 }
 
 
