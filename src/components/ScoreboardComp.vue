@@ -182,20 +182,26 @@ export default defineComponent({
 
         headingPosition(sbElem: HTMLElement){
 
-            // Data
-            const scrollOffset = sbElem.scrollLeft;
-            const widthOffset = sbElem.offsetWidth;
-            const tableWidth = (document.querySelectorAll('.stats-table')[0] as HTMLElement).offsetWidth;
+            const statsTable = document.querySelectorAll('.stats-table')[0] as HTMLElement;
 
-            // Calculate heading's new position
-            const centerOffset = (tableWidth - widthOffset);
-            const scrollPercentage = scrollOffset / centerOffset;
-            const newPosition = (tableWidth - widthOffset) * scrollPercentage;
+            if (statsTable){
 
-            // Set the new position
-            document.querySelectorAll(".table-heading").forEach((heading) => {
-                (heading as HTMLElement).style.transform = `translateX(${newPosition}px)`;
-            });
+                // Data
+                const scrollOffset = sbElem.scrollLeft;
+                const widthOffset = sbElem.offsetWidth;
+                const tableWidth = statsTable.offsetWidth;
+
+                // Calculate heading's new position
+                const centerOffset = (tableWidth - widthOffset);
+                const scrollPercentage = scrollOffset / centerOffset;
+                const newPosition = (tableWidth - widthOffset) * scrollPercentage;
+
+                // Set the new position
+                document.querySelectorAll(".table-heading").forEach((heading) => {
+                    (heading as HTMLElement).style.transform = `translateX(${newPosition}px)`;
+                });
+
+            }
 
         },
 
@@ -510,6 +516,11 @@ export default defineComponent({
         }
     
         & .stats-table{
+            background:var(--mainBg2c);
+
+            &:before{
+                background:var(--mainBorder2a);
+            }
 
             & th,
             & td{

@@ -135,8 +135,6 @@ export default defineComponent({
 
     }
 
-
-
     & .time-btn:disabled{
         filter:brightness(80%) !important;
         cursor:default;
@@ -150,6 +148,30 @@ export default defineComponent({
     & .time-buttons{
         display:flex;
         gap:var(--size4);
+    }
+
+}
+
+@media screen and (width <= 768px){
+
+    .user-options{
+
+        & .time-btn{
+
+            &.time-btn-current{
+
+                &:before{
+                    background:var(--accBorder2a);
+                }
+
+            }
+
+            &:after{
+                background:var(--accBg2c);
+            }
+
+        }
+
     }
 
 }

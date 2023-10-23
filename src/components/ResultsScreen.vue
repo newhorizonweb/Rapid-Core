@@ -808,6 +808,7 @@ export default defineComponent({
             & .fr-section,
             & .pb-div{
                 flex:100%;
+                background:var(--mainBg2c);
             }
 
         }
@@ -816,6 +817,11 @@ export default defineComponent({
 
             & .ci-section{
                 flex:100%;
+                background:var(--mainBg2c);
+
+                &:before{
+                    background:var(--mainBorder2a);
+                }
             }
 
         }

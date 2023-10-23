@@ -171,6 +171,28 @@ footer.wrapper{
 
 }
 
+@media screen and (width <= 768px){
+
+    .glass-border{
+
+        &:before{
+            background:var(--mainBorder1a);
+        }
+
+    }
+
+    .glass-btn,
+    .audio-player{
+        background:var(--mainBg2c);
+
+        &:before{
+            background:var(--mainBorder2a);
+        }
+    
+    }
+
+}
+
 
 
     /* Settings */

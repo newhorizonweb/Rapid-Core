@@ -110,6 +110,9 @@ export default defineComponent({
             bodyStyle.setProperty('--mainBg1c', 
                 this.calcVar("--mainColor", "sub", 70, 100));
 
+            bodyStyle.setProperty('--mainBg1d', 
+                this.calcVar("--mainColor", "sub", 20, 70));
+
 
             bodyStyle.setProperty('--mainBg2a',
                 this.calcVar("--mainColor", "sub", 70, 70));
@@ -117,12 +120,18 @@ export default defineComponent({
             bodyStyle.setProperty('--mainBg2b',
                 this.calcVar("--mainColor", "sub", 20, 60));
 
+            bodyStyle.setProperty('--mainBg2c',
+                this.calcVar("--mainColor", "sub", 45, 70));
+
 
             bodyStyle.setProperty('--mainBg3a',
                 this.calcVar("--mainColor", "sub", 160, 70));
 
             bodyStyle.setProperty('--mainBg3b',
                 this.calcVar("--mainColor", "sub", 140, 60));
+
+            bodyStyle.setProperty('--mainBg3c',
+                this.calcVar("--mainColor", "sub", 150, 80));
 
 
 
@@ -132,6 +141,9 @@ export default defineComponent({
 
             bodyStyle.setProperty('--accBg2b',
                 this.calcVar("--accColor", "sub", 20, 60));
+
+            bodyStyle.setProperty('--accBg2c',
+                this.calcVar("--accColor", "sub", 45, 70));
 
 
 

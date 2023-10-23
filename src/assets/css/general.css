@@ -78,6 +78,20 @@ body{
 
 }
 
+@media screen and (width <= 768px){
+
+    body{
+        --colorGrad1:rgb(17, 21, 25);
+        --colorGrad2:rgb(22, 26, 30, 0.8);
+
+        --mainGrad1:rgb(from var(--mainBg1d)             
+            calc(r * 0.3) calc(g * 0.3) calc(b * 0.3) / 0.7);
+
+        --mainGrad3:var(--mainBg3c);
+    }
+
+}
+
 .game-theme-def{
     --mainColor:rgb(23, 121, 171);
     --accColor:rgb(25, 180, 175);

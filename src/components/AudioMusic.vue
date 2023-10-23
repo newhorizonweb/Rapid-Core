@@ -447,4 +447,17 @@ export default defineComponent({
     }
 }
 
+
+@media screen and (width <= 768px){
+
+    .music-display{
+
+        &:before{
+            background:var(--mainBorder1a);
+        }
+
+    }
+
+}
+
 </style>
