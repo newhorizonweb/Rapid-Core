@@ -7,19 +7,19 @@
     <p class="uo-label">Game Duration</p>
 
     <div class="time-buttons">
-        <button class="time-btn glass-btn time-btn-current"
+        <button class="time-btn glass-btn time-btn-current btn-sfx"
             @click="setTimeDur"
             :disabled="duringMatch"
             runTime="10">
             <p>10s</p>
         </button>
-        <button class="time-btn glass-btn"
+        <button class="time-btn glass-btn btn-sfx"
             @click="setTimeDur"
             :disabled="duringMatch"
             runTime="30">
             <p>30s</p>
         </button>
-        <button class="time-btn glass-btn" 
+        <button class="time-btn glass-btn btn-sfx" 
             @click="setTimeDur"
             :disabled="duringMatch"
             runTime="60">

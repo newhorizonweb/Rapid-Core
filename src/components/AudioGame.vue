@@ -29,10 +29,12 @@ export default defineComponent({
             finishAudioSrc: require('@/assets/audio/finish.mp3'),
             clickAudioSrc: require('@/assets/audio/click.mp3'),
             missAudioSrc: require('@/assets/audio/miss.mp3'),
+            btnAudioSrc: require('@/assets/audio/btn-click.mp3'),
 
             // Click
             clickAudioPool: [] as HTMLAudioElement[],
             missAudioPool: [] as HTMLAudioElement[],
+            btnAudioPool: [] as HTMLAudioElement[],
             clickAudioMax: 10,
 
             // Audio Settings
@@ -50,6 +52,9 @@ export default defineComponent({
 
             const missAudio = new Audio(this.missAudioSrc);
             this.missAudioPool.push(missAudio);
+
+            const btnAudio = new Audio(this.btnAudioSrc);
+            this.btnAudioPool.push(btnAudio);
         }
 
         // Send the audio elements to the GameField
@@ -57,6 +62,18 @@ export default defineComponent({
             start: this.$refs.startAudioElem,
             preTime: this.$refs.preTimeAudioElem,
             finish: this.$refs.finishAudioElem,
+        });
+
+        // Add audio to the UI buttons
+        this.$nextTick(() => {
+            console.log(document.querySelectorAll(".btn-sfx"))
+            document.querySelectorAll(".btn-sfx").forEach((btn) => {
+               // btn.addEventListener("click", this.playBtnSound);
+                btn.addEventListener("click", () => {
+                    console.log("aaa")
+                    this.playBtnSound();
+                });
+            });
         });
 
     },
@@ -85,6 +102,10 @@ export default defineComponent({
 
         playMissSound(){
             this.playGameSound(this.missAudioPool);
+        },
+
+        playBtnSound(){
+            this.playGameSound(this.btnAudioPool);
         }
 
     }

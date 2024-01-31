@@ -3,9 +3,9 @@
 
 <template>
 
-<button class="stats-btn glass-btn"
+<button class="stats-btn glass-btn btn-sfx"
     :class="{'close-stats': showScoreboard}"
-    v-if="showSbBtn" 
+    v-show="showSbBtn" 
     @click="showScoreboard = !showScoreboard">
     <StatsIcon />
 </button>
@@ -16,7 +16,7 @@
     <div class="scoreboards-inner">
 
         <div class="clear-stats-div">
-            <button class="clear-stats-btn glass-btn"
+            <button class="clear-stats-btn glass-btn btn-sfx"
                 @click="clearScoreboard">
                 Clear Stats
             </button>

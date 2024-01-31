@@ -91,7 +91,6 @@
 
 </div>
 
-
 </template>
 
 
@@ -191,7 +190,7 @@ export default defineComponent({
 
         // Set the Cursor Color
         this.setCursorColor();
-
+        
     },
 
     methods:{

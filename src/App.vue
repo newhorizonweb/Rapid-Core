@@ -48,7 +48,7 @@
     </div>
     <div class="version">
         <p>v{{ appVersion }}</p>
-        <p>© 2023 uverit</p>
+        <p>© 2024 uverit</p>
     </div>
     
 </footer>

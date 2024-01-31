@@ -61,7 +61,7 @@
     </div>
 
     <div class="volume-section">
-        <button class="audio-icon mute-btn mute-music"
+        <button class="audio-icon mute-btn mute-music btn-sfx"
             @click="isMusicMuted = !isMusicMuted"
             aria-label="Mute Music">
             <MuteIcon />

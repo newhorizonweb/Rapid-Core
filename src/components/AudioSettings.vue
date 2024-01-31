@@ -14,7 +14,7 @@
 
     <div class="volume-section">
         <button 
-            class="audio-icon mute-btn mute-master"
+            class="audio-icon mute-btn mute-master btn-sfx"
             :class="{'muted-icon-active': isMuted}"
             @click="isMuted = !isMuted"
             aria-label="Mute Gameplay Sounds">
