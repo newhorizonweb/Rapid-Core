@@ -4,9 +4,7 @@
 <template>
 
 <div class="bg-blobs" ref="bgBlobs">
-    <BgStars 
-        :blobContainer="this.$refs.bgBlobs"
-    />
+    <BgStars />
 </div>
 
 </template>

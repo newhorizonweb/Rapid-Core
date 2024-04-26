@@ -29,10 +29,6 @@ export default defineComponent({
             starSizeMax: 2
         }
     },
-
-    props:[
-        "blobContainer"
-    ],
     
     mounted(){
         this.createStar();

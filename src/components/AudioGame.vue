@@ -66,13 +66,13 @@ export default defineComponent({
 
         // Add audio to the UI buttons
         this.$nextTick(() => {
-            console.log(document.querySelectorAll(".btn-sfx"))
             document.querySelectorAll(".btn-sfx").forEach((btn) => {
-               // btn.addEventListener("click", this.playBtnSound);
+
+                // btn.addEventListener("click", this.playBtnSound);
                 btn.addEventListener("click", () => {
-                    console.log("aaa")
                     this.playBtnSound();
                 });
+                
             });
         });
 

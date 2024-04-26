@@ -1,0 +1,46 @@
+{
+  "short_name": "Rapid Core",
+  "name": "Rapid Core - Your Personal Aim Trainer",
+  "icons": [
+    {
+      "src": "keep-it-fit-icon.svg",
+      "sizes": "any",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "rapid-core-favicon-48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "rapid-core-favicon-120.png",
+      "type": "image/png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "rapid-core-favicon-144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "rapid-core-favicon-180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "rapid-core-favicon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "rapid-core-favicon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#79ABAB",
+  "background_color": "#20252A"
+}

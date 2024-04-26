@@ -67,10 +67,10 @@
                     <tbody>
                         <tr>
                             <td>AVG</td>
-                            <td>{{ scoreboard.averages.score.toFixed(2) }}</td>
-                            <td>{{ scoreboard.averages.sps.toFixed(2) }}</td>
-                            <td>{{ scoreboard.averages.cps.toFixed(2) }}</td>
-                            <td>{{ scoreboard.averages.accuracy.toFixed(2) }}%</td>
+                            <td>{{ scoreboard.averages?.score.toFixed(2) }}</td>
+                            <td>{{ scoreboard.averages?.sps.toFixed(2) }}</td>
+                            <td>{{ scoreboard.averages?.cps.toFixed(2) }}</td>
+                            <td>{{ scoreboard.averages?.accuracy.toFixed(2) }}%</td>
                         </tr>
                     </tbody>
                 </table>
